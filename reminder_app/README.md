@@ -1,4 +1,4 @@
-# Pembagian Tugas
+# Pembagian Tugas (SEHARUSNYA TUPOKSINYA SEPERTI INI)
 lib/
 ├── main.dart                      # Entry point (Firebase + MultiProvider)
 ├── firebase_options.dart          # Auto-generated Firebase Config
