@@ -1,99 +1,102 @@
 import 'package:flutter/material.dart';
 
-// =============================================================================
-// IMPORTS (Layanan / Screen Asli)
-// Un-comment (hapus tanda //) baris import di bawah ini jika file screen teman Anda sudah dibuat.
-// =============================================================================
-// import '../../features/splash/splash_screen.dart';        // Aliyah
-// import '../../features/auth/login_screen.dart';          // Laili
-// import '../../features/dashboard/dashboard_screen.dart';  // Aliyah
-// import '../../features/task/task_detail_screen.dart';    // Aliyah + Laudya
-// import '../../features/history/history_screen.dart';      // Laili
-// import '../../features/notification/notification_screen.dart'; // Bintoro
-// import '../../features/profile/profile_screen.dart';      // Laili
+// TODO (Nanti saat file layar asli dari tim sudah selesai):
+// Hilangkan komentar import di bawah ini dan ganti Placeholder dengan Screen asli.
+// import 'package:reminder_application_project/features/splash/splash_screen.dart';
+// import 'package:reminder_application_project/features/auth/login_screen.dart';
+// import 'package:reminder_application_project/features/auth/register_screen.dart';
+// import 'package:reminder_application_project/features/dashboard/dashboard_screen.dart';
+// import 'package:reminder_application_project/features/task/add_task_screen.dart';
+// import 'package:reminder_application_project/features/task/edit_task_screen.dart';
+// import 'package:reminder_application_project/features/task/task_detail_screen.dart';
+// import 'package:reminder_application_project/features/history/history_screen.dart';
+// import 'package:reminder_application_project/features/notification/notification_screen.dart';
+// import 'package:reminder_application_project/features/profile/profile_screen.dart';
 
 class AppRoutes {
-  // ---------------------------------------------------------------------------
-  // 1. CONSTANTS NAMA RUTE (Digunakan oleh seluruh anggota tim)
-  // ---------------------------------------------------------------------------
+  AppRoutes._(); // Private constructor
+
+  // ===========================================================================
+  // CONSTANT NAMA RUTE (Disepakati Bersama Tim)
+  // ===========================================================================
   static const String splash = '/';
   static const String login = '/login';
+  static const String register = '/register';
   static const String dashboard = '/dashboard';
+  static const String addTask = '/add-task';
+  static const String editTask = '/edit-task';
   static const String taskDetail = '/task-detail';
   static const String history = '/history';
   static const String notification = '/notification';
   static const String profile = '/profile';
 
-  // ---------------------------------------------------------------------------
-  // 2. TOGGLE FITUR (Feature Flags)
-  // Ubah ke `true` jika fitur/layar dari teman tim sudah siap diuji.
-  // Ini mencegah crash saat aplikasi dijalankan oleh tim lain.
-  // ---------------------------------------------------------------------------
-  static const bool _useRealSplash = false;       // Aliyah
-  static const bool _useRealLogin = false;        // Laili
-  static const bool _useRealDashboard = false;    // Aliyah
-  static const bool _useRealTaskDetail = false;   // Aliyah + Laudya
-  static const bool _useRealHistory = false;      // Laili
-  static const bool _useRealNotification = false; // Bintoro
-  static const bool _useRealProfile = false;      // Laili
+  // Rute Awal Aplikasi
+  static const String initialRoute = splash;
 
-  // ---------------------------------------------------------------------------
-  // 3. GENERATE ROUTE
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
+  // ROUTE GENERATOR GLOBAL
+  // ===========================================================================
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(
-          builder: (_) => _useRealSplash
-              ? const SizedBox() // Ganti dengan: const SplashScreen()
-              : const _PlaceholderScreen(title: 'Splash Screen', assignee: 'Aliyah'),
+          builder: (_) => const _PlaceholderScreen(title: 'Splash Screen (Aliyah)'),
+          // Saat SplashScreen asli milik Aliyah siap:
+          // builder: (_) => const SplashScreen(),
         );
 
       case login:
         return MaterialPageRoute(
-          builder: (_) => _useRealLogin
-              ? const SizedBox() // Ganti dengan: const LoginScreen()
-              : const _PlaceholderScreen(title: 'Login Screen', assignee: 'Laili'),
+          builder: (_) => const _PlaceholderScreen(title: 'Login Screen (Laili)'),
+          // builder: (_) => const LoginScreen(),
+        );
+
+      case register:
+        return MaterialPageRoute(
+          builder: (_) => const _PlaceholderScreen(title: 'Register Screen (Laili)'),
+          // builder: (_) => const RegisterScreen(),
         );
 
       case dashboard:
         return MaterialPageRoute(
-          builder: (_) => _useRealDashboard
-              ? const SizedBox() // Ganti dengan: const DashboardScreen()
-              : const _PlaceholderScreen(title: 'Dashboard Screen', assignee: 'Aliyah'),
+          builder: (_) => const _PlaceholderScreen(title: 'Dashboard Screen (Aliyah)'),
+          // builder: (_) => const DashboardScreen(),
+        );
+
+      case addTask:
+        return MaterialPageRoute(
+          builder: (_) => const _PlaceholderScreen(title: 'Add Task Screen (Aliyah)'),
+          // builder: (_) => const AddTaskScreen(),
+        );
+
+      case editTask:
+        return MaterialPageRoute(
+          builder: (_) => const _PlaceholderScreen(title: 'Edit Task Screen (Aliyah)'),
+          // builder: (_) => const EditTaskScreen(),
         );
 
       case taskDetail:
-        final args = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => _useRealTaskDetail
-              ? const SizedBox() // Ganti dengan: TaskDetailScreen(task: args)
-              : _PlaceholderScreen(
-                  title: 'Task Detail Screen',
-                  assignee: 'Aliyah + Laudya',
-                  extraData: args,
-                ),
+          builder: (_) => const _PlaceholderScreen(title: 'Task Detail Screen (Aliyah)'),
+          // builder: (_) => const TaskDetailScreen(),
         );
 
       case history:
         return MaterialPageRoute(
-          builder: (_) => _useRealHistory
-              ? const SizedBox() // Ganti dengan: const HistoryScreen()
-              : const _PlaceholderScreen(title: 'History Screen', assignee: 'Laili'),
+          builder: (_) => const _PlaceholderScreen(title: 'History Screen (Laili)'),
+          // builder: (_) => const HistoryScreen(),
         );
 
       case notification:
         return MaterialPageRoute(
-          builder: (_) => _useRealNotification
-              ? const SizedBox() // Ganti dengan: const NotificationScreen()
-              : const _PlaceholderScreen(title: 'Notification Screen', assignee: 'Bintoro'),
+          builder: (_) => const _PlaceholderScreen(title: 'Notification Screen (Bintoro)'),
+          // builder: (_) => const NotificationScreen(),
         );
 
       case profile:
         return MaterialPageRoute(
-          builder: (_) => _useRealProfile
-              ? const SizedBox() // Ganti dengan: const ProfileScreen()
-              : const _PlaceholderScreen(title: 'Profile Screen', assignee: 'Laili'),
+          builder: (_) => const _PlaceholderScreen(title: 'Profile Screen (Laili)'),
+          // builder: (_) => const ProfileScreen(),
         );
 
       default:
@@ -101,7 +104,7 @@ class AppRoutes {
           builder: (_) => Scaffold(
             appBar: AppBar(title: const Text('Rute Tidak Ditemukan')),
             body: Center(
-              child: Text('Rute "${settings.name}" belum terdaftar di AppRoutes.'),
+              child: Text('Halaman dengan rute "${settings.name}" tidak ditemukan.'),
             ),
           ),
         );
@@ -110,73 +113,31 @@ class AppRoutes {
 }
 
 // =============================================================================
-// 4. SCREEN PLACEHOLDER (Satu-satunya komponen internal isolasi)
-// Digunakan agar aplikasi tetap bisa berpindah halaman tanpa crash saat
-// fitur teman belum selesai dikerjakan.
+// PLACEHOLDER SCREEN SEMENTARA (DUMMY SCREEN)
+// Kelas internal agar aplikasi tetap bisa dites jalan tanpa error/crash
 // =============================================================================
 class _PlaceholderScreen extends StatelessWidget {
   final String title;
-  final String assignee;
-  final dynamic extraData;
-
-  const _PlaceholderScreen({
-    required this.title,
-    required this.assignee,
-    this.extraData,
-  });
+  const _PlaceholderScreen({required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        centerTitle: true,
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.construction_rounded,
-                size: 72,
-                color: Colors.amber,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.blue.shade200),
-                ),
-                child: Text(
-                  'Penanggung Jawab: $assignee',
-                  style: TextStyle(
-                    color: Colors.blue.shade900,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              if (extraData != null) ...[
-                const SizedBox(height: 20),
-                Text(
-                  'Arguments / Data Diterima:\n$extraData',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ],
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.construction, size: 64, color: Colors.teal),
+            const SizedBox(height: 16),
+            Text(
+              '$title\nsedang dalam tahap pengerjaan.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
         ),
       ),
     );
