@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../services/firestore_service.dart';
+import '../services/notification_service.dart';
 
 class NotificationProvider extends ChangeNotifier {
-  final FirestoreService _firestoreService = FirestoreService();
+  final NotificationService _notificationService = NotificationService();
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
-      _notificationsSubscription;
+  _notificationsSubscription;
 
   StreamSubscription<int>? _unreadCountSubscription;
 
@@ -39,41 +39,40 @@ class NotificationProvider extends ChangeNotifier {
 
     notifyListeners();
 
-    _notificationsSubscription =
-        _firestoreService.getNotifications(userId).listen(
-      (snapshot) {
-        _notifications = snapshot.docs.map((doc) {
-          return {
-            'id': doc.id,
-            ...doc.data(),
-          };
-        }).toList();
+    _notificationsSubscription = _notificationService
+        .getNotifications(userId)
+        .listen(
+          (snapshot) {
+            _notifications = snapshot.docs.map((doc) {
+              return {'id': doc.id, ...doc.data()};
+            }).toList();
 
-        _isLoading = false;
-        _errorMessage = null;
+            _isLoading = false;
+            _errorMessage = null;
 
-        notifyListeners();
-      },
-      onError: (Object error) {
-        _isLoading = false;
-        _errorMessage = 'Gagal mengambil daftar notifikasi.';
+            notifyListeners();
+          },
+          onError: (Object error) {
+            _isLoading = false;
+            _errorMessage = 'Gagal mengambil daftar notifikasi.';
 
-        notifyListeners();
-      },
-    );
+            notifyListeners();
+          },
+        );
 
-    _unreadCountSubscription =
-        _firestoreService.getUnreadCount(userId).listen(
-      (unreadTotal) {
-        _unreadCount = unreadTotal;
-        notifyListeners();
-      },
-      onError: (Object error) {
-        _errorMessage = 'Gagal menghitung notifikasi yang belum dibaca.';
+    _unreadCountSubscription = _notificationService
+        .getUnreadCount(userId)
+        .listen(
+          (unreadTotal) {
+            _unreadCount = unreadTotal;
+            notifyListeners();
+          },
+          onError: (Object error) {
+            _errorMessage = 'Gagal menghitung notifikasi yang belum dibaca.';
 
-        notifyListeners();
-      },
-    );
+            notifyListeners();
+          },
+        );
   }
 
   // Menandai notifikasi sebagai sudah dibaca.
@@ -82,7 +81,7 @@ class NotificationProvider extends ChangeNotifier {
     required String notificationId,
   }) async {
     try {
-      await _firestoreService.markAsRead(
+      await _notificationService.markAsRead(
         userId: userId,
         notificationId: notificationId,
       );
@@ -120,4 +119,3 @@ class NotificationProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-
