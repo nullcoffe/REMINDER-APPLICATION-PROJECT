@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
-// TODO (Nanti saat file layar asli dari tim sudah selesai):
-// Hilangkan komentar import di bawah ini dan ganti Placeholder dengan Screen asli.
-// import 'package:reminder_application_project/features/splash/splash_screen.dart';
-// import 'package:reminder_application_project/features/auth/login_screen.dart';
-// import 'package:reminder_application_project/features/auth/register_screen.dart';
-// import 'package:reminder_application_project/features/dashboard/dashboard_screen.dart';
-// import 'package:reminder_application_project/features/task/add_task_screen.dart';
-// import 'package:reminder_application_project/features/task/edit_task_screen.dart';
-// import 'package:reminder_application_project/features/task/task_detail_screen.dart';
-// import 'package:reminder_application_project/features/history/history_screen.dart';
-// import 'package:reminder_application_project/features/notification/notification_screen.dart';
-// import 'package:reminder_application_project/features/profile/profile_screen.dart';
+// Import layar milik Aliyah yang sudah selesai
+import '../features/splash/splash_screen.dart';
+import '../features/dashboard/dashboard_screen.dart';
+import '../features/task/add_task_screen.dart';
+import '../features/task/edit_task_screen.dart';
+import '../features/task/task_detail_screen.dart';
+
+// TODO (Nanti saat file layar dari tim lain selesai, aktifkan import di bawah):
+// import '../features/auth/login_screen.dart';
+// import '../features/auth/register_screen.dart';
+// import '../features/history/history_screen.dart';
+// import '../features/notification/notification_screen.dart';
+// import '../features/profile/profile_screen.dart';
 
 class AppRoutes {
   AppRoutes._(); // Private constructor
 
   // ===========================================================================
-  // CONSTANT NAMA RUTE (Disepakati Bersama Tim)
+  // CONSTANT NAMA RUTE
   // ===========================================================================
   static const String splash = '/';
   static const String login = '/login';
@@ -40,63 +41,54 @@ class AppRoutes {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderScreen(title: 'Splash Screen (Aliyah)'),
-          // Saat SplashScreen asli milik Aliyah siap:
-          // builder: (_) => const SplashScreen(),
+          builder: (_) => const SplashScreen(),
         );
 
       case login:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderScreen(title: 'Login Screen (Laili)'),
-          // builder: (_) => const LoginScreen(),
         );
 
       case register:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderScreen(title: 'Register Screen (Laili)'),
-          // builder: (_) => const RegisterScreen(),
         );
 
       case dashboard:
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderScreen(title: 'Dashboard Screen (Aliyah)'),
-          // builder: (_) => const DashboardScreen(),
+          builder: (_) => const DashboardScreen(),
         );
 
       case addTask:
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderScreen(title: 'Add Task Screen (Aliyah)'),
-          // builder: (_) => const AddTaskScreen(),
+          builder: (_) => const AddTaskScreen(),
         );
 
       case editTask:
+        // Sesuaikan parameter jika EditTaskScreen membutuhkan data awal
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderScreen(title: 'Edit Task Screen (Aliyah)'),
-          // builder: (_) => const EditTaskScreen(),
+          builder: (_) => const EditTaskScreen(),
         );
 
       case taskDetail:
+        // Sesuaikan parameter jika TaskDetailScreen membutuhkan data awal
         return MaterialPageRoute(
-          builder: (_) => const _PlaceholderScreen(title: 'Task Detail Screen (Aliyah)'),
-          // builder: (_) => const TaskDetailScreen(),
+          builder: (_) => const TaskDetailScreen(),
         );
 
       case history:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderScreen(title: 'History Screen (Laili)'),
-          // builder: (_) => const HistoryScreen(),
         );
 
       case notification:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderScreen(title: 'Notification Screen (Bintoro)'),
-          // builder: (_) => const NotificationScreen(),
         );
 
       case profile:
         return MaterialPageRoute(
           builder: (_) => const _PlaceholderScreen(title: 'Profile Screen (Laili)'),
-          // builder: (_) => const ProfileScreen(),
         );
 
       default:
@@ -113,8 +105,7 @@ class AppRoutes {
 }
 
 // =============================================================================
-// PLACEHOLDER SCREEN SEMENTARA (DUMMY SCREEN)
-// Kelas internal agar aplikasi tetap bisa dites jalan tanpa error/crash
+// PLACEHOLDER SCREEN SEMENTARA UNTUK TIM LAIN
 // =============================================================================
 class _PlaceholderScreen extends StatelessWidget {
   final String title;
