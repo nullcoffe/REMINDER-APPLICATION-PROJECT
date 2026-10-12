@@ -1,169 +1,93 @@
 import 'package:flutter/material.dart';
-import '../../core/widgets/priority_badge.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_sizes.dart';
+import '../../core/constants/app_strings.dart';
 
-class TaskDetailScreen extends StatefulWidget {
+class TaskDetailScreen extends StatelessWidget {
   final String title;
   final String description;
-  final String category;
-  final String priority;
-  final String deadline;
+  final String date;
 
   const TaskDetailScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
-    required this.category,
-    required this.priority,
-    required this.deadline,
-  }) : super(key: key);
-
-  @override
-  State<TaskDetailScreen> createState() => _TaskDetailScreenState();
-}
-
-class _TaskDetailScreenState extends State<TaskDetailScreen> {
-  // Simulasi status checklist sub-tugas
-  final List<Map<String, dynamic>> _subTasks = [
-    {'title': 'Analisis kebutuhan sistem', 'isDone': true},
-    {'title': 'Desain antarmuka (UI/UX)', 'isDone': false},
-    {'title': 'Implementasi kode program', 'isDone': false},
-  ];
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Detail Tugas'),
-        backgroundColor: Colors.teal,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            onPressed: () {
-              // TODO: Navigasi ke EditTaskScreen
-            },
+        title: const Text(
+          AppStrings.taskDetailTitle,
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        backgroundColor: AppColors.surface,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Baris Judul dan Badge Prioritas
-            Row(
+      body: Padding(
+        padding: const EdgeInsets.all(AppSizes.paddingMedium),
+        child: Card(
+          color: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
+          ),
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSizes.paddingLarge),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                // Judul Tugas
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: AppSizes.fontSizeLarge,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(width: 8),
-                PriorityBadge(priority: widget.priority),
+                const SizedBox(height: AppSizes.spacingSmall),
+
+                // Tanggal / Tenggat Waktu
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      size: AppSizes.iconSmall,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: AppSizes.spacingSmall),
+                    Text(
+                      date,
+                      style: const TextStyle(
+                        fontSize: AppSizes.fontSizeSmall,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(height: AppSizes.spacingLarge),
+
+                // Deskripsi Tugas
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: AppSizes.fontSizeMedium,
+                    color: AppColors.textPrimary,
+                    height: 1.5,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 16),
-
-            // Informasi Kategori & Deadline
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.category_outlined, color: Colors.teal, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        widget.category,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                  Container(height: 24, width: 1, color: Colors.grey[300]),
-                  Row(
-                    children: [
-                      const Icon(Icons.access_time_outlined, color: Colors.teal, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        widget.deadline,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Bagian Deskripsi
-            const Text(
-              'Deskripsi',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.description.isEmpty
-                  ? 'Tidak ada deskripsi tambahan untuk tugas ini.'
-                  : widget.description,
-              style: TextStyle(
-                fontSize: 14,
-                color: widget.description.isEmpty ? Colors.grey : Colors.black87,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Bagian Sub-Tugas / Checklist
-            const Text(
-              'Sub-Tugas (Checklist)',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _subTasks.length,
-              itemBuilder: (context, index) {
-                final subTask = _subTasks[index];
-                return CheckboxListTile(
-                  title: Text(
-                    subTask['title'],
-                    style: TextStyle(
-                      decoration: subTask['isDone']
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      color: subTask['isDone'] ? Colors.grey : Colors.black,
-                    ),
-                  ),
-                  value: subTask['isDone'],
-                  activeColor: Colors.teal,
-                  contentPadding: EdgeInsets.zero,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _subTasks[index]['isDone'] = value ?? false;
-                    });
-                  },
-                );
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
