@@ -57,4 +57,10 @@ class AppStrings {
   static const String notificationEmptyTitle = 'Belum ada notifikasi';
   static const String notificationEmptyBody =
       'Pengingat tugas dan deadline kamu akan muncul di sini.';
+
+    // Judul layar task
+  static const String addTaskTitle = 'Tambah Tugas Baru';
+  static const String editTaskTitle = 'Edit Tugas';
+  static const String saveChanges = 'Simpan Perubahan';
+  static const String taskDetailTitle = 'Detail Tugas';
 }

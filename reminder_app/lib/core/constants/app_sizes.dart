@@ -37,4 +37,17 @@ class AppSizes {
   // Ikon & indikator
   static const double iconEmptyState = 64.0; // notification_screen.dart
   static const double loadingIndicatorSize = 20.0; // custom_button.dart
+
+    // Alias untuk nama yang dipakai layar task
+  static const double paddingMedium = spaceM; // 16
+  static const double paddingLarge = spaceL; // 24
+  static const double radiusMedium = radiusDefault;
+  static const double radiusLarge = radiusCard;
+  static const double spacingSmall = spaceS;
+  static const double spacingMedium = spaceM;
+  static const double spacingLarge = spaceL;
+  static const double iconSmall = 16.0; // usulan
+  static const double fontSizeSmall = 12.0; // usulan
+  static const double fontSizeMedium = 16.0; // usulan
+  static const double fontSizeLarge = 20.0; // usulan
 }
