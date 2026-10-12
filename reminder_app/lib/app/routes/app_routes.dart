@@ -7,12 +7,12 @@ import '../features/task/add_task_screen.dart';
 import '../features/task/edit_task_screen.dart';
 import '../features/task/task_detail_screen.dart';
 
-// TODO (Nanti saat file layar dari tim lain selesai, aktifkan import di bawah):
-// import '../features/auth/login_screen.dart';
-// import '../features/auth/register_screen.dart';
-// import '../features/history/history_screen.dart';
-// import '../features/notification/notification_screen.dart';
-// import '../features/profile/profile_screen.dart';
+// import layar dari tim selesai:
+import '../features/auth/login_screen.dart';
+import '../features/auth/register_screen.dart';
+import '../features/history/history_screen.dart';
+import '../features/notification/notification_screen.dart';
+import '../features/profile/profile_screen.dart';
 
 class AppRoutes {
   AppRoutes._(); // Private constructor
