@@ -3,12 +3,22 @@
 // Referensi desain Figma: "03 Register"
 // Layar daftar akun baru: isi email, password, konfirmasi password.
 // Ada bar kecil yang nunjukin kekuatan password secara langsung.
-// Sama seperti login: belum nyambung ke Firebase / AuthProvider (bagian Bintoro).
-// Titik sambungnya ada di _onRegisterPressed() (cari komentar TODO).
+//
+// Sudah tersambung ke AuthProvider (buatan Bintoro) lewat _onRegisterPressed().
+// Kalau daftar sukses, user otomatis login (Firebase) dan dipindah ke dashboard.
 // =============================================================================
 
 // Semua widget Flutter datang dari sini.
 import 'package:flutter/material.dart';
+
+// Provider: dipakai untuk mengambil AuthProvider lewat context.read<...>().
+import 'package:provider/provider.dart';
+
+// Daftar nama rute aplikasi (buatan Aliyah), dipakai pindah ke dashboard.
+import '../../app/routes/app_routes.dart';
+
+// State auth (buatan Bintoro): register(), isLoading, errorMessage.
+import '../../providers/auth_provider.dart';
 
 // Layar login, dipakai buat balik ke login kalau register dibuka tanpa
 // tumpukan halaman sebelumnya (lihat _goToLogin).
@@ -55,25 +65,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // 3. Tampilkan loading.
     setState(() => _isLoading = true);
 
-    final email = _emailController.text.trim();
+    // 4. Panggil AuthProvider.register(). Hasilnya true (sukses) atau false.
+    //    Catatan: AuthService menolak email selain domain .ac.id, jadi email
+    //    non-kampus akan gagal di tahap ini walau lolos validasi form.
+    final auth = context.read<AuthProvider>();
+    final success = await auth.register(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
 
-    // TODO(Bintoro): ganti bagian simulasi di bawah dengan
-    //   final error = await context.read<AuthProvider>()
-    //       .register(email, _passwordController.text);
-    // lalu kalau `error` tidak null, tampilkan lewat _showMessage(error).
-    //
-    // Sementara ini cuma simulasi: print ke console, tunggu 1 detik.
-    debugPrint('Register dipanggil: $email');
-    await Future.delayed(const Duration(seconds: 1));
+    // 5. Baca pesan error SEKARANG, sebelum pindah layar.
+    final error = auth.errorMessage;
 
-    // Pastikan layar masih ada sebelum setState (user mungkin sudah pindah).
+    // 6. Pastikan layar masih ada sebelum setState (user mungkin sudah pindah).
     if (!mounted) return;
     setState(() => _isLoading = false);
 
-    _showMessage('Akun berhasil dibuat (simulasi)');
-
-    // Setelah daftar, arahkan user ke halaman login.
-    _goToLogin();
+    if (success) {
+      _showMessage('Akun berhasil dibuat');
+      // Firebase otomatis memasukkan user ke sesi login setelah daftar,
+      // jadi langsung ke dashboard dan hapus layar sebelumnya dari tumpukan.
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } else {
+      _showMessage(error ?? 'Pendaftaran gagal. Silakan coba lagi.');
+    }
   }
 
   /// Kembali ke layar login.
@@ -127,13 +145,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const AuthHeader(
                       showBrand: true,
                       title: 'Daftar Akun Baru',
-                      subtitle:
-                          'Mulai kelola tugas kuliah dan deadline '
+                      subtitle: 'Mulai kelola tugas kuliah dan deadline '
                           'lebih teratur bersama TaskZilla',
                     ),
                     const SizedBox(height: 28),
 
-                    // --- Email (pribadi maupun kampus sama-sama boleh) ---
+                    // --- Email ---
+                    // TODO: AuthService hanya menerima email .ac.id. Kalau tim
+                    // memutuskan tetap wajib .ac.id, ganti validator di bawah
+                    // dengan validator khusus kampus supaya error muncul di form.
                     AuthTextField(
                       label: 'Email',
                       hint: 'cth: nama@gmail.com',

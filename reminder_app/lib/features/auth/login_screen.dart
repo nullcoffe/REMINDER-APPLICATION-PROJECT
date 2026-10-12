@@ -4,13 +4,21 @@
 //
 // Layar login: isi email + password, lalu tekan "Masuk Sekarang".
 //
-// Catatan penting: layar ini BELUM nyambung ke Firebase / AuthProvider
-// (itu bagian Bintoro). Jadi saat tombol ditekan, prosesnya masih simulasi.
-// Titik yang nanti disambung ditandai komentar TODO di _onLoginPressed().
+// Sudah tersambung ke AuthProvider (buatan Bintoro) lewat _onLoginPressed().
+// Kalau login sukses, user dipindah ke dashboard lewat AppRoutes (Aliyah).
 // =============================================================================
 
 // Semua widget Flutter datang dari sini. Jangan sampai ketinggalan.
 import 'package:flutter/material.dart';
+
+// Provider: dipakai untuk mengambil AuthProvider lewat context.read<...>().
+import 'package:provider/provider.dart';
+
+// Daftar nama rute aplikasi (buatan Aliyah), dipakai pindah ke dashboard.
+import '../../app/routes/app_routes.dart';
+
+// State login (buatan Bintoro): login(), isLoading, errorMessage.
+import '../../providers/auth_provider.dart';
 
 // Layar register (tetangga satu folder), dipakai buat pindah halaman.
 import 'register_screen.dart';
@@ -38,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // Catatan: centang ini baru tampilan saja, belum memengaruhi proses login.
   bool _rememberMe = false; // status centang "Ingat Saya"
   bool _isLoading = false; // true = lagi proses login (tombol muter)
 
@@ -51,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   /// Dijalankan saat tombol "Masuk Sekarang" ditekan (atau tekan Enter di password).
-  /// `async` karena ada proses yang perlu ditunggu (nanti: panggil server).
+  /// `async` karena ada proses yang perlu ditunggu (panggil Firebase).
   Future<void> _onLoginPressed() async {
     // 1. Tutup keyboard dulu.
     FocusScope.of(context).unfocus();
@@ -63,29 +72,38 @@ class _LoginScreenState extends State<LoginScreen> {
     // 3. Tampilkan loading.
     setState(() => _isLoading = true);
 
-    // 4. Ambil isi form.
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+    // 4. Panggil AuthProvider.login(). Hasilnya true (sukses) atau false (gagal).
+    //    context.read dipakai (bukan watch) karena ini di dalam fungsi,
+    //    bukan di build().
+    final auth = context.read<AuthProvider>();
+    final success = await auth.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
 
-    // TODO(Bintoro): ganti bagian simulasi di bawah dengan
-    //   final error = await context.read<AuthProvider>().login(email, password);
-    // lalu kalau `error` tidak null, tampilkan lewat _showMessage(error).
-    //
-    // Sementara ini cuma simulasi: print ke console, tunggu 1 detik.
-    // (Panjang password saja yang di-print, bukan isinya, demi keamanan.)
-    debugPrint('Login dipanggil: $email (ingat saya: $_rememberMe)');
-    debugPrint('Panjang password: ${password.length}');
-    await Future.delayed(const Duration(seconds: 1));
+    // 5. Baca pesan error SEKARANG, sebelum pindah layar. Kalau gagal,
+    //    AuthProvider sudah mengisi errorMessage (misal "Email atau kata
+    //    sandi salah.").
+    final error = auth.errorMessage;
 
-    // 5. Cek `mounted`: pastikan layar masih ada. Kalau user keburu pindah
+    // 6. Cek `mounted`: pastikan layar masih ada. Kalau user keburu pindah
     //    halaman selama menunggu, setState di layar yang sudah hilang bisa error.
     if (!mounted) return;
 
-    // 6. Matikan loading.
+    // 7. Matikan loading.
     setState(() => _isLoading = false);
 
-    // TODO(Aliyah): pindah ke dashboard lewat AppRoutes kalau login sukses.
-    _showMessage('Login berhasil (simulasi)');
+    if (success) {
+      // Sukses: masuk dashboard dan hapus semua layar sebelumnya dari tumpukan,
+      // jadi tombol back tidak balik ke login.
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } else {
+      // Gagal: tampilkan pesan dari AuthProvider.
+      _showMessage(error ?? 'Login gagal. Silakan coba lagi.');
+    }
   }
 
   /// Dipanggil saat link "Lupa kata sandi?" ditekan.
@@ -206,7 +224,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Expanded(
                           child: Text(
                             'Ingat Saya di perangkat ini',
-                            style: TextStyle(fontSize: 12, color: AuthStyle.textGrey),
+                            style: TextStyle(
+                                fontSize: 12, color: AuthStyle.textGrey),
                           ),
                         ),
                       ],
@@ -227,7 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text(
                           'Belum punya akun? ',
-                          style: TextStyle(fontSize: 12, color: AuthStyle.textGrey),
+                          style: TextStyle(
+                              fontSize: 12, color: AuthStyle.textGrey),
                         ),
                         GestureDetector(
                           onTap: _isLoading ? null : _goToRegister,
