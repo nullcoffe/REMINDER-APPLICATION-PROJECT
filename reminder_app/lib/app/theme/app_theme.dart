@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_sizes.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_sizes.dart';
 
 class AppTheme {
   AppTheme._(); // Private constructor agar class tidak bisa di-instansiasi
@@ -12,18 +12,18 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.background,
+      primaryColor: AppColors.primaryTeal,
+      scaffoldBackgroundColor: AppColors.scaffoldLight,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
+        seedColor: AppColors.primaryTeal,
+        primary: AppColors.primaryTeal,
+        secondary: AppColors.secondaryTeal,
         brightness: Brightness.light,
       ),
 
       // App Bar Theme
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.primaryTeal,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -32,37 +32,31 @@ class AppTheme {
       // Elevated Button Theme (UI Kit Tombol Utama TaskZilla)
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.primaryTeal,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+            borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSizes.paddingMedium,
-            horizontal: AppSizes.paddingLarge,
-          ),
+          padding: AppSizes.buttonPadding,
         ),
       ),
 
       // Input Decoration Theme (Form TextField)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.paddingMedium,
-          vertical: AppSizes.paddingSmall,
-        ),
+        fillColor: AppColors.surfaceLight,
+        contentPadding: AppSizes.inputPadding,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+          borderSide: const BorderSide(color: AppColors.borderLight),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+          borderSide: const BorderSide(color: AppColors.borderLight),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+          borderSide: const BorderSide(color: AppColors.primaryTeal, width: 2),
         ),
       ),
     );
@@ -75,12 +69,12 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.backgroundDark, // Sesuaikan jika ada konstanta dark background
+      primaryColor: AppColors.primaryTeal,
+      scaffoldBackgroundColor: AppColors.scaffoldDark,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
+        seedColor: AppColors.primaryTeal,
+        primary: AppColors.primaryTeal,
+        secondary: AppColors.secondaryTeal,
         brightness: Brightness.dark,
       ),
 
@@ -93,36 +87,30 @@ class AppTheme {
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.primaryTeal,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+            borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
           ),
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSizes.paddingMedium,
-            horizontal: AppSizes.paddingLarge,
-          ),
+          padding: AppSizes.buttonPadding,
         ),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceDark,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.paddingMedium,
-          vertical: AppSizes.paddingSmall,
-        ),
+        contentPadding: AppSizes.inputPadding,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
           borderSide: const BorderSide(color: AppColors.borderDark),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
           borderSide: const BorderSide(color: AppColors.borderDark),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-          borderSide: const BorderSide(color: AppColors.secondary, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+          borderSide: const BorderSide(color: AppColors.secondaryTeal, width: 2),
         ),
       ),
     );
