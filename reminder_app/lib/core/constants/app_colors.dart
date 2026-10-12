@@ -33,4 +33,10 @@ class AppColors {
   // Status umum
   static const Color error = Colors.red;
   static const Color success = Colors.green;
+
+    // Alias untuk nama yang dipakai layar task
+  static const Color primary = primaryTeal;
+  static const Color background = scaffoldLight;
+  static const Color surface = surfaceLight;
+  static const Color textPrimary = Color(0xFF1E293B); // usulan, dari AuthStyle.textDark
 }
