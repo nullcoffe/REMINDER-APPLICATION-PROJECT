@@ -1,7 +1,4 @@
-/// Teks statis TaskZilla.
-///
-/// DRAFT SEMENTARA (backup oleh Laili, PIC asli: Alya).
-/// Teks diambil dari laporan pengajuan ide aplikasi (docx) dan kode develop.
+// kumpulan teks statis (tetap) dan string yang akan digunakan di seluruh aplikasi
 class AppStrings {
   AppStrings._();
 
@@ -58,7 +55,7 @@ class AppStrings {
   static const String notificationEmptyBody =
       'Pengingat tugas dan deadline kamu akan muncul di sini.';
 
-    // Judul layar task
+  // Judul layar task
   static const String addTaskTitle = 'Tambah Tugas Baru';
   static const String editTaskTitle = 'Edit Tugas';
   static const String saveChanges = 'Simpan Perubahan';
