@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../app/routes/app_routes.dart';
-import '../../providers/auth_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
+import '../../services/auth_service.dart';
 import 'register_screen.dart';
 import 'widgets/auth_form_helper.dart';
 
@@ -20,6 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authService = AuthService();
+
   bool _rememberMe = false;
   bool _isLoading = false;
 
@@ -35,21 +35,24 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-    final auth = context.read<AuthProvider>();
-    final success = await auth.login(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
-    final error = auth.errorMessage;
 
-    if (!mounted) return;
-    setState(() => _isLoading = false);
+    try {
+      await _authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
 
-    if (success) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
-    } else {
-      _showMessage(error ?? 'Login gagal. Silakan coba lagi.');
+      if (!mounted) return;
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      String errorMsg = e.toString().replaceFirst('Exception: ', '');
+      _showMessage(errorMsg);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -58,8 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _goToRegister() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => const RegisterScreen()));
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+    );
   }
 
   void _showMessage(String text) {
@@ -87,8 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const AuthHeader(
                       title: 'Masuk ke Akun Anda',
-                      subtitle:
-                          'Lanjutkan kelola tugas dan jadwal kuliah '
+                      subtitle: 'Lanjutkan kelola tugas dan jadwal kuliah '
                           'dengan akun TaskZilla yang sudah terdaftar.',
                     ),
                     const SizedBox(height: 28),
@@ -137,8 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             activeColor: AppColors.primaryTeal,
                             onChanged: _isLoading
                                 ? null
-                                : (v) =>
-                                      setState(() => _rememberMe = v ?? false),
+                                : (v) => setState(() => _rememberMe = v ?? false),
                           ),
                         ),
                         const SizedBox(width: 8),

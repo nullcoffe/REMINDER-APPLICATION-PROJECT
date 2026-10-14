@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../app/routes/app_routes.dart';
-import '../../providers/auth_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
+import '../../services/auth_service.dart';
 import 'login_screen.dart';
 import 'widgets/auth_form_helper.dart';
 
@@ -21,6 +19,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
+  final _authService = AuthService();
+
   bool _isLoading = false;
 
   @override
@@ -36,22 +36,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-    final auth = context.read<AuthProvider>();
-    final success = await auth.register(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
-    final error = auth.errorMessage;
 
-    if (!mounted) return;
-    setState(() => _isLoading = false);
+    try {
+      await _authService.register(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
 
-    if (success) {
+      if (!mounted) return;
       _showMessage('Akun berhasil dibuat');
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
-    } else {
-      _showMessage(error ?? 'Pendaftaran gagal. Silakan coba lagi.');
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      String errorMsg = e.toString().replaceFirst('Exception: ', '');
+      _showMessage(errorMsg);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
