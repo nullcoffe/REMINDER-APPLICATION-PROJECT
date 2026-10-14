@@ -1,69 +1,79 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-// [CATATAN RELASI ROUTE]: Pastikan rute atau halaman tujuan aman diimpor atau menggunakan nama string rute
-// import '../../app/routes/app_routes.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:reminder_app/app/routes/app_routes.dart';
+import 'package:reminder_app/core/constants/app_colors.dart';
+import 'package:reminder_app/core/constants/app_sizes.dart';
+import 'package:reminder_app/core/constants/app_strings.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    // Timer selama 3 detik untuk berpindah halaman secara otomatis
-    Timer(const Duration(seconds: 3), () {
-      // [STRATEGI AMAN BENTROK]: Menggunakan navigasi langsung atau via named route
-      // Jika AppRoutes belum sepenuhnya digabung oleh tim, ganti sementara dengan Navigator.pushReplacement
-      // Navigator.pushReplacementNamed(context, '/login');
-      
-      // Navigasi aman sementara:
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const Scaffold(
-            body: Center(
-              child: Text('Halaman Utama / Login (Menunggu Merge Tim)'),
-            ),
-          ),
-        ),
-      );
-    });
+    // Tunggu 3 detik, lalu cek status login untuk menentukan halaman tujuan
+    _timer = Timer(const Duration(seconds: 3), _navigateNext);
+  }
+
+  void _navigateNext() {
+    if (!mounted) return;
+
+    // Auth gate: user sudah punya sesi aktif -> Dashboard, jika tidak -> Login
+    final user = FirebaseAuth.instance.currentUser;
+    final nextRoute = user != null ? AppRoutes.dashboard : AppRoutes.login;
+
+    Navigator.pushReplacementNamed(context, nextRoute);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal, // Menyesuaikan tema utama aplikasi
+      backgroundColor: AppColors.primaryTeal,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Ilustrasi / Maskot Dino (bisa diganti dengan Icon atau Image asset nantinya)
+            // Logo / Maskot TaskZilla
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(AppSizes.spaceS),
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
                 ],
               ),
-              child: const Icon(
-                Icons.pets, // Representasi sementara Mascot Dino
-                size: 80,
-                color: Colors.teal,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/logo_taskzilla.jpeg', // Sesuaikan path sesuai letak foldermu
+                  width: 90,
+                  height: 90,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.spaceL),
             const Text(
-              'TaskZilla',
+              AppStrings.appName,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -71,12 +81,26 @@ class _SplashScreenState extends State<SplashScreen> {
                 letterSpacing: 1.5,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSizes.spaceS),
             const Text(
-              'Smart Task Manager for Students',
+              AppStrings.splashLabel,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppSizes.fontSizeSmall,
+                fontWeight: FontWeight.w600,
                 color: Colors.white70,
+                letterSpacing: 2,
+              ),
+            ),
+            const SizedBox(height: AppSizes.spaceS),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSizes.spaceL),
+              child: Text(
+                AppStrings.splashTagline,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                ),
               ),
             ),
             const SizedBox(height: 48),
