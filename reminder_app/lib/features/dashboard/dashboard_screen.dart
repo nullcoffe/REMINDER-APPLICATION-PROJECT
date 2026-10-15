@@ -28,7 +28,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Mengubah teks status menjadi format yang seragam.
   String _normalizeStatus(dynamic status) {
-    return status.toString().split('.').last
+    return status
+        .toString()
+        .split('.')
+        .last
         .replaceAll('_', ' ')
         .trim()
         .toLowerCase();
@@ -96,11 +99,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final totalTasks = allTasks.length;
 
                 final completedTasks = allTasks.where((task) {
-                  return _normalizeStatus(task.status) == 'done' || _normalizeStatus(task.status) == 'completed';
+                  return _normalizeStatus(task.status) == 'done' ||
+                      _normalizeStatus(task.status) == 'completed';
                 }).length;
 
                 final todoTasks = allTasks.where((task) {
-                  return _normalizeStatus(task.status) == 'to do' || _normalizeStatus(task.status) == 'todo';
+                  return _normalizeStatus(task.status) == 'to do' ||
+                      _normalizeStatus(task.status) == 'todo';
                 }).length;
 
                 final inProgressTasks = allTasks.where((task) {
@@ -248,8 +253,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                               return TaskCard(
                                 title: task.title,
-                                category: task.category,
-                                priority: task.priority,
+                                category: task.categoryId,
+                                priority: task.priorityScore.toString(),
                                 deadline: _formatDeadline(task.deadline),
                                 onTap: () {
                                   Navigator.pushNamed(
