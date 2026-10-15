@@ -1,43 +1,41 @@
-﻿
+﻿import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
 
 import 'app/routes/app_routes.dart';
 import 'app/theme/app_theme.dart';
-import 'firebase_options.dart';
+
 
 Future<void> main() async {
-  // Memastikan Flutter siap sebelum Firebase dijalankan.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Menginisialisasi Firebase sesuai platform.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Menjalankan aplikasi Reminder App.
-  runApp(const ReminderApp());
+  runApp(const TaskZillaApp());
 }
 
-class ReminderApp extends StatelessWidget {
-  const ReminderApp({super.key});
+
+class TaskZillaApp extends StatelessWidget {
+  const TaskZillaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Nama aplikasi.
-      title: 'Reminder App',
-
-      // Menyembunyikan banner DEBUG.
       debugShowCheckedModeBanner: false,
 
-      // Menggunakan tema dari AppTheme.
+      title: 'TaskZilla',
+
       theme: AppTheme.lightTheme,
 
-      // Menentukan halaman pertama aplikasi.
+      darkTheme: AppTheme.darkTheme,
+
+      themeMode: ThemeMode.light,
+
       initialRoute: AppRoutes.initialRoute,
 
-      // Menghubungkan navigasi dengan AppRoutes.
       onGenerateRoute: AppRoutes.generateRoute,
     );
   }
