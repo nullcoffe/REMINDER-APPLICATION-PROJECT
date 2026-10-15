@@ -10,12 +10,10 @@ import '../../features/task/task_detail_screen.dart';
 // Import layar dari tim yang sudah selesai
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
+import '../../features/auth/forgot_password_screen.dart';
 import '../../features/notification/notification_screen.dart';
-
-// TODO(Laili): aktifkan import di bawah saat layarnya sudah jadi,
-// lalu ganti _PlaceholderScreen di case history dan profile.
-// import '../../features/history/history_screen.dart';
-// import '../../features/profile/profile_screen.dart';
+import '../../features/history/history_screen.dart';
+import '../../features/profile/profile_screen.dart';
 
 class AppRoutes {
   AppRoutes._(); // Private constructor
@@ -26,6 +24,7 @@ class AppRoutes {
   static const String splash = '/';
   static const String login = '/login';
   static const String register = '/register';
+  static const String forgotPassword = '/forgot-password';
   static const String dashboard = '/dashboard';
   static const String addTask = '/add-task';
   static const String editTask = '/edit-task';
@@ -52,6 +51,11 @@ class AppRoutes {
 
   // ===========================================================================
   // ROUTE GENERATOR GLOBAL
+  // Dipakai di main.dart:
+  //   MaterialApp(
+  //     initialRoute: AppRoutes.initialRoute,
+  //     onGenerateRoute: AppRoutes.generateRoute,
+  //   )
   // ===========================================================================
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -68,6 +72,11 @@ class AppRoutes {
       case register:
         return MaterialPageRoute(
           builder: (_) => const RegisterScreen(),
+        );
+
+      case forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPasswordScreen(),
         );
 
       case dashboard:
@@ -105,8 +114,7 @@ class AppRoutes {
 
       case history:
         return MaterialPageRoute(
-          builder: (_) =>
-              const _PlaceholderScreen(title: 'History Screen (Laili)'),
+          builder: (_) => const HistoryScreen(),
         );
 
       case notification:
@@ -116,8 +124,7 @@ class AppRoutes {
 
       case profile:
         return MaterialPageRoute(
-          builder: (_) =>
-              const _PlaceholderScreen(title: 'Profile Screen (Laili)'),
+          builder: (_) => const ProfileScreen(),
         );
 
       default:
@@ -126,41 +133,11 @@ class AppRoutes {
             appBar: AppBar(title: const Text('Rute Tidak Ditemukan')),
             body: Center(
               child: Text(
-                  'Halaman dengan rute "${settings.name}" tidak ditemukan.'),
+                'Halaman dengan rute "${settings.name}" tidak ditemukan.',
+              ),
             ),
           ),
         );
     }
-  }
-}
-
-// =============================================================================
-// PLACEHOLDER SCREEN SEMENTARA UNTUK LAYAR YANG BELUM JADI
-// =============================================================================
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const _PlaceholderScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.construction, size: 64, color: Colors.teal),
-            const SizedBox(height: 16),
-            Text(
-              '$title\nsedang dalam tahap pengerjaan.',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
