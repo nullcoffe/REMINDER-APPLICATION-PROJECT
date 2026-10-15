@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../core/widgets/task_card.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<DashboardScreen> createState() => _DashboardScreenState(); 
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
