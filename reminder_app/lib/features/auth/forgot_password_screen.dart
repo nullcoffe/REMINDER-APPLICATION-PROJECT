@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_sizes.dart';
+import '../../core/constants/app_strings.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -26,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      setState(() => _errorMessage = "Email tidak boleh kosong");
+      setState(() => _errorMessage = AppStrings.fieldRequired);
       return;
     }
 
@@ -73,10 +76,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Lupa Password"),
+        backgroundColor: AppColors.primaryTeal,
+        foregroundColor: Colors.white,
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSizes.pagePadding),
           child: _success ? _successView() : _formView(),
         ),
       ),
@@ -92,8 +97,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           const Text(
             "Masukkan email akun kamu untuk menerima link reset password",
             textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.textSecondary),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSizes.spaceL),
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -101,29 +107,43 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             onSubmitted: (_) {
               if (!_loading) _sendResetEmail();
             },
-            decoration: const InputDecoration(
-              labelText: "Email",
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: AppStrings.emailLabel,
+              labelStyle: const TextStyle(color: AppColors.textSecondary),
+              border: const OutlineInputBorder(),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primaryTeal),
+              ),
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: AppSizes.spaceM),
           if (_errorMessage != null) ...[
             Text(
               _errorMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: AppColors.error),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: AppSizes.spaceM),
           ],
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryTeal,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+                ),
+              ),
               onPressed: _loading ? null : _sendResetEmail,
               child: _loading
                   ? const SizedBox(
                       height: 20,
                       width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
                   : const Text("Kirim Link Reset"),
             ),
@@ -140,20 +160,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         const Icon(
           Icons.mark_email_read,
           size: 70,
-          color: Colors.green,
+          color: AppColors.primaryTeal,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSizes.spaceL),
         Text(
           "Link reset password telah dikirim ke:\n\n$_sentEmail",
           textAlign: TextAlign.center,
+          style: const TextStyle(color: AppColors.textPrimary),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: AppSizes.spaceM),
         const Text(
           "Tidak ketemu? Cek juga folder spam.",
           textAlign: TextAlign.center,
+          style: TextStyle(color: AppColors.textSecondary),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSizes.spaceL),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryTeal,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+            ),
+          ),
           onPressed: () => Navigator.pop(context),
           child: const Text("Kembali Login"),
         ),
