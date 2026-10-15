@@ -10,6 +10,7 @@ class AppSizes {
   static const double radiusCard = 16.0;
 
   // Spacing
+  static const double spaceXS = 4.0;
   static const double spaceS = 8.0;
   static const double spaceM = 16.0;
   static const double spaceL = 24.0;
@@ -38,6 +39,7 @@ class AppSizes {
   static const double iconSmall = 16.0;
 
   // Ukuran font
+  static const double fontSizeXS = 12.0;
   static const double fontSizeSmall = 12.0;
   static const double fontSizeMedium = 16.0;
   static const double fontSizeLarge = 20.0;
