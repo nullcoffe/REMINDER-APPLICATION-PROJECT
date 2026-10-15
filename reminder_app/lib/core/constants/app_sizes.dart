@@ -35,6 +35,7 @@ class AppSizes {
   static const double spaceS = 8.0;
   static const double spaceM = 16.0;
   static const double spaceL = 24.0;
+  static const double spaceXL = 40.0;
 
   // Alias untuk kompatibilitas dengan kode sebelumnya.
   static const double spacingSmall = spaceS;

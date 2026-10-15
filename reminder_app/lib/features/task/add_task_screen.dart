@@ -6,7 +6,7 @@ import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_textfield.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({Key? key}) : super(key: key);
+  const AddTaskScreen({super.key});
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -135,7 +135,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               // Dropdown Kategori (Mengambil dari AppStrings.categories)
               DropdownButtonFormField<String>(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Kategori',
                   prefixIcon: const Icon(Icons.category_outlined, color: AppColors.primaryTeal),
@@ -152,7 +152,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               // Dropdown Prioritas
               DropdownButtonFormField<String>(
-                value: _selectedPriority,
+                initialValue: _selectedPriority,
                 decoration: InputDecoration(
                   labelText: 'Prioritas',
                   prefixIcon: const Icon(Icons.flag_outlined, color: AppColors.primaryTeal),

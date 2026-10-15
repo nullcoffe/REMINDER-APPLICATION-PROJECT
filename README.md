@@ -1,4 +1,7 @@
-# 📋 Pembagian Tugas TaskZilla
+Berikut versi lengkap `README.md` yang sudah diperbarui. Tinggal copy-paste seluruhnya ke file `README.md` di repository kamu.
+
+````markdown
+# Pembagian Tugas TaskZilla
 
 Dokumen ini memastikan pembagian tugas yang **adil, terukur, dan mudah dilacak di GitHub**. Setiap anggota memiliki "wilayah kekuasaan" masing-masing dengan beban kerja yang seimbang antara UI dan logika.
 
@@ -22,10 +25,10 @@ Dokumen ini memastikan pembagian tugas yang **adil, terukur, dan mudah dilacak d
 | Anggota                  | NIM | Role                    | Fokus Utama                                                                        |
 | ------------------------ | --- | ----------------------- | ---------------------------------------------------------------------------------- |
 | **Aliyah Tasya Ashifah** | 125 | Frontend Lead & UI Kit  | Tema, Routes, Widget Reusable, Splash, Dashboard, Task                             |
-| **Laili Nurul Fadila**   | 013 | Frontend & User Flow    | Auth UI, History, Profile                                                          |
+| **Laili Nurul Fadila**   | 013 | Frontend & User Flow    | Auth UI, History, Constants                                                        |
 | **Laudya Aulia Putri**   | 042 | Backend Lead & PM       | Models, Service Firestore (task/category/checklist/user), Task & Category Provider |
 | **Bintoro Amansyah**     | 004 | Backend Logic           | Auth Service, Notifikasi (FCM/Local/Service), Priority Calculator, Notification UI |
-| **Alya Ramadhani**       | 144 | System Analyst & Config | Constants, Utils (validator/formatter), Config, Documentation                      |
+| **Alya Ramadhani**       | 144 | System Analyst & Config | Profile, Utils (validator/formatter), Config, Documentation                        |
 | **Delavanti Gogumo**     | 177 | QA & DevOps             | Testing, Tools, Build, Git Management                                              |
 
 ---
@@ -59,10 +62,10 @@ REMINDER-APPLICATION-PROJECT/
     │   │   └── requirements.md          # Catatan analisis kebutuhan teknis
     │   │
     │   ├── core/
-    │   │   ├── constants/               # Terjemahan Figma ke kode → ALYA
+    │   │   ├── constants/               # Terjemahan Figma ke kode → LAI
     │   │   │   ├── app_colors.dart      # Kode warna hex dari Figma
     │   │   │   ├── app_sizes.dart       # Padding/margin standar
-    │   │   │   └── app_strings.dart     # Teks statis aplikasi
+    │   │   │   ── app_strings.dart     # Teks statis aplikasi
     │   │   ├── utils/                   # Logika helper → ALYA & BIN
     │   │   │   ├── date_formatter.dart      # Format deadline & countdown   [ALYA]
     │   │   │   ├── email_validator.dart     # Validasi domain .ac.id        [ALYA]
@@ -70,7 +73,7 @@ REMINDER-APPLICATION-PROJECT/
     │   │   └── widgets/                 # Widget reusable → ALY
     │   │       ├── costom_button.dart       # ⚠️ Tombol standar TaskZilla
     │   │       ├── costom_textfield.dart    # ⚠️ Input form dengan validasi
-    │   │       ├── loading_inicator.dart    # ⚠️ Animasi loading global
+    │   │       ├── loading_inicator.dart    # ️ Animasi loading global
     │   │       ├── priority_badge.dart      # Label Urgent/High/Medium/Low
     │   │       └── task_card.dart           # Kartu tugas (Dashboard/Riwayat)
     │   │
@@ -111,7 +114,7 @@ REMINDER-APPLICATION-PROJECT/
     │       │   ├── add_task_screen.dart     # Form tambah tugas + Smart Alarm
     │       │   ├── edit_task_screen.dart    # Edit detail tugas
     │       │   ├── task_detail_screen.dart  # Detail + checklist + countdown
-    │       │   └── widgets/
+    │       │   ── widgets/
     │       │       ├── checklist_item.dart  # Widget sub-tugas
     │       │       └── task_form.dart       # Reusable form input tugas
     │       ├── history/                 # → LAI
@@ -120,7 +123,7 @@ REMINDER-APPLICATION-PROJECT/
     │       ├── nontification/           # ⚠️ → BIN (nama folder typo)
     │       │   └── notification_screen.dart # Daftar reminder deadline
     │       ├── notification/            # ⚠️ → BIN (duplikat, hanya berisi .gitkeep)
-    │       └── profile/                 # → LAI
+    │       └── profile/                 # → ALYA
     │           ├── profile_screen.dart      # Info akun + statistik pribadi
     │           └── widgets/
     │               └── settings_tile.dart   # Toggle Dark Mode, Notifikasi
@@ -135,6 +138,7 @@ REMINDER-APPLICATION-PROJECT/
     └── docs/                            # Dokumentasi teknis → ALYA & DEL
         └── (api_reference.md, database_schema.md, CONTRIBUTING.md, weekly_report.md)
 ```
+````
 
 ### 🔄 Perubahan dari Rencana Awal
 
@@ -146,6 +150,8 @@ REMINDER-APPLICATION-PROJECT/
 | `loading_indicator.dart`          | `loading_inicator.dart`                                                              | Typo, perlu diperbaiki                     |
 | `notification*`                   | `nontification*`                                                                     | Typo di model, provider, service, folder   |
 | `features/notification/`          | Ada 2 folder: `nontification/` & `notification/`                                     | Duplikat, harus disatukan                  |
+| `core/constants/`                 | PIC berpindah dari Alya ke **Laili**                                                 | Pertukaran tugas dengan Profile            |
+| `features/profile/`               | PIC berpindah dari Laili ke **Alya**                                                 | Pertukaran tugas dengan Constants          |
 
 ---
 
@@ -155,7 +161,7 @@ REMINDER-APPLICATION-PROJECT/
 | ----------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `lib/app/`                    | Aliyah           | Rute navigasi & tema global sesuai desain Figma (warna Teal, tipografi, UI Kit)                                                                                          |
 | `lib/config/`                 | Alya             | Feature flags & dokumentasi kebutuhan teknis sistem                                                                                                                      |
-| `lib/core/constants/`         | Alya             | Penerjemahan desain Figma ke kode (warna, teks, ukuran)                                                                                                                  |
+| `lib/core/constants/`         | Laili            | Penerjemahan desain Figma ke kode (warna, teks, ukuran)                                                                                                                  |
 | `lib/core/utils/`             | Alya & Bintoro   | Alya: `email_validator`, `date_formatter` · Bintoro: `priority_calculator`                                                                                               |
 | `lib/core/widgets/`           | Aliyah           | Widget reusable seluruh aplikasi                                                                                                                                         |
 | `lib/models/`                 | Laudya           | Struktur data sesuai skema Firestore, lengkap dengan `fromFirestore()` & `toFirestore()`                                                                                 |
@@ -167,7 +173,7 @@ REMINDER-APPLICATION-PROJECT/
 | `lib/features/task/`          | Aliyah           | Tambah, edit, dan detail tugas                                                                                                                                           |
 | `lib/features/history/`       | Laili            | Riwayat tugas selesai & grafik produktivitas                                                                                                                             |
 | `lib/features/nontification/` | Bintoro          | Daftar reminder deadline                                                                                                                                                 |
-| `lib/features/profile/`       | Laili            | Info akun & pengaturan                                                                                                                                                   |
+| `lib/features/profile/`       | Alya             | Info akun & pengaturan                                                                                                                                                   |
 | `test/`                       | Delavanti        | Unit test & widget test, target coverage minimal **70%**                                                                                                                 |
 | `tools/`                      | Delavanti        | Script lint check & build APK                                                                                                                                            |
 | `docs/`                       | Alya & Delavanti | Dokumentasi teknis proyek                                                                                                                                                |
@@ -196,9 +202,9 @@ REMINDER-APPLICATION-PROJECT/
 | ----------------------- | --------------------------------------------------------------- |
 | `lib/features/auth/`    | `login_screen`, `register_screen`, widgets form dengan validasi |
 | `lib/features/history/` | `history_screen`, grafik produktivitas, completed task card     |
-| `lib/features/profile/` | `profile_screen`, `settings_tile` (Dark Mode, Notifikasi)       |
+| `lib/core/constants/`   | `app_colors`, `app_sizes`, `app_strings` (terjemahan Figma)     |
 
-**🎯 Output:** Flow autentikasi aman, halaman riwayat interaktif, form profil.
+**🎯 Output:** Flow autentikasi aman, halaman riwayat interaktif, constants konsisten dengan Figma.
 
 ### 3. Laudya Aulia Putri (042) — Backend Lead & PM
 
@@ -228,19 +234,19 @@ REMINDER-APPLICATION-PROJECT/
 | `lib/core/utils/priority_calculator.dart`   | Algoritma perhitungan skor prioritas           |
 | `lib/features/nontification/`               | Layar daftar reminder deadline                 |
 
-**🎯 Output:** Sistem Auth & Notifikasi aktif, algoritma prioritas akurat.
+** Output:** Sistem Auth & Notifikasi aktif, algoritma prioritas akurat.
 
 ### 5. Alya Ramadhani (144) — System Analyst & Config
 
 | File/Folder                           | Deskripsi                                                           |
 | ------------------------------------- | ------------------------------------------------------------------- |
 | `lib/config/`                         | `feature_flags.dart` & `requirements.md`                            |
-| `lib/core/constants/`                 | `app_colors`, `app_strings`, `app_sizes` (terjemahan Figma ke kode) |
+| `lib/features/profile/`               | `profile_screen`, `settings_tile` (Dark Mode, Notifikasi)           |
 | `lib/core/utils/email_validator.dart` | Validasi domain .ac.id                                              |
 | `lib/core/utils/date_formatter.dart`  | Format deadline & countdown                                         |
 | `docs/`                               | `api_reference`, `database_schema`, `CONTRIBUTING`, `weekly_report` |
 
-**🎯 Output:** Constants terstruktur, validator & formatter fungsional, dokumentasi lengkap.
+**🎯 Output:** Halaman profil terstruktur, validator & formatter fungsional, dokumentasi lengkap.
 
 ### 6. Delavanti Gogumo (177) — QA & DevOps
 
@@ -280,11 +286,11 @@ Format: `feature/[nama-fitur]-[nama]` — dibuat dari branch **`develop`**, di-m
 
 ### 👩‍💻 Laili — Frontend & User Flow
 
-| Branch                  | Cakupan                                             | Minggu |
-| ----------------------- | --------------------------------------------------- | :----: |
-| `feature/auth-ui-laili` | `features/auth/` (login, register, widgets)         |   3    |
-| `feature/history-laili` | `features/history/` (screen, chart, completed card) |   6    |
-| `feature/profile-laili` | `features/profile/` (screen, settings tile)         |   6    |
+| Branch                    | Cakupan                                             | Minggu |
+| ------------------------- | --------------------------------------------------- | :----: |
+| `feature/auth-ui-laili`   | `features/auth/` (login, register, widgets)         |   3    |
+| `feature/history-laili`   | `features/history/` (screen, chart, completed card) |   6    |
+| `feature/constants-laili` | `core/constants/*` (colors, strings, sizes)         |   2    |
 
 ### 👩‍💻 Laudya — Backend Lead & PM
 
@@ -307,12 +313,12 @@ Format: `feature/[nama-fitur]-[nama]` — dibuat dari branch **`develop`**, di-m
 
 ### 👩‍💻 Alya — System Analyst & Config
 
-| Branch                   | Cakupan                                                                     | Minggu |
-| ------------------------ | --------------------------------------------------------------------------- | :----: |
-| `feature/constants-alya` | `core/constants/*` (colors, strings, sizes)                                 |   2    |
-| `feature/utils-alya`     | `core/utils/email_validator.dart`, `date_formatter.dart`                    |  2–3   |
-| `feature/config-alya`    | `config/feature_flags.dart`, `config/requirements.md`                       |  1–2   |
-| `docs/api-schema-alya`   | `docs/api_reference.md`, `docs/database_schema.md`, `docs/weekly_report.md` |  2–9   |
+| Branch                 | Cakupan                                                                     | Minggu |
+| ---------------------- | --------------------------------------------------------------------------- | :----: |
+| `feature/profile-alya` | `features/profile/` (screen, settings tile)                                 |   6    |
+| `feature/utils-alya`   | `core/utils/email_validator.dart`, `date_formatter.dart`                    |  2–3   |
+| `feature/config-alya`  | `config/feature_flags.dart`, `config/requirements.md`                       |  1–2   |
+| `docs/api-schema-alya` | `docs/api_reference.md`, `docs/database_schema.md`, `docs/weekly_report.md` |  2–9   |
 
 ### 👩‍💻 Delavanti — QA & DevOps
 
@@ -514,7 +520,7 @@ Beberapa nama file/folder di repository mengandung typo. Sebaiknya **diperbaiki 
 | `services/nontification_service.dart`                | `notification_service.dart`           |
 | `features/nontification/` + `features/notification/` | Satukan jadi `features/notification/` |
 
-> 💡 Gunakan `git mv` (bukan rename manual) agar riwayat file tetap terlacak di GitHub. Setelah rename, setiap anggota yang sudah meng-import file tersebut perlu menyesuaikan path import-nya.
+> Gunakan `git mv` (bukan rename manual) agar riwayat file tetap terlacak di GitHub. Setelah rename, setiap anggota yang sudah meng-import file tersebut perlu menyesuaikan path import-nya.
 
 ### 2. Branching Strategy
 
@@ -564,15 +570,24 @@ Setiap anggota wajib:
 
 ## 🎯 Timeline Implementasi
 
-| Minggu | Fokus                                                                                                                           | PIC Utama                        |
-| :----: | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-|   1    | Setup project, struktur folder, `.gitkeep`, perapihan nama typo, `main.dart` & Firebase setup                                   | Semua anggota, Delavanti, Laudya |
-|   2    | `core/constants/`, `config/`, `app/theme/`, `models/`, `core/utils/` (validator & formatter)                                    | Alya, Aliyah, Laudya             |
-|   3    | `services/auth_service.dart`, `features/auth/`, `services/*_service.dart` (Firestore)                                           | Bintoro, Laili, Laudya           |
-|   4    | `providers/`, `core/utils/priority_calculator.dart`, `features/splash/`, `features/dashboard/`                                  | Laudya, Bintoro, Aliyah          |
-|   5    | `features/task/`, `core/widgets/`                                                                                               | Aliyah                           |
-|   6    | `features/history/`, `features/profile/`                                                                                        | Laili                            |
-|   7    | `services/fcm_service.dart`, `services/local_notification.dart`, `services/notification_service.dart`, `features/notification/` | Bintoro                          |
-|   8    | `test/`, `tools/`, integrasi & testing                                                                                          | Delavanti, Semua anggota         |
-|   9    | Bug fixing, UI polish, dokumentasi                                                                                              | Semua anggota                    |
-|   10   | Build APK, final testing, deployment                                                                                            | Delavanti, Laudya                |
+| Minggu | Fokus                                                                                                                           | PIC Utama                           |
+| :----: | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+|   1    | Setup project, struktur folder, `.gitkeep`, perapihan nama typo, `main.dart` & Firebase setup                                   | Semua anggota, Delavanti, Laudya    |
+|   2    | `core/constants/`, `config/`, `app/theme/`, `models/`, `core/utils/` (validator & formatter)                                    | **Laili**, Aliyah, Laudya           |
+|   3    | `services/auth_service.dart`, `features/auth/`, `services/*_service.dart` (Firestore)                                           | Bintoro, Laili, Laudya              |
+|   4    | `providers/`, `core/utils/priority_calculator.dart`, `features/splash/`, `features/dashboard/`                                  | Laudya, Bintoro, Aliyah             |
+|   5    | `features/task/`, `core/widgets/`                                                                                               | Aliyah                              |
+|   6    | `features/history/`, `features/profile/`                                                                                        | Laili (history), **Alya** (profile) |
+|   7    | `services/fcm_service.dart`, `services/local_notification.dart`, `services/notification_service.dart`, `features/notification/` | Bintoro                             |
+|   8    | `test/`, `tools/`, integrasi & testing                                                                                          | Delavanti, Semua anggota            |
+|   9    | Bug fixing, UI polish, dokumentasi                                                                                              | Semua anggota                       |
+|   10   | Build APK, final testing, deployment                                                                                            | Delavanti, Laudya                   |
+
+````
+
+Setelah kamu copy-paste, simpan file dan jalankan:
+```bash
+git add README.md
+git commit -m "docs: update pembagian tugas (pertukaran constants ↔ profile Laili/Alya)"
+git push origin refactor/remove-providers-laili
+````
