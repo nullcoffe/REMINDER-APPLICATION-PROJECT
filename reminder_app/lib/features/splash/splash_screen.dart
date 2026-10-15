@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/logo_taskzilla.jpeg', // Sesuaikan path sesuai letak foldermu
+                  'assets/logo_taskzilla.jpeg', // Sesuaikan path sesuai letak foldermu
                   width: 90,
                   height: 90,
                   fit: BoxFit.cover,
