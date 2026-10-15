@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/setting_tile.dart';
+import 'widgets/settings_tile.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
