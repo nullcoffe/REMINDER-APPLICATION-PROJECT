@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_sizes.dart';
+import 'package:reminder_app/core/constants/app_colors.dart';
+import 'package:reminder_app/core/constants/app_sizes.dart';
 
 class AppTheme {
   AppTheme._(); // Private constructor agar class tidak bisa di-instansiasi

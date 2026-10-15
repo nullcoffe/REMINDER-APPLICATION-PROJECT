@@ -13,6 +13,7 @@ class AppSizes {
   static const double spaceS = 8.0;
   static const double spaceM = 16.0;
   static const double spaceL = 24.0;
+  static const double spaceXL = 40.0;
 
   // Padding halaman
   static const double pagePadding = 16.0;
