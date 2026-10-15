@@ -1,24 +1,15 @@
-
-/// Kumpulan teks statis yang digunakan dalam aplikasi TaskZilla.
-///
-/// Penanggung jawab: Alya
-/// Status: Draft sementara.
-/// Sumber teks: Laporan pengajuan ide aplikasi dan kode develop.
-///
-/// Catatan:
-/// File ini hanya menyimpan teks, bukan ukuran tampilan.
-/// Ukuran tampilan dikelola melalui core/constants/app_sizes.dart.
+// kumpulan teks statis (tetap) dan string yang akan digunakan di seluruh aplikasi
 class AppStrings {
   AppStrings._();
 
-  // Identitas aplikasi
+  // Identitas
   static const String appName = 'TaskZilla';
   static const String slogan = 'Deadline Aman, Kuliah Tenang.';
   static const String splashLabel = 'STUDENT PRODUCTIVITY';
   static const String splashTagline =
       'Kelola Tugas Kuliahmu, Taklukkan Deadlinemu';
 
-  // Autentikasi (Login dan Register)
+  // Auth
   static const String loginButton = 'Masuk';
   static const String registerButton = 'Daftar Sekarang';
   static const String registerTitle = 'Buat Akun Baru';
@@ -29,7 +20,7 @@ class AppStrings {
   static const String passwordHint = 'Min. 8 karakter kombinasi';
   static const String fullNameHint = 'Sesuai KTM';
 
-  // Pesan validasi
+  // Validasi
   static const String fieldRequired = 'Field wajib diisi';
   static const String emailUsed =
       'Email sudah digunakan. Gunakan email lain atau masuk.';
@@ -45,32 +36,26 @@ class AppStrings {
     'UAS',
   ];
 
-  // Status pengerjaan tugas
+  // Status tugas
   static const String statusTodo = 'To Do';
   static const String statusInProgress = 'In Progress';
   static const String statusDone = 'Done';
 
-  // Tingkat kesulitan tugas
-  static const List<String> difficulties = [
-    'Mudah',
-    'Sedang',
-    'Sulit',
-  ];
+  // Tingkat kesulitan
+  static const List<String> difficulties = ['Mudah', 'Sedang', 'Sulit'];
 
-  // Tingkat prioritas tugas
+  // Prioritas
   static const String priorityUrgent = 'URGENT';
   static const String priorityHigh = 'HIGH';
   static const String priorityMedium = 'MEDIUM';
   static const String priorityLow = 'LOW';
 
-  // Pesan saat belum ada notifikasi
-  // Digunakan pada notification_screen.dart
-  static const String notificationEmptyTitle =
-      'Belum ada notifikasi';
+  // Empty state notifikasi (notification_screen.dart)
+  static const String notificationEmptyTitle = 'Belum ada notifikasi';
   static const String notificationEmptyBody =
       'Pengingat tugas dan deadline kamu akan muncul di sini.';
 
-  // Judul dan tombol pada layar tugas
+  // Judul layar task
   static const String addTaskTitle = 'Tambah Tugas Baru';
   static const String editTaskTitle = 'Edit Tugas';
   static const String saveChanges = 'Simpan Perubahan';

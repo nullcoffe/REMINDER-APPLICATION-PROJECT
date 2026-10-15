@@ -1,100 +1,56 @@
 import 'package:flutter/material.dart';
 
-/// ============================================================
-/// KONSTANTA UKURAN TASKZILLA
-/// Penanggung jawab: Alya
-///
-/// Fungsi:
-/// Menyimpan ukuran, padding, spacing, radius, dan ukuran ikon
-/// agar tampilan seluruh halaman TaskZilla tetap konsisten.
-///
-/// Catatan:
-/// Nilai ini merupakan draft dan dapat disesuaikan dengan Figma.
-/// ============================================================
-
+//Konstanta ukuran, padding, dan radius untuk mengatur konsistensi ui aplikasi
 class AppSizes {
   AppSizes._();
 
-  // ============================================================
-  // RADIUS / SUDUT MEMBULAT
-  // Disesuaikan dengan AppTheme dan komponen UI TaskZilla.
-  // ============================================================
-
+  // Radius
   static const double radiusBadge = 8.0;
   static const double radiusDefault = 12.0;
   static const double radiusCard = 16.0;
 
-  // Alias agar kompatibel dengan kode halaman yang sudah ada.
-  static const double radiusMedium = radiusDefault;
-  static const double radiusLarge = radiusCard;
-
-  // ============================================================
-  // SPACING / JARAK ANTAR KOMPONEN
-  // ============================================================
-
+  // Spacing
   static const double spaceS = 8.0;
   static const double spaceM = 16.0;
   static const double spaceL = 24.0;
   static const double spaceXL = 40.0;
 
-  // Alias untuk kompatibilitas dengan kode sebelumnya.
-  static const double spacingSmall = spaceS;
-  static const double spacingMedium = spaceM;
-  static const double spacingLarge = spaceL;
-
-  // ============================================================
-  // PADDING HALAMAN
-  // ============================================================
-
+  // Padding halaman
   static const double pagePadding = 16.0;
 
-  // Alias ukuran padding yang digunakan oleh halaman task.
-  static const double paddingMedium = spaceM;
-  static const double paddingLarge = spaceL;
-
-  // ============================================================
-  // PADDING TOMBOL
-  // Sesuai dengan ElevatedButtonTheme pada AppTheme.
-  // ============================================================
-
+  // Padding komponen
   static const EdgeInsets buttonPadding = EdgeInsets.symmetric(
-    vertical: 14.0,
-    horizontal: 24.0,
+    vertical: 14,
+    horizontal: 24,
   );
-
-  // ============================================================
-  // PADDING INPUT
-  // Sesuai dengan InputDecorationTheme pada AppTheme.
-  // ============================================================
-
   static const EdgeInsets inputPadding = EdgeInsets.symmetric(
-    horizontal: 16.0,
-    vertical: 12.0,
+    horizontal: 16,
+    vertical: 12,
   );
-
-  // ============================================================
-  // PADDING BADGE PRIORITAS
-  // ============================================================
-
   static const EdgeInsets badgePadding = EdgeInsets.symmetric(
-    horizontal: 10.0,
-    vertical: 4.0,
+    horizontal: 10,
+    vertical: 4,
   );
 
-  // ============================================================
-  // UKURAN IKON DAN INDIKATOR
-  // ============================================================
-
+  // Ukuran elemen
   static const double iconEmptyState = 64.0;
   static const double loadingIndicatorSize = 20.0;
   static const double iconSmall = 16.0;
 
-  // ============================================================
-  // UKURAN TEKS
-  // Digunakan sebagai acuan ukuran teks komponen UI.
-  // ============================================================
-
+  // Ukuran font
   static const double fontSizeSmall = 12.0;
   static const double fontSizeMedium = 16.0;
   static const double fontSizeLarge = 20.0;
+
+  // Alias
+  static const double paddingMedium = spaceM;
+  static const double paddingLarge = spaceL;
+  static const double radiusMedium = radiusDefault;
+  static const double radiusLarge = radiusCard;
+  static const double spacingSmall = spaceS;
+  static const double spacingMedium = spaceM;
+  static const double spacingLarge = spaceL;
+
+  // Layout Auth
+  static const double authMaxContentWidth = 420.0;
 }
