@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../services/task_service.dart';
 import '../../models/task_model.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
+import 'widgets/completed_task_card.dart';
 
+// Layar utama untuk menampilkan riwayat tugas yang telah diselesaikan
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
 
@@ -15,8 +16,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   final TaskService _taskService = TaskService();
-
-  // Ambil userId dari Firebase Auth langsung
+  // Mengambil ID pengguna yang sedang login dari Firebase Auth
   String? get _userId => FirebaseAuth.instance.currentUser?.uid;
 
   @override
@@ -31,6 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: _userId == null
           ? const Center(child: Text('Silakan login terlebih dahulu'))
           : StreamBuilder<List<TaskModel>>(
+              // Mengambil stream data tugas dari Firestore berdasarkan userId
               stream: _taskService.getTasks(_userId!),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,30 +42,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 }
 
                 final allTasks = snapshot.data ?? [];
-                //ini menentukan bagian tugas kategori mana yang di tampilkan dihistori
+                // Memfilter hanya tugas yang berstatus 'completed'
                 final completedTasks = allTasks
                     .where((task) => task.status == 'completed')
                     .toList();
 
+                // Menampilkan empty state jika tidak ada tugas selesai
                 if (completedTasks.isEmpty) {
-                  return const Center(
-                    child: Text('Belum ada tugas yang diselesaikan.'),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check_circle_outline, size: 64, color: AppColors.textSecondary),
+                        const SizedBox(height: AppSizes.spaceM),
+                        const Text('Belum ada tugas yang diselesaikan.'),
+                      ],
+                    ),
                   );
                 }
 
+                // Merender daftar kartu tugas yang sudah selesai
                 return ListView.builder(
-                  padding: const EdgeInsets.all(AppSizes.spaceL),
+                  padding: const EdgeInsets.all(AppSizes.pagePadding),
                   itemCount: completedTasks.length,
                   itemBuilder: (context, index) {
-                    final task = completedTasks[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: AppSizes.spaceM),
-                      child: ListTile(
-                        title: Text(task.title),
-                        subtitle: Text(task.description),
-                        trailing: Text(task.difficultyLevel),
-                      ),
-                    );
+                    return CompletedTaskCard(task: completedTasks[index]);
                   },
                 );
               },
