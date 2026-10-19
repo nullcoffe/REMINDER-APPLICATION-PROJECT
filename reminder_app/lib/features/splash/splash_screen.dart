@@ -1,16 +1,18 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/routes/app_routes.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_sizes.dart';
+import '../../core/constants/app_strings.dart';
 
 /// Splash Screen TaskZilla.
 ///
-/// Halaman ini tampil pertama kali ketika aplikasi dibuka.
-/// Setelah 3 detik, pengguna diarahkan ke halaman Login.
-///
-/// Catatan:
-/// Pastikan AppRoutes.login tersedia di file app_routes.dart.
+/// Tampil pertama kali saat aplikasi dibuka. Setelah 3 detik:
+/// - pengguna yang sudah login diarahkan ke Dashboard,
+/// - pengguna yang belum login diarahkan ke Login.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -19,77 +21,81 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  static const String _logoPath = 'assets/logotaskzilla.jpeg';
+
   /// Menyimpan timer agar bisa dibatalkan ketika halaman ditutup.
   Timer? _navigationTimer;
 
   @override
   void initState() {
     super.initState();
+    _navigationTimer = Timer(const Duration(seconds: 3), _navigateNext);
+  }
 
-    // Menjalankan timer setelah Splash Screen pertama kali dibuka.
-    _navigationTimer = Timer(
-      const Duration(seconds: 3),
-      () {
-        // Memastikan widget masih aktif sebelum melakukan navigasi.
-        if (!mounted) return;
+  void _navigateNext() {
+    // Pastikan widget masih aktif sebelum melakukan navigasi.
+    if (!mounted) return;
 
-        // Mengganti Splash Screen dengan halaman Login.
-        // pushReplacementNamed mencegah pengguna kembali ke Splash
-        // menggunakan tombol Back.
-        Navigator.of(context).pushReplacementNamed(
-          AppRoutes.login,
-        );
-      },
-    );
+    final user = FirebaseAuth.instance.currentUser;
+    final nextRoute = user != null ? AppRoutes.dashboard : AppRoutes.login;
+
+    // pushReplacementNamed mencegah pengguna kembali ke Splash
+    // menggunakan tombol Back.
+    Navigator.of(context).pushReplacementNamed(nextRoute);
   }
 
   @override
   void dispose() {
-    // Membatalkan timer jika Splash Screen ditutup lebih awal.
-    // Hal ini mencegah timer berjalan ketika widget sudah tidak aktif.
     _navigationTimer?.cancel();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Warna utama Splash Screen mengikuti tema TaskZilla.
-      backgroundColor: Colors.teal,
-
+      backgroundColor: AppColors.primaryTeal,
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Maskot sementara menggunakan ikon hewan.
-              // Ikon ini dapat diganti dengan gambar Dino jika aset tersedia.
+              // Logo TaskZilla di dalam lingkaran putih.
               Container(
-                padding: const EdgeInsets.all(24),
+                width: 140,
+                height: 140,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.pets,
-                  size: 80,
-                  color: Colors.teal,
+                child: ClipOval(
+                  child: Image.asset(
+                    _logoPath,
+                    fit: BoxFit.cover,
+                    // Jika gambar gagal dimuat, tampilkan ikon pengganti
+                    // agar aplikasi tidak crash.
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.pets,
+                        size: 80,
+                        color: AppColors.primaryTeal,
+                      );
+                    },
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSizes.spaceL),
 
               // Nama aplikasi.
               const Text(
-                'TaskZilla',
+                AppStrings.appName,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -98,15 +104,25 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSizes.spaceS),
 
-              // Slogan aplikasi pengelola tugas mahasiswa.
+              // Label dan tagline aplikasi.
               const Text(
-                'Smart Task Manager for Students',
-                textAlign: TextAlign.center,
+                AppStrings.splashLabel,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppSizes.fontSizeSmall,
+                  fontWeight: FontWeight.w600,
                   color: Colors.white70,
+                  letterSpacing: 2,
+                ),
+              ),
+              const SizedBox(height: AppSizes.spaceS),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.spaceL),
+                child: Text(
+                  AppStrings.splashTagline,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.white70),
                 ),
               ),
 
@@ -114,9 +130,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
               // Indikator bahwa aplikasi sedang mempersiapkan halaman.
               const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.white,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ],
           ),
