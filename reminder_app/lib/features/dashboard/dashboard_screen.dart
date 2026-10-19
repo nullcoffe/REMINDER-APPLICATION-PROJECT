@@ -17,6 +17,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  static const String _allCategory = 'Semua';
+
   final TaskService _taskService = TaskService();
   String? get _userId => FirebaseAuth.instance.currentUser?.uid;
 
