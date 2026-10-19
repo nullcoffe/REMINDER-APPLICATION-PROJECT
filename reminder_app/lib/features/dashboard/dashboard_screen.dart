@@ -9,6 +9,8 @@ import 'widgets/bar_aplikasi.dart';
 import 'widgets/konten.dart';
 import 'widgets/navigation_bar.dart';
 
+// Layar utama dashboard aplikasi TaskZilla.
+// Menampilkan ringkasan tugas, daftar tugas aktif, dan navigasi utama.
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -17,12 +19,22 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  // Service untuk mengelola data tugas
   final TaskService _taskService = TaskService();
+
+  // ID pengguna yang sedang login
   String? get _userId => FirebaseAuth.instance.currentUser?.uid;
 
+  // State untuk filter tugas yang dipilih
   String _selectedFilter = 'Semua';
+
+  // State untuk navigasi bawah
   int _currentNavIndex = 0;
-  int _unreadNotificationCount = 0;
+
+  // Jumlah notifikasi yang belum dibaca
+  final int _unreadNotificationCount = 0;
+
+  // Controller untuk search bar
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -37,6 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
+  // Memuat jumlah notifikasi belum dibaca dari service
   Future<void> _loadUnreadNotificationCount() async {
     // TODO: Integrasi dengan NotificationService
   }
@@ -72,11 +85,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           if (index == 2) Navigator.pushNamed(context, AppRoutes.history);
           if (index == 3) Navigator.pushNamed(context, AppRoutes.profile);
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.addTask),
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
