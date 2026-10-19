@@ -7,6 +7,7 @@ import '../../models/task_model.dart';
 import '../../core/widgets/task_card.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
+import '../../core/constants/app_strings.dart';
 import 'widgets/filter_bar.dart';
 import 'widgets/summary_card.dart';
 
@@ -20,11 +21,16 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  static const String _allCategory = 'Semua';
+
   final TaskService _taskService = TaskService();
   String? get _userId => FirebaseAuth.instance.currentUser?.uid;
 
-  /// Filter yang sedang dipilih pengguna.
-  String _selectedFilter = 'Semua';
+  /// Daftar kategori untuk FilterBar: "Semua" + kategori dari AppStrings.
+  final List<String> _categories = [_allCategory, ...AppStrings.categories];
+
+  /// Kategori yang sedang dipilih pengguna.
+  String _selectedCategory = _allCategory;
 
   /// Mengubah teks status menjadi format yang seragam.
   String _normalizeStatus(dynamic status) {
@@ -37,16 +43,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .toLowerCase();
   }
 
-  /// Memeriksa apakah tugas sesuai dengan filter.
+  /// Memeriksa apakah tugas sesuai dengan kategori yang dipilih.
   bool _matchesFilter(TaskModel task) {
-    if (_selectedFilter == 'Semua') {
+    if (_selectedCategory == _allCategory) {
       return true;
     }
 
-    final status = _normalizeStatus(task.status);
-    final filter = _selectedFilter.toLowerCase();
-
-    return status == filter;
+    final category = task.categoryId.toString().trim().toLowerCase();
+    return category == _selectedCategory.toLowerCase();
   }
 
   /// Mengubah nilai deadline menjadi teks yang dapat ditampilkan.
@@ -71,7 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'TaskZilla',
+          AppStrings.appName,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: false,
@@ -99,13 +103,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final totalTasks = allTasks.length;
 
                 final completedTasks = allTasks.where((task) {
-                  return _normalizeStatus(task.status) == 'done' ||
-                      _normalizeStatus(task.status) == 'completed';
+                  final s = _normalizeStatus(task.status);
+                  return s == 'done' || s == 'completed';
                 }).length;
 
                 final todoTasks = allTasks.where((task) {
-                  return _normalizeStatus(task.status) == 'to do' ||
-                      _normalizeStatus(task.status) == 'todo';
+                  final s = _normalizeStatus(task.status);
+                  return s == 'to do' || s == 'todo';
                 }).length;
 
                 final inProgressTasks = allTasks.where((task) {
@@ -126,7 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: AppSizes.spaceXS),
+                        const SizedBox(height: AppSizes.spaceS),
                         const Text(
                           'Yuk, atur tugasmu agar lebih terorganisir.',
                           style: TextStyle(
@@ -160,7 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 title: 'Tugas Selesai',
                                 value: completedTasks.toString(),
                                 icon: Icons.check_circle_outline,
-                                color: Colors.green,
+                                color: AppColors.success,
                               ),
                             ),
                           ],
@@ -187,7 +191,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: AppSizes.spaceXL),
+                        const SizedBox(height: AppSizes.spaceL),
                         const Text(
                           'Daftar Tugas',
                           style: TextStyle(
@@ -198,10 +202,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         const SizedBox(height: AppSizes.spaceS),
                         FilterBar(
-                          selectedFilter: _selectedFilter,
-                          onFilterChanged: (filter) {
+                          categories: _categories,
+                          selectedCategory: _selectedCategory,
+                          activeColor: AppColors.primaryTeal,
+                          onSelected: (category) {
                             setState(() {
-                              _selectedFilter = filter;
+                              _selectedCategory = category;
                             });
                           },
                         ),
@@ -221,18 +227,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Text(
                                     totalTasks == 0
                                         ? 'Belum ada tugas.'
-                                        : 'Tidak ada tugas pada filter ini.',
+                                        : 'Tidak ada tugas pada kategori ini.',
                                     style: const TextStyle(
                                       color: AppColors.textSecondary,
                                       fontSize: AppSizes.fontSizeSmall,
                                     ),
                                   ),
-                                  const SizedBox(height: AppSizes.spaceXS),
+                                  const SizedBox(height: AppSizes.spaceS),
                                   const Text(
                                     'Tambahkan tugas agar aktivitasmu lebih teratur.',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: AppSizes.fontSizeXS,
+                                      fontSize: AppSizes.fontSizeSmall,
                                       color: AppColors.textSecondary,
                                     ),
                                   ),
@@ -260,7 +266,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Navigator.pushNamed(
                                     context,
                                     AppRoutes.taskDetail,
-                                    arguments: task,
+                                    arguments: {
+                                      'title': task.title,
+                                      'description': task.description,
+                                      'date': _formatDeadline(task.deadline),
+                                    },
                                   );
                                 },
                               );
