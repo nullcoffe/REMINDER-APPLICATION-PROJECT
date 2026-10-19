@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 
-//palert warna utama aplikasi taskzilla
 class AppColors {
   AppColors._();
 
-  // warna brand atau warna primary
-  static const Color primaryTeal = Color(0xFF008080);
-  static const Color secondaryTeal = Color(0xFF4DB6AC);
+  // Warna brand dari Stitch AI
+  static const Color primary = Color(0xFF14B8A6);
+  static const Color secondary = Color(0xFF0D9488);
+  static const Color tertiary = Color(0xFF99D5CA);
 
-  // warna Background & surface
-  static const Color scaffoldLight = Color(0xFFF8F9FA);
-  static const Color scaffoldDark = Color(0xFF121212);
-  static const Color surfaceLight = Colors.white;
-  static const Color surfaceDark = Color(0xFF1E1E1E);
+  // Background & surface tema gelap
+  static const Color background = Color(0xFF1E3A3A);
+  static const Color surface = Color(0xFF2A4A4A);
+  static const Color surfaceLight = Color(0xFF3A5A5A);
 
-  // warna Prioritas
-  static const Color priorityUrgent = Colors.red;
-  static const Color priorityHigh = Colors.orange;
-  static const Color priorityMedium = Colors.blue;
-  static const Color priorityLow = Colors.green;
+  // Teks
+  static const Color textPrimary = Colors.white;
+  static const Color textSecondary = Color(0xFF99D5CA);
 
-  // Teks & garis
-  static const Color textSecondary = Colors.grey;
-  static const Color borderLight = Color(0xFFE0E0E0); // grey.shade300
-  static const Color borderDark = Color(0xFF616161); // grey.shade700
+  // Prioritas
+  static const Color priorityUrgent = Color(0xFFEF4444);
+  static const Color priorityHigh = Color(0xFFF97316);
+  static const Color priorityMedium = Color(0xFF14B8A6);
+  static const Color priorityLow = Color(0xFF22C55E);
 
-  // Status umum
-  static const Color error = Colors.red;
-  static const Color success = Colors.green;
+  // Status
+  static const Color error = Color(0xFFEF4444);
+  static const Color success = Color(0xFF22C55E);
 
-  // Alias untuk nama yang dipakai layar task
-  static const Color primary = primaryTeal;
-  static const Color background = scaffoldLight;
-  static const Color surface = surfaceLight;
-  static const Color textPrimary = Color(0xFF1E293B);
+  // Border
+  static const Color border = Color(0xFF3A5A5A);
+
+  // Alias untuk kompatibilitas kode lama
+  static const Color primaryTeal = primary;
+  static const Color secondaryTeal = secondary;
+  static const Color scaffoldLight = background;
+  static const Color scaffoldDark = background;
+  static const Color surfaceDark = surface;
+  static const Color borderLight = border;
+  static const Color borderDark = border;
 }

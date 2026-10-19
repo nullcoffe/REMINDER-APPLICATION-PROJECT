@@ -67,6 +67,9 @@ class _ForgotPasswordScreenState
           case 'user-not-found':
             _errorMessage = 'Email tidak terdaftar.';
             break;
+          case 'user-not-found':
+            _errorMessage = "Email tidak terdaftar";
+            break;
           case 'too-many-requests':
             _errorMessage =
                 'Terlalu banyak percobaan. Coba lagi nanti.';

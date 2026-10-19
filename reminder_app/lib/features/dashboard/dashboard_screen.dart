@@ -1,129 +1,83 @@
 import 'package:flutter/material.dart';
-import '../../core/widgets/task_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../app/routes/app_routes.dart';
+import '../../core/constants/app_colors.dart';
+import '../../services/task_service.dart';
+
+import 'widgets/bar_aplikasi.dart';
+import 'widgets/konten.dart';
+import 'widgets/navigation_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // Variabel kategori filter aktif
-  String selectedCategory = 'Semua';
-  final List<String> categories = ['Semua', 'Kuliah', 'Tugas', 'Pribadi'];
+  static const String _allCategory = 'Semua';
+
+  final TaskService _taskService = TaskService();
+  String? get _userId => FirebaseAuth.instance.currentUser?.uid;
+
+  String _selectedFilter = 'Semua';
+  int _currentNavIndex = 0;
+  int _unreadNotificationCount = 0;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUnreadNotificationCount();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadUnreadNotificationCount() async {
+    // TODO: Integrasi dengan NotificationService
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TaskZilla Dashboard'),
-        backgroundColor: Colors.teal,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: Hubungkan ke notification_screen.dart milik Bintoro
-            },
-          ),
-        ],
+      backgroundColor: AppColors.background,
+      appBar: DashboardAppBar(
+        unreadNotificationCount: _unreadNotificationCount,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Bagian Sambutan Pengguna
-            const Text(
-              'Halo, Aliyah! 👋',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Berikut daftar tugas kuliah dan aktivitasmu hari ini.',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-
-            // Bar Filter Kategori Sederhana
-            SizedBox(
-              height: 40,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  final isSelected = selectedCategory == category;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ChoiceChip(
-                      label: Text(category),
-                      selected: isSelected,
-                      selectedColor: Colors.teal.shade100,
-                      labelStyle: TextStyle(
-                        color: isSelected ? Colors.teal.shade900 : Colors.black87,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      onSelected: (selected) {
-                        setState(() {
-                          selectedCategory = category;
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Daftar Tugas (Menggunakan TaskCard reusable core widget buatan Aliyah)
-            const Text(
-              'Daftar Tugas Aktif',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            
-            Expanded(
-              child: ListView(
-                children: [
-                  TaskCard(
-                    title: 'Implementasi Routing Flutter',
-                    category: 'Kuliah',
-                    priority: 'High',
-                    deadline: 'Besok, 23:59 WIT',
-                    onTap: () {
-                      // TODO: Navigasi ke halaman detail tugas
-                    },
-                  ),
-                  TaskCard(
-                    title: 'Analisis Jaringan Komputer',
-                    category: 'Kuliah',
-                    priority: 'Urgent',
-                    deadline: '14 Okt 2026',
-                    onTap: () {},
-                  ),
-                  TaskCard(
-                    title: 'Membuat Laporan Praktikum',
-                    category: 'Pribadi',
-                    priority: 'Medium',
-                    deadline: '15 Okt 2026',
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: DashboardContent(
+        userId: _userId,
+        taskService: _taskService,
+        selectedFilter: _selectedFilter,
+        searchController: _searchController,
+        currentNavIndex: _currentNavIndex,
+        onNavTap: (index) {
+          setState(() => _currentNavIndex = index);
+          if (index == 1) Navigator.pushNamed(context, AppRoutes.addTask);
+          if (index == 2) Navigator.pushNamed(context, AppRoutes.history);
+          if (index == 3) Navigator.pushNamed(context, AppRoutes.profile);
+        },
+        onFilterChanged: (filter) {
+          setState(() => _selectedFilter = filter);
+        },
+      ),
+      bottomNavigationBar: DashboardBottomNav(
+        currentIndex: _currentNavIndex,
+        onTap: (index) {
+          setState(() => _currentNavIndex = index);
+          if (index == 1) Navigator.pushNamed(context, AppRoutes.addTask);
+          if (index == 2) Navigator.pushNamed(context, AppRoutes.history);
+          if (index == 3) Navigator.pushNamed(context, AppRoutes.profile);
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Navigasi ke add_task_screen.dart
-        },
-        backgroundColor: Colors.teal,
+        onPressed: () => Navigator.pushNamed(context, AppRoutes.addTask),
+        backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
