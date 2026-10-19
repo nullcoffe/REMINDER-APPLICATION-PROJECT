@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -66,9 +65,7 @@ class _TaskFormState extends State<TaskForm> {
               color: AppColors.primaryTeal,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                AppSizes.radiusDefault,
-              ),
+              borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
           ),
         ),
@@ -89,9 +86,7 @@ class _TaskFormState extends State<TaskForm> {
             ),
             alignLabelWithHint: true,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                AppSizes.radiusDefault,
-              ),
+              borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
           ),
         ),
@@ -100,9 +95,7 @@ class _TaskFormState extends State<TaskForm> {
 
         // Pilihan kategori tugas.
         DropdownButtonFormField<String>(
-          value: AppStrings.categories.contains(
-            widget.selectedCategory,
-          )
+          initialValue: AppStrings.categories.contains(widget.selectedCategory)
               ? widget.selectedCategory
               : AppStrings.categories.first,
           isExpanded: true,
@@ -113,9 +106,7 @@ class _TaskFormState extends State<TaskForm> {
               color: AppColors.primaryTeal,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                AppSizes.radiusDefault,
-              ),
+              borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
           ),
           items: AppStrings.categories.map((category) {
@@ -132,9 +123,7 @@ class _TaskFormState extends State<TaskForm> {
         // Tombol untuk memilih deadline.
         OutlinedButton.icon(
           onPressed: widget.onPickDate,
-          icon: const Icon(
-            Icons.calendar_today_outlined,
-          ),
+          icon: const Icon(Icons.calendar_today_outlined),
           label: Text(
             widget.selectedDate == null
                 ? 'Pilih Deadline Tugas'
@@ -144,9 +133,7 @@ class _TaskFormState extends State<TaskForm> {
             foregroundColor: AppColors.primaryTeal,
             padding: AppSizes.inputPadding,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                AppSizes.radiusDefault,
-              ),
+              borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
           ),
         ),
