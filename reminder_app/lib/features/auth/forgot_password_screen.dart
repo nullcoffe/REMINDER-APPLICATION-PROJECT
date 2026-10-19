@@ -11,12 +11,10 @@ class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() =>
-      _ForgotPasswordScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState
-    extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -30,7 +28,7 @@ class _ForgotPasswordScreenState
     _emailController.dispose();
     super.dispose();
   }
-  
+
   Future<void> _sendResetEmail() async {
     if (_loading) return;
 
@@ -46,9 +44,7 @@ class _ForgotPasswordScreenState
     });
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: email,
-      );
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
       if (!mounted) return;
 
@@ -67,12 +63,8 @@ class _ForgotPasswordScreenState
           case 'user-not-found':
             _errorMessage = 'Email tidak terdaftar.';
             break;
-          case 'user-not-found':
-            _errorMessage = "Email tidak terdaftar";
-            break;
           case 'too-many-requests':
-            _errorMessage =
-                'Terlalu banyak percobaan. Coba lagi nanti.';
+            _errorMessage = 'Terlalu banyak percobaan. Coba lagi nanti.';
             break;
           case 'network-request-failed':
             _errorMessage = 'Periksa koneksi internet kamu.';
@@ -82,8 +74,7 @@ class _ForgotPasswordScreenState
                 'Fitur reset password belum diaktifkan di Firebase.';
             break;
           default:
-            _errorMessage =
-                'Gagal mengirim link reset (${e.code}).';
+            _errorMessage = 'Gagal mengirim link reset (${e.code}).';
         }
       });
     } catch (e) {
@@ -110,10 +101,7 @@ class _ForgotPasswordScreenState
       appBar: AppBar(
         title: const Text(
           'Lupa Password',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.background,
         foregroundColor: Colors.white,
@@ -153,11 +141,7 @@ class _ForgotPasswordScreenState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.lock_reset,
-              size: 60,
-              color: AppColors.primary,
-            ),
+            const Icon(Icons.lock_reset, size: 60, color: AppColors.primary),
             const SizedBox(height: AppSizes.spaceL),
             const Text(
               'Masukkan email akun kamu untuk menerima link reset password.',
@@ -170,7 +154,7 @@ class _ForgotPasswordScreenState
             const SizedBox(height: AppSizes.spaceL),
             CustomTextField(
               controller: _emailController,
-              labelText: AppStrings.emailLabel,
+              labelText: 'Email Mahasiswa',
               hintText: 'nama@email.com',
               prefixIcon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
@@ -179,8 +163,7 @@ class _ForgotPasswordScreenState
                   return AppStrings.fieldRequired;
                 }
 
-                final emailPattern =
-                    RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                final emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
                 if (!emailPattern.hasMatch(value.trim())) {
                   return 'Masukkan alamat email yang valid.';
@@ -231,11 +214,7 @@ class _ForgotPasswordScreenState
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
-            Icons.mark_email_read,
-            size: 70,
-            color: AppColors.primary,
-          ),
+          const Icon(Icons.mark_email_read, size: 70, color: AppColors.primary),
           const SizedBox(height: AppSizes.spaceL),
           const Text(
             'Permintaan reset password berhasil diproses.',
