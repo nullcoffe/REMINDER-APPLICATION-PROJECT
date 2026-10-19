@@ -18,9 +18,8 @@ import '../../features/profile/profile_screen.dart';
 class AppRoutes {
   AppRoutes._(); // Private constructor
 
-  // ===========================================================================
+
   // CONSTANT NAMA RUTE
-  // ===========================================================================
   static const String splash = '/';
   static const String login = '/login';
   static const String register = '/register';
@@ -36,14 +35,12 @@ class AppRoutes {
   // Rute Awal Aplikasi
   static const String initialRoute = splash;
 
-  // ===========================================================================
-  // ARGUMEN RUTE
   // EditTaskScreen dan TaskDetailScreen butuh data awal. Kirim lewat:
   //   Navigator.pushNamed(context, AppRoutes.taskDetail, arguments: {
   //     'title': '...', 'description': '...', 'date': '...',
   //   });
   // Untuk editTask cukup 'title' dan 'description'.
-  // ===========================================================================
+  
   static Map<String, dynamic> _args(RouteSettings settings) {
     final a = settings.arguments;
     return a is Map<String, dynamic> ? a : const <String, dynamic>{};
