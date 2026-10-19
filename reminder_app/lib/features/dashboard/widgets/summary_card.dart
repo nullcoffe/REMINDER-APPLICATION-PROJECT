@@ -1,108 +1,113 @@
+
 import 'package:flutter/material.dart';
 
-/// Kartu ringkasan kecil (Aktif, Mendesak, Selesai, dll) di dashboard.
-///
-
+// Widget kartu untuk menampilkan ringkasan informasi tugas.
+// Contohnya jumlah semua tugas, tugas berjalan,
+// dan tugas yang sudah selesai.
 class SummaryCard extends StatelessWidget {
-  /// Teks keterangan, mis. "Mendesak".
-  final String label;
+  // Judul informasi yang ditampilkan pada kartu.
+  final String title;
 
-  /// Angka yang ditampilkan.
-  final int count;
+  // Nilai ringkasan, misalnya jumlah tugas.
+  // Menggunakan String agar bisa menerima angka maupun teks.
+  final String value;
 
-  /// Ikon di bagian atas kartu.
+  // Ikon yang mewakili informasi pada kartu.
   final IconData icon;
 
-  /// Warna aksen kartu.
+  // Warna utama kartu dan ikon.
   final Color color;
 
-  /// Opsional: teks kecil tambahan di bawah label, mis. "minggu ini".
+  // Keterangan tambahan yang bersifat opsional.
   final String? subtitle;
-
-  /// Opsional: kalau diisi, kartu bisa diklik.
-  final VoidCallback? onTap;
 
   const SummaryCard({
     super.key,
-    required this.label,
-    required this.count,
+    required this.title,
+    required this.value,
     required this.icon,
     this.color = Colors.teal,
     this.subtitle,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final background = Color.lerp(Colors.white, color, 0.10)!;
-    final border = Color.lerp(Colors.white, color, 0.30)!;
+    // Membuat kartu ringkasan dengan sudut membulat.
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
 
-    return Material(
-      color: background,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: border),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(icon, color: color, size: 18),
+      child: Padding(
+        // Memberikan jarak antara isi kartu dan tepinya.
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Baris ikon dan judul informasi.
+            Row(
+              children: [
+                // Latar ikon menggunakan warna transparan.
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  if (onTap != null)
-                    Icon(Icons.chevron_right, color: color, size: 18),
-                ],
-              ),
-              const SizedBox(height: 10),
-              // Angka beranimasi halus saat berubah (mis. ganti filter).
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                transitionBuilder: (child, animation) =>
-                    FadeTransition(opacity: animation, child: child),
-                child: Text(
-                  '$count',
-                  key: ValueKey<int>(count),
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+
+                  // Ikon sesuai jenis ringkasan.
+                  child: Icon(
+                    icon,
                     color: color,
+                    size: 22,
                   ),
                 ),
+
+                const SizedBox(width: 10),
+
+                // Judul dapat menggunakan ruang yang tersedia.
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Menampilkan nilai utama ringkasan.
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: color,
               ),
-              const SizedBox(height: 2),
+            ),
+
+            // Menampilkan keterangan tambahan jika tersedia.
+            if (subtitle != null && subtitle!.isNotEmpty) ...[
+              const SizedBox(height: 6),
               Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                subtitle!,
                 style: const TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Colors.grey,
                 ),
               ),
-              if (subtitle != null)
-                Text(
-                  subtitle!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 11, color: Colors.black54),
-                ),
             ],
-          ),
+          ],
         ),
       ),
     );

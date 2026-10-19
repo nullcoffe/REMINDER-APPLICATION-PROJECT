@@ -1,65 +1,83 @@
+
 import 'package:flutter/material.dart';
 
-/// Bar filter kategori (scroll horizontal) untuk DashboardScreen.
-///
-/// Berdiri sendiri: tidak meng-import file lain di proyek, jadi aman dari
-/// bentrok. Semua data & warna dikirim lewat parameter.
+// Widget untuk menampilkan pilihan filter daftar tugas.
+// Widget ini hanya mengatur tampilan dan mengirimkan
+// pilihan filter ke halaman yang memanggilnya.
 class FilterBar extends StatelessWidget {
-  /// Daftar nama kategori (termasuk "Semua" kalau diinginkan).
-  final List<String> categories;
+  // Daftar pilihan filter yang akan ditampilkan.
+  // Nilai default disesuaikan dengan status tugas TaskZilla.
+  final List<String> filters;
 
-  /// Kategori yang sedang aktif.
-  final String selectedCategory;
+  // Filter yang sedang dipilih oleh pengguna.
+  final String selectedFilter;
 
-  /// Dipanggil saat sebuah kategori dipilih.
-  final ValueChanged<String> onSelected;
-
-  /// Warna chip aktif. Nanti bisa diisi AppColors.primary.
-  final Color activeColor;
-
-  /// Opsional: jumlah tugas per kategori, mis. {'Kuliah': 3}.
-  /// Kalau diisi, angka ditampilkan di samping nama kategori.
-  final Map<String, int>? counts;
+  // Fungsi yang dipanggil ketika pengguna memilih filter.
+  final ValueChanged<String> onFilterChanged;
 
   const FilterBar({
     super.key,
-    required this.categories,
-    required this.selectedCategory,
-    required this.onSelected,
-    this.activeColor = Colors.teal,
-    this.counts,
+    this.filters = const [
+      'Semua',
+      'To Do',
+      'In Progress',
+      'Done',
+    ],
+    required this.selectedFilter,
+    required this.onFilterChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          final isSelected = category == selectedCategory;
-          final count = counts?[category];
-          final label = count == null ? category : '$category ($count)';
+    // Membuat daftar pilihan filter yang dapat digeser
+    // secara horizontal jika tidak cukup ruang.
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: filters.map((filter) {
+          // Memeriksa apakah filter ini sedang dipilih.
+          final bool isSelected = filter == selectedFilter;
 
-          return ChoiceChip(
-            label: Text(label),
-            selected: isSelected,
-            showCheckmark: false,
-            selectedColor: Color.lerp(Colors.white, activeColor, 0.18),
-            backgroundColor: Colors.grey.shade100,
-            side: BorderSide(
-              color: isSelected ? activeColor : Colors.grey.shade300,
+          return Padding(
+            // Memberikan jarak antarpilihan filter.
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              // Teks yang ditampilkan pada pilihan filter.
+              label: Text(filter),
+
+              // Menandai filter yang sedang aktif.
+              selected: isSelected,
+
+              // Mengatur warna pilihan aktif dan tidak aktif.
+              selectedColor: Colors.teal,
+              backgroundColor: Colors.grey.shade100,
+
+              // Mengatur warna teks berdasarkan status pilihan.
+              labelStyle: TextStyle(
+                color: isSelected ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w600,
+              ),
+
+              // Menghilangkan ikon centang bawaan.
+              showCheckmark: false,
+
+              // Mengatur bentuk sudut pilihan filter.
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                  color: isSelected
+                      ? Colors.teal
+                      : Colors.grey.shade300,
+                ),
+              ),
+
+              // Mengirimkan filter baru ke halaman pemanggil.
+              onSelected: (_) {
+                onFilterChanged(filter);
+              },
             ),
-            labelStyle: TextStyle(
-              color: isSelected ? activeColor : Colors.black87,
-              fontWeight: FontWeight.w600,
-            ),
-            onSelected: (_) => onSelected(category),
           );
-        },
+        }).toList(),
       ),
     );
   }
