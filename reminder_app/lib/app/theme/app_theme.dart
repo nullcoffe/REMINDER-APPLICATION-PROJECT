@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
 
-// Konfigurasi tema aplikasi TaskZilla.
-// Menggunakan tema gelap dengan warna teal sebagai identitas brand.
+/// Konfigurasi tema global aplikasi TaskZilla.
+/// Menggunakan skema warna gelap untuk konsistensi visual.
 class AppTheme {
   AppTheme._();
 
-  // Tema gelap utama aplikasi.
-  // Semua layar akan menggunakan tema ini secara konsisten.
+  /// Tema gelap utama yang diterapkan pada seluruh aplikasi.
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -17,15 +16,15 @@ class AppTheme {
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
 
-      // Skema warna berbasis seed color teal
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
+        surface: AppColors.surface,
+        error: AppColors.error,
         brightness: Brightness.dark,
       ),
 
-      // Konfigurasi AppBar
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
@@ -33,7 +32,6 @@ class AppTheme {
         centerTitle: false,
       ),
 
-      // Konfigurasi Card dengan efek bayangan
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 2,
@@ -41,7 +39,6 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
 
-      // Konfigurasi tombol utama
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -53,7 +50,6 @@ class AppTheme {
         ),
       ),
 
-      // Konfigurasi input field
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
@@ -75,7 +71,6 @@ class AppTheme {
         ),
       ),
 
-      // Transisi halaman yang halus untuk Android dan iOS
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
