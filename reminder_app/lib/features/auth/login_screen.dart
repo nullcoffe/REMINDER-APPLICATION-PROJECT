@@ -36,59 +36,76 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Fungsi utama untuk memproses login ke Firebase
-  Future<void> _handleLogin() async {
-    // Cek validasi form sebelum lanjut
-    if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    setState(() => _isLoading = true);
+Future<void> _handleLogin() async {
+  if (!(_formKey.currentState?.validate() ?? false)) {
+    return;
+  }
 
-    try {
-      // Panggil method login dari AuthService
-      await _authService.login(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
+  setState(() => _isLoading = true);
 
-      if (!mounted) return;
+  try {
+    await _authService.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
 
-      // Pindah ke dashboard dan hapus history login
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.dashboard,
-        (route) => false,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
+    if (!mounted) return;
 
-      // Terjemahkan kode error Firebase ke bahasa Indonesia
-      String message;
-      switch (e.code) {
-        case 'user-not-found':
-          message = 'Email tidak terdaftar';
-          break;
-        case 'wrong-password':
-          message = 'Kata sandi salah';
-          break;
-        case 'invalid-email':
-          message = 'Format email tidak valid';
-          break;
-        case 'too-many-requests':
-          message = 'Terlalu banyak percobaan, coba lagi nanti';
-          break;
-        default:
-          message = 'Login gagal: ${e.message}';
-      }
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.dashboard,
+      (route) => false,
+    );
+  } on FirebaseAuthException catch (e) {
+    if (!mounted) return;
 
-      _showErrorSnackBar(message);
-    } catch (e) {
-      if (!mounted) return;
-      _showErrorSnackBar('Terjadi kesalahan: ${e.toString()}');
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+    String message;
+
+    switch (e.code) {
+      case 'invalid-credential':
+      case 'invalid-login-credentials':
+      case 'wrong-password':
+        message = 'Email atau kata sandi tidak sesuai.';
+        break;
+
+      case 'user-not-found':
+        message = 'Email belum terdaftar.';
+        break;
+
+      case 'user-disabled':
+        message = 'Akun ini telah dinonaktifkan.';
+        break;
+
+      case 'invalid-email':
+        message = 'Format email tidak valid.';
+        break;
+
+      case 'too-many-requests':
+        message = 'Terlalu banyak percobaan. Coba lagi nanti.';
+        break;
+
+      case 'network-request-failed':
+        message = 'Koneksi internet bermasalah.';
+        break;
+
+      default:
+        message = 'Login gagal [${e.code}]: '
+            '${e.message ?? "Terjadi kesalahan autentikasi."}';
+    }
+
+    _showErrorSnackBar(message);
+  } catch (e) {
+    if (!mounted) return;
+
+    _showErrorSnackBar('Terjadi kesalahan: $e');
+  } finally {
+    if (mounted) {
+      setState(() => _isLoading = false);
     }
   }
+}
+
 
   // Helper untuk menampilkan pesan error
   void _showErrorSnackBar(String message) {

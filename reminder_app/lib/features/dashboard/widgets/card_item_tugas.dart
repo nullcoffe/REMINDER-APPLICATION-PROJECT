@@ -1,35 +1,75 @@
+
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/widgets/neu_card.dart';
 import '../../../models/task_model.dart';
+import '../../../services/task_service.dart';
 
-// Widget untuk menampilkan satu kartu tugas di dashboard.
+// Kartu tugas pada dashboard.
 class TaskCardItem extends StatelessWidget {
   final TaskModel task;
   final VoidCallback? onTap;
 
-  const TaskCardItem({super.key, required this.task, this.onTap});
+  const TaskCardItem({
+    super.key,
+    required this.task,
+    this.onTap,
+  });
 
-  // Menentukan apakah tugas bersifat urgent berdasarkan skor prioritas.
   bool get _isUrgent => task.priorityScore >= 8;
 
-  // Memformat Timestamp deadline menjadi teks tanggal yang mudah dibaca.
+  bool get _isCompleted =>
+      task.status.toLowerCase() == 'completed';
+
   String get _deadlineText {
+    final date = task.deadline.toDate();
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+
+    return '$day/$month/${date.year}';
+  }
+
+  // Simpan perubahan status tugas ke Firestore.
+  Future<void> _toggleCompletion(
+    BuildContext context,
+    bool? value,
+  ) async {
+    if (value == null || value == _isCompleted) return;
+
+    final updatedTask = TaskModel(
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      categoryId: task.categoryId,
+      userId: task.userId,
+      deadline: task.deadline,
+      difficultyLevel: task.difficultyLevel,
+      priorityScore: task.priorityScore,
+      status: value ? 'completed' : 'to-do',
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+    );
+
     try {
-      final DateTime date = task.deadline.toDate();
-      final day = date.day.toString().padLeft(2, '0');
-      final month = date.month.toString().padLeft(2, '0');
-      final year = date.year;
-      return '$day/$month/$year';
+      await TaskService().updateTask(updatedTask);
     } catch (e) {
-      return 'Tanggal tidak valid';
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal memperbarui status tugas: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final progress = _isCompleted ? 1.0 : 0.0;
+
     return GestureDetector(
       onTap: onTap,
       child: NeuCard(
@@ -37,7 +77,7 @@ class TaskCardItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Baris atas: Kategori dan Deadline
+            // Kategori dan deadline.
             Row(
               children: [
                 Container(
@@ -50,7 +90,9 @@ class TaskCardItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    task.categoryId.isNotEmpty ? task.categoryId : 'Umum',
+                    task.categoryId.isNotEmpty
+                        ? task.categoryId
+                        : 'Umum',
                     style: TextStyle(
                       color: AppColors.primary,
                       fontSize: 12,
@@ -96,18 +138,18 @@ class TaskCardItem extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
 
-            // Baris tengah: Checkbox, Judul, dan Deskripsi
+            // Checkbox, judul, dan deskripsi.
             Row(
               children: [
                 Checkbox(
-                  value: false,
+                  value: _isCompleted,
                   activeColor: AppColors.primary,
                   checkColor: Colors.white,
-                  onChanged: (value) {
-                    // Logika update status akan ditambahkan nanti
-                  },
+                  onChanged: (value) =>
+                      _toggleCompletion(context, value),
                 ),
                 Expanded(
                   child: Column(
@@ -119,6 +161,9 @@ class TaskCardItem extends StatelessWidget {
                           color: AppColors.textPrimary,
                           fontSize: AppSizes.fontSizeMedium,
                           fontWeight: FontWeight.bold,
+                          decoration: _isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -138,9 +183,10 @@ class TaskCardItem extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
 
-            // Bagian Progress Pengerjaan
+            // Progres berdasarkan status keseluruhan tugas.
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -160,7 +206,7 @@ class TaskCardItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '0%',
+                        '${(progress * 100).round()}%',
                         style: TextStyle(
                           color: AppColors.primary,
                           fontSize: 12,
@@ -173,7 +219,7 @@ class TaskCardItem extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
-                      value: 0,
+                      value: progress,
                       backgroundColor: AppColors.surface,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         AppColors.primary,
@@ -184,9 +230,10 @@ class TaskCardItem extends StatelessWidget {
                 ],
               ),
             ),
+
             const SizedBox(height: 12),
 
-            // Baris bawah: Prioritas, Kesulitan, dan Subtask
+            // Prioritas, kesulitan, dan jumlah subtask.
             Row(
               children: [
                 Container(
@@ -203,7 +250,9 @@ class TaskCardItem extends StatelessWidget {
                   child: Text(
                     _isUrgent ? 'Urgent' : 'Normal',
                     style: TextStyle(
-                      color: _isUrgent ? Colors.redAccent : AppColors.secondary,
+                      color: _isUrgent
+                          ? Colors.redAccent
+                          : AppColors.secondary,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -231,7 +280,11 @@ class TaskCardItem extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.checklist, size: 16, color: AppColors.textSecondary),
+                Icon(
+                  Icons.checklist,
+                  size: 16,
+                  color: AppColors.textSecondary,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '0 Subtask',

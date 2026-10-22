@@ -8,14 +8,10 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: email.trim(),
-        password: password,
-      );
-    } on FirebaseAuthException {
-      rethrow;
-    }
+    await _auth.signInWithEmailAndPassword(
+      email: email.trim(),
+      password: password,
+    );
   }
 
   Future<void> register({
