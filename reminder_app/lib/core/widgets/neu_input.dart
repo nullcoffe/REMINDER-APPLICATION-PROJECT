@@ -40,7 +40,7 @@ class NeuInput extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           // Menggunakan withValues karena withOpacity sudah deprecated
-          hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+          hintStyle: TextStyle(color: AppColors.secondary),
           prefixIcon: prefixIcon != null
               ? Icon(prefixIcon, color: AppColors.tertiary, size: 20)
               : null,

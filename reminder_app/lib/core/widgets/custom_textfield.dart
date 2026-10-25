@@ -1,28 +1,16 @@
-
 import 'package:flutter/material.dart';
 
-// Widget kolom input yang dapat digunakan
-// untuk memasukkan nama, email, kata sandi, dan data lainnya.
+import '../constants/app_colors.dart';
+
+/// Widget input teks kustom dengan dukungan validasi dan ikon.
+/// Digunakan secara global untuk form login, registrasi, dan input tugas.
 class CustomTextField extends StatelessWidget {
-  // Mengelola teks yang dimasukkan oleh pengguna.
   final TextEditingController controller;
-
-  // Label yang muncul pada kolom input.
   final String labelText;
-
-  // Petunjuk teks sebelum pengguna mengetik.
   final String hintText;
-
-  // Ikon yang ditampilkan di bagian kiri kolom.
   final IconData prefixIcon;
-
-  // Menentukan apakah karakter input disembunyikan.
   final bool isPassword;
-
-  // Menentukan jenis keyboard yang digunakan.
   final TextInputType keyboardType;
-
-  // Fungsi untuk memeriksa apakah input sudah valid.
   final String? Function(String?)? validator;
 
   const CustomTextField({
@@ -38,67 +26,38 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Membuat kolom input dengan dukungan validasi.
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
       keyboardType: keyboardType,
       validator: validator,
-
-      // Mengatur tampilan kolom input.
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        prefixIcon: Icon(prefixIcon, color: AppColors.primary),
 
-        // Menampilkan ikon di sebelah kiri kolom.
-        prefixIcon: Icon(
-          prefixIcon,
-          color: Colors.teal,
-        ),
-
-        // Border ketika kolom tidak sedang dipilih.
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-
-        // Border saat kolom dalam keadaan normal.
+        // Konfigurasi border untuk berbagai状态 input
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.grey,
-            width: 1,
-          ),
+          borderSide: BorderSide(color: AppColors.border, width: 1),
         ),
-
-        // Border berubah warna ketika kolom dipilih.
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.teal,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
-
-        // Border ketika input tidak valid.
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.red,
-          ),
+          borderSide: const BorderSide(color: Colors.red),
         ),
-
-        // Border ketika kolom aktif dan input tidak valid.
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Colors.red,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
 
-        // Memberikan warna latar pada kolom input.
+        // Warna latar belakang input disesuaikan dengan tema gelap
         filled: true,
-        fillColor: Colors.grey.shade50,
+        fillColor: AppColors.surface,
       ),
     );
   }
