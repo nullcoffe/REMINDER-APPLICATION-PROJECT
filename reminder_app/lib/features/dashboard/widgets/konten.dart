@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
-import '../../../services/task_service.dart';
 import '../../../models/task_model.dart';
+import '../../../services/task_service.dart';
 
 import 'sambutan.dart';
 import 'pencarian.dart';
@@ -75,14 +76,19 @@ class DashboardContent extends StatelessWidget {
         }
 
         final List<TaskModel> allTasks = snapshot.data ?? [];
-        final activeTasks = allTasks
-            .where((t) => _normalizeStatus(t.status) != 'done')
-            .toList();
-        final completedTasks = allTasks
-            .where((t) => _normalizeStatus(t.status) == 'done')
-            .toList();
 
-        final deadlineTasks = allTasks.where((t) {
+        final activeTasks = allTasks.where((t) {
+          final s = _normalizeStatus(t.status);
+          return s != 'done' && s != 'completed';
+        }).toList();
+
+        final completedTasks = allTasks.where((t) {
+          final s = _normalizeStatus(t.status);
+          return s == 'done' || s == 'completed';
+        }).toList();
+
+        // Deadline dalam 3 hari ke depan (atau sudah lewat), hanya tugas aktif.
+        final deadlineTasks = activeTasks.where((t) {
           try {
             final deadline = t.deadline.toDate();
             return deadline.difference(DateTime.now()).inDays <= 3;
@@ -125,7 +131,7 @@ class DashboardContent extends StatelessWidget {
                       title: 'Deadline',
                       value: deadlineTasks.length.toString(),
                       icon: Icons.timer_outlined,
-                      color: Colors.redAccent,
+                      color: AppColors.error,
                     ),
                   ),
                 ],
@@ -141,7 +147,7 @@ class DashboardContent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Daftar Tugas Aktif',
                     style: TextStyle(
                       color: AppColors.textPrimary,
@@ -150,17 +156,16 @@ class DashboardContent extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
+                    padding: AppSizes.badgePadding,
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(
+                        AppSizes.radiusDefault,
+                      ),
                     ),
                     child: Text(
                       '${filteredTasks.length} tugas',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.primary,
                         fontSize: AppSizes.fontSizeSmall,
                         fontWeight: FontWeight.bold,
@@ -175,8 +180,17 @@ class DashboardContent extends StatelessWidget {
               else
                 ...filteredTasks.map(
                   (task) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: TaskCardItem(task: task, onTap: () {}),
+                    padding: const EdgeInsets.only(bottom: AppSizes.spaceM),
+                    child: TaskCardItem(
+                      task: task,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.taskDetail,
+                          arguments: task,
+                        );
+                      },
+                    ),
                   ),
                 ),
             ],
