@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/app_strings.dart';
+import '../../models/task_model.dart';
+
 // Import fitur autentikasi
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/auth/login_screen.dart';
@@ -36,15 +39,6 @@ class AppRoutes {
   /// Rute awal yang dijalankan saat aplikasi dibuka.
   static const String initialRoute = splash;
 
-  /// Helper untuk mengekstrak argumen dari RouteSettings.
-  /// Mengembalikan Map kosong jika argumen tidak ada atau bukan Map.
-  static Map<String, dynamic> _args(RouteSettings settings) {
-    final arguments = settings.arguments;
-    return arguments is Map<String, dynamic>
-        ? arguments
-        : const <String, dynamic>{};
-  }
-
   /// Generator rute global untuk MaterialApp.
   /// Menangani navigasi ke setiap layar berdasarkan nama rute.
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -68,23 +62,38 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AddTaskScreen());
 
       case editTask:
-        final args = _args(settings);
-        return MaterialPageRoute(
-          builder: (_) => EditTaskScreen(
-            initialTitle: args['title']?.toString() ?? '',
-            initialDescription: args['description']?.toString() ?? '',
-          ),
-        );
+        {
+          final args = settings.arguments;
+          if (args is TaskModel) {
+            return MaterialPageRoute(
+              builder: (_) => EditTaskScreen(task: args),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              appBar: AppBar(title: const Text('Edit Tugas')),
+              body: const Center(
+                child: Text('Data tugas tidak ditemukan untuk diedit.'),
+              ),
+            ),
+          );
+        }
 
       case taskDetail:
-        final args = _args(settings);
-        return MaterialPageRoute(
-          builder: (_) => TaskDetailScreen(
-            title: args['title']?.toString() ?? '',
-            description: args['description']?.toString() ?? '',
-            date: args['date']?.toString() ?? '',
-          ),
-        );
+        {
+          final args = settings.arguments;
+          if (args is TaskModel) {
+            return MaterialPageRoute(
+              builder: (_) => TaskDetailScreen(task: args),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              appBar: AppBar(title: const Text(AppStrings.taskDetailTitle)),
+              body: const Center(child: Text(AppStrings.taskDetailNotFound)),
+            ),
+          );
+        }
 
       case history:
         return MaterialPageRoute(builder: (_) => const HistoryScreen());
