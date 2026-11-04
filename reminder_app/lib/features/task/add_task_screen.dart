@@ -1,7 +1,6 @@
-
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
@@ -21,18 +20,15 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _titleController =
-      TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
 
-  final TextEditingController _descriptionController =
-      TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   final TaskService _taskService = TaskService();
 
   DateTime? _selectedDate;
 
-  late String _selectedCategory =
-      AppStrings.categories.first;
+  late String _selectedCategory = AppStrings.categories.first;
 
   String _selectedPriority = AppStrings.priorityMedium;
 
@@ -112,9 +108,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (_selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Silakan pilih deadline tugas terlebih dahulu!',
-          ),
+          content: Text('Silakan pilih deadline tugas terlebih dahulu!'),
         ),
       );
       return;
@@ -124,11 +118,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Silakan login terlebih dahulu.',
-          ),
-        ),
+        const SnackBar(content: Text('Silakan login terlebih dahulu.')),
       );
       return;
     }
@@ -139,9 +129,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
     try {
       // Membuat ID dokumen unik.
-      final taskRef = FirebaseFirestore.instance
-          .collection('tasks')
-          .doc();
+      final taskRef = FirebaseFirestore.instance.collection('tasks').doc();
 
       final task = TaskModel(
         id: taskRef.id,
@@ -159,12 +147,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
       if (!mounted) return;
 
+      // Diubah menggunakan AppStrings.taskAddedSuccess ("Tugas tersimpan")
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Tugas berhasil disimpan ke Firestore.',
-          ),
-        ),
+        const SnackBar(content: Text(AppStrings.taskAddedSuccess)),
       );
 
       Navigator.pop(context, true);
@@ -206,9 +191,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(
-          AppSizes.pagePadding,
-        ),
+        padding: const EdgeInsets.all(AppSizes.pagePadding),
         child: Form(
           key: _formKey,
           child: Column(
@@ -218,12 +201,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               CustomTextField(
                 controller: _titleController,
                 labelText: 'Judul Tugas',
-                hintText:
-                    'Contoh: Laporan Praktikum Pemrograman Mobile',
+                hintText: 'Contoh: Laporan Praktikum Pemrograman Mobile',
                 prefixIcon: Icons.assignment_outlined,
                 validator: (value) {
-                  if (value == null ||
-                      value.trim().isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return AppStrings.fieldRequired;
                   }
 
@@ -239,29 +220,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 maxLines: 3,
                 decoration: InputDecoration(
                   labelText: 'Deskripsi Tugas (Opsional)',
-                  hintText:
-                      'Catatan tambahan mengenai tugas ini...',
+                  hintText: 'Catatan tambahan mengenai tugas ini...',
                   prefixIcon: const Icon(
                     Icons.description_outlined,
                     color: AppColors.primaryTeal,
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
-                    borderSide: const BorderSide(
-                      color: AppColors.borderLight,
-                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+                    borderSide: const BorderSide(color: AppColors.borderLight),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                     borderSide: const BorderSide(
                       color: AppColors.primaryTeal,
                       width: 2,
@@ -276,7 +248,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               // Kategori.
               DropdownButtonFormField<String>(
-                initialValue: _selectedCategory,
+                value: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Kategori',
                   prefixIcon: const Icon(
@@ -284,16 +256,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     color: AppColors.primaryTeal,
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                   ),
                 ),
                 items: AppStrings.categories.map((cat) {
-                  return DropdownMenuItem<String>(
-                    value: cat,
-                    child: Text(cat),
-                  );
+                  return DropdownMenuItem<String>(value: cat, child: Text(cat));
                 }).toList(),
                 onChanged: _isSaving
                     ? null
@@ -310,7 +277,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               // Prioritas.
               DropdownButtonFormField<String>(
-                initialValue: _selectedPriority,
+                value: _selectedPriority,
                 decoration: InputDecoration(
                   labelText: 'Prioritas',
                   prefixIcon: const Icon(
@@ -318,9 +285,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     color: AppColors.primaryTeal,
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                   ),
                 ),
                 items: _priorities.map((priority) {
@@ -345,18 +310,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               // Deadline.
               InkWell(
                 onTap: _isSaving ? null : _pickDate,
-                borderRadius: BorderRadius.circular(
-                  AppSizes.radiusDefault,
-                ),
+                borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                 child: Container(
                   padding: AppSizes.inputPadding,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.borderLight,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.radiusDefault,
-                    ),
+                    border: Border.all(color: AppColors.borderLight),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                     color: AppColors.surfaceLight,
                   ),
                   child: Row(
@@ -365,17 +324,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         Icons.calendar_today_outlined,
                         color: AppColors.primaryTeal,
                       ),
-                      const SizedBox(
-                        width: AppSizes.spaceS,
-                      ),
+                      const SizedBox(width: AppSizes.spaceS),
                       Expanded(
                         child: Text(
                           _selectedDate == null
                               ? 'Pilih Deadline Tugas'
                               : 'Deadline: '
-                                  '${_selectedDate!.day}/'
-                                  '${_selectedDate!.month}/'
-                                  '${_selectedDate!.year}',
+                                    '${_selectedDate!.day}/'
+                                    '${_selectedDate!.month}/'
+                                    '${_selectedDate!.year}',
                           style: TextStyle(
                             fontSize: 15,
                             color: _selectedDate == null
@@ -396,13 +353,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               // Tombol simpan.
               CustomButton(
-                text: _isSaving
-                    ? 'Menyimpan...'
-                    : 'Simpan Tugas',
+                text: _isSaving ? 'Menyimpan...' : 'Simpan Tugas',
                 onPressed: () {
                   if (_isSaving) return;
                   _saveTask();
-                }
+                },
               ),
             ],
           ),
