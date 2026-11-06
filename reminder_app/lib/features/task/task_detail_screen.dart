@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
+import '../../models/task_model.dart';
 
+// Layar detail tugas yang menerima objek TaskModel utuh.
 class TaskDetailScreen extends StatelessWidget {
-  final String title;
-  final String description;
-  final String date;
+  final TaskModel task;
 
   const TaskDetailScreen({
     super.key,
-    required this.title,
-    required this.description,
-    required this.date,
+    required this.task,
   });
+
+  // Format tanggal dari Timestamp menjadi string yang mudah dibaca.
+  String _formatDate(DateTime date) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +50,9 @@ class TaskDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Judul Tugas
+                // Judul tugas
                 Text(
-                  title,
+                  task.title,
                   style: const TextStyle(
                     fontSize: AppSizes.fontSizeLarge,
                     fontWeight: FontWeight.bold,
@@ -56,7 +61,7 @@ class TaskDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.spacingSmall),
 
-                // Tanggal / Tenggat Waktu
+                // Tanggal tenggat waktu
                 Row(
                   children: [
                     const Icon(
@@ -66,7 +71,7 @@ class TaskDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSizes.spacingSmall),
                     Text(
-                      date,
+                      _formatDate(task.deadline.toDate()),
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSmall,
                         color: AppColors.textSecondary,
@@ -76,9 +81,9 @@ class TaskDetailScreen extends StatelessWidget {
                 ),
                 const Divider(height: AppSizes.spacingLarge),
 
-                // Deskripsi Tugas
+                // Deskripsi tugas
                 Text(
-                  description,
+                  task.description,
                   style: const TextStyle(
                     fontSize: AppSizes.fontSizeMedium,
                     color: AppColors.textPrimary,

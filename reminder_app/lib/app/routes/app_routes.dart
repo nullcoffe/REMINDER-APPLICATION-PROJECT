@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Import model data
+import '../../models/task_model.dart';
+
 // Import fitur autentikasi
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/auth/login_screen.dart';
@@ -16,7 +19,6 @@ import '../../features/task/edit_task_screen.dart';
 import '../../features/task/task_detail_screen.dart';
 
 /// Kelas untuk mengelola routing aplikasi.
-/// Berisi konstanta nama rute dan generator rute global.
 class AppRoutes {
   AppRoutes._();
 
@@ -33,20 +35,8 @@ class AppRoutes {
   static const String notification = '/notification';
   static const String profile = '/profile';
 
-  /// Rute awal yang dijalankan saat aplikasi dibuka.
   static const String initialRoute = splash;
 
-  /// Helper untuk mengekstrak argumen dari RouteSettings.
-  /// Mengembalikan Map kosong jika argumen tidak ada atau bukan Map.
-  static Map<String, dynamic> _args(RouteSettings settings) {
-    final arguments = settings.arguments;
-    return arguments is Map<String, dynamic>
-        ? arguments
-        : const <String, dynamic>{};
-  }
-
-  /// Generator rute global untuk MaterialApp.
-  /// Menangani navigasi ke setiap layar berdasarkan nama rute.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -67,23 +57,18 @@ class AppRoutes {
       case addTask:
         return MaterialPageRoute(builder: (_) => const AddTaskScreen());
 
+      // Menerima objek TaskModel langsung
       case editTask:
-        final args = _args(settings);
+        final task = settings.arguments as TaskModel;
         return MaterialPageRoute(
-          builder: (_) => EditTaskScreen(
-            initialTitle: args['title']?.toString() ?? '',
-            initialDescription: args['description']?.toString() ?? '',
-          ),
+          builder: (_) => EditTaskScreen(task: task),
         );
 
+      // Menerima objek TaskModel langsung
       case taskDetail:
-        final args = _args(settings);
+        final task = settings.arguments as TaskModel;
         return MaterialPageRoute(
-          builder: (_) => TaskDetailScreen(
-            title: args['title']?.toString() ?? '',
-            description: args['description']?.toString() ?? '',
-            date: args['date']?.toString() ?? '',
-          ),
+          builder: (_) => TaskDetailScreen(task: task),
         );
 
       case history:
@@ -100,9 +85,7 @@ class AppRoutes {
           builder: (_) => Scaffold(
             appBar: AppBar(title: const Text('Rute Tidak Ditemukan')),
             body: Center(
-              child: Text(
-                'Halaman dengan rute "${settings.name}" tidak ditemukan.',
-              ),
+              child: Text('Halaman dengan rute "${settings.name}" tidak ditemukan.'),
             ),
           ),
         );
