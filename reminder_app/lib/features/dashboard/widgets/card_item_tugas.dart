@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/widgets/neu_card.dart';
 import '../../../models/task_model.dart';
@@ -13,7 +12,7 @@ class TaskCardItem extends StatelessWidget {
   const TaskCardItem({super.key, required this.task, this.onTap});
 
   // Menentukan apakah tugas bersifat urgent berdasarkan skor prioritas.
-  bool get _isUrgent => task.priorityScore >= 8;
+  bool get _isUrgent => task.priorityScore >= 80;
 
   // Memformat Timestamp deadline menjadi teks tanggal yang mudah dibaca.
   String get _deadlineText {
@@ -30,6 +29,9 @@ class TaskCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil skema warna dari tema aktif.
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: NeuCard(
@@ -41,18 +43,15 @@ class TaskCardItem extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.2),
+                    color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     task.categoryId.isNotEmpty ? task.categoryId : 'Umum',
                     style: TextStyle(
-                      color: AppColors.primary,
+                      color: colorScheme.onPrimaryContainer,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
@@ -60,14 +59,9 @@ class TaskCardItem extends StatelessWidget {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _isUrgent
-                        ? Colors.redAccent.withValues(alpha: 0.2)
-                        : AppColors.secondary.withValues(alpha: 0.2),
+                    color: _isUrgent ? colorScheme.errorContainer : colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -76,17 +70,13 @@ class TaskCardItem extends StatelessWidget {
                       Icon(
                         Icons.access_time,
                         size: 12,
-                        color: _isUrgent
-                            ? Colors.redAccent
-                            : AppColors.secondary,
+                        color: _isUrgent ? colorScheme.error : colorScheme.secondary,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         _deadlineText,
                         style: TextStyle(
-                          color: _isUrgent
-                              ? Colors.redAccent
-                              : AppColors.secondary,
+                          color: _isUrgent ? colorScheme.error : colorScheme.secondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -103,11 +93,10 @@ class TaskCardItem extends StatelessWidget {
               children: [
                 Checkbox(
                   value: false,
-                  activeColor: AppColors.primary,
-                  checkColor: Colors.white,
-                  onChanged: (value) {
-                    // Logika update status akan ditambahkan nanti
-                  },
+                  activeColor: colorScheme.primary,
+                  checkColor: colorScheme.onPrimary,
+                  side: BorderSide(color: colorScheme.outline),
+                  onChanged: (value) {},
                 ),
                 Expanded(
                   child: Column(
@@ -116,18 +105,16 @@ class TaskCardItem extends StatelessWidget {
                       Text(
                         task.title,
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                           fontSize: AppSizes.fontSizeMedium,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        task.description.isNotEmpty
-                            ? task.description
-                            : 'Tidak ada deskripsi',
+                        task.description.isNotEmpty ? task.description : 'Tidak ada deskripsi',
                         style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: colorScheme.onSurfaceVariant,
                           fontSize: AppSizes.fontSizeSmall,
                         ),
                         maxLines: 2,
@@ -144,7 +131,7 @@ class TaskCardItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -154,15 +141,12 @@ class TaskCardItem extends StatelessWidget {
                     children: [
                       Text(
                         'Progres Pengerjaan',
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12),
                       ),
                       Text(
                         '0%',
                         style: TextStyle(
-                          color: AppColors.primary,
+                          color: colorScheme.primary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -174,10 +158,8 @@ class TaskCardItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
                       value: 0,
-                      backgroundColor: AppColors.surface,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
-                      ),
+                      backgroundColor: colorScheme.surface,
+                      valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
                       minHeight: 6,
                     ),
                   ),
@@ -190,20 +172,15 @@ class TaskCardItem extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: _isUrgent
-                        ? Colors.redAccent.withValues(alpha: 0.2)
-                        : AppColors.secondary.withValues(alpha: 0.2),
+                    color: _isUrgent ? colorScheme.errorContainer : colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     _isUrgent ? 'Urgent' : 'Normal',
                     style: TextStyle(
-                      color: _isUrgent ? Colors.redAccent : AppColors.secondary,
+                      color: _isUrgent ? colorScheme.error : colorScheme.secondary,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -211,34 +188,26 @@ class TaskCardItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.tertiary.withValues(alpha: 0.2),
+                    color: colorScheme.tertiaryContainer,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    task.difficultyLevel.isNotEmpty
-                        ? task.difficultyLevel
-                        : 'Sedang',
+                    task.difficultyLevel.isNotEmpty ? task.difficultyLevel : 'Sedang',
                     style: TextStyle(
-                      color: AppColors.tertiary,
+                      color: colorScheme.onTertiaryContainer,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.checklist, size: 16, color: AppColors.textSecondary),
+                Icon(Icons.checklist, size: 16, color: colorScheme.onSurfaceVariant),
                 const SizedBox(width: 4),
                 Text(
                   '0 Subtask',
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12),
                 ),
               ],
             ),
