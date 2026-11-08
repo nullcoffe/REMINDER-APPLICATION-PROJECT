@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
-import '../../core/widgets/custom_button.dart';
-import '../../core/widgets/custom_textfield.dart';
+import '../../core/widgets/neu_button.dart';
+import '../../core/widgets/neu_input.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -29,16 +29,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> _sendResetEmail() async {
-<<<<<<< HEAD
-    if (!(_formKey.currentState?.validate() ?? false)) return;
-=======
     if (_loading) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    if (!(_formKey.currentState?.validate() ?? false)) {
-      return;
-    }
-
->>>>>>> develop
     final email = _emailController.text.trim();
 
     setState(() {
@@ -89,9 +82,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       debugPrint('Reset password error: $e');
     } finally {
       if (mounted) {
-        setState(() {
-          _loading = false;
-        });
+        setState(() => _loading = false);
       }
     }
   }
@@ -101,20 +92,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-<<<<<<< HEAD
         title: Text(
-          "Lupa Password",
+          'Lupa Password',
           style: TextStyle(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
-=======
-        title: const Text(
-          'Lupa Password',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
->>>>>>> develop
         ),
         backgroundColor: colorScheme.surface,
         elevation: 0,
@@ -150,75 +135,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
         ],
       ),
-<<<<<<< HEAD
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.lock_reset, size: 60, color: colorScheme.primary),
-          const SizedBox(height: AppSizes.spaceL),
-          Text(
-            "Masukkan email akun kamu untuk menerima link reset password",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: colorScheme.onSurfaceVariant,
-              fontSize: AppSizes.fontSizeSmall,
-            ),
-          ),
-          const SizedBox(height: AppSizes.spaceXL),
-          NeuInput(
-            hintText: AppStrings.loginEmailHint,
-            controller: _emailController,
-            prefixIcon: Icons.email_outlined,
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return AppStrings.fieldRequired;
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: AppSizes.spaceM),
-          if (_errorMessage != null) ...[
-            Text(
-              _errorMessage!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: colorScheme.error,
-=======
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.lock_reset, size: 60, color: AppColors.primary),
+            Icon(Icons.lock_reset, size: 60, color: colorScheme.primary),
             const SizedBox(height: AppSizes.spaceL),
-            const Text(
+            Text(
               'Masukkan email akun kamu untuk menerima link reset password.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: AppColors.textSecondary,
->>>>>>> develop
+                color: colorScheme.onSurfaceVariant,
                 fontSize: AppSizes.fontSizeSmall,
               ),
             ),
-            const SizedBox(height: AppSizes.spaceL),
-            CustomTextField(
+            const SizedBox(height: AppSizes.spaceXL),
+            NeuInput(
+              hintText: AppStrings.loginEmailHint,
               controller: _emailController,
-              labelText: 'Email Mahasiswa',
-              hintText: 'nama@email.com',
               prefixIcon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
-                if (value == null || value.trim().isEmpty) {
+                if (value == null || value.trim().isEmpty)
                   return AppStrings.fieldRequired;
-                }
-
                 final emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-
-                if (!emailPattern.hasMatch(value.trim())) {
+                if (!emailPattern.hasMatch(value.trim()))
                   return 'Masukkan alamat email yang valid.';
-                }
-
                 return null;
               },
             ),
@@ -227,18 +170,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: AppColors.error,
+                style: TextStyle(
+                  color: colorScheme.error,
                   fontSize: AppSizes.fontSizeSmall,
                 ),
               ),
               const SizedBox(height: AppSizes.spaceM),
             ],
-            CustomButton(
+            NeuButton(
               text: _loading ? 'Mengirim...' : 'Kirim Link Reset',
-              isLoading: _loading,
-              onPressed: _sendResetEmail,
-              backgroundColor: AppColors.primary,
+              onPressed: _loading ? null : _sendResetEmail,
             ),
           ],
         ),
@@ -266,13 +207,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         children: [
           Icon(Icons.mark_email_read, size: 70, color: colorScheme.primary),
           const SizedBox(height: AppSizes.spaceL),
-<<<<<<< HEAD
           Text(
-            "Link reset password telah dikirim ke:",
-=======
-          const Text(
-            'Permintaan reset password berhasil diproses.',
->>>>>>> develop
+            'Link reset password telah dikirim ke:',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: colorScheme.onSurface,
@@ -290,13 +226,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
           const SizedBox(height: AppSizes.spaceM),
-<<<<<<< HEAD
           Text(
-            "Tidak ketemu? Cek juga folder spam.",
-=======
-          const Text(
-            'Periksa kotak masuk dan folder spam email kamu.',
->>>>>>> develop
+            'Tidak ketemu? Cek juga folder spam.',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: colorScheme.onSurfaceVariant,
@@ -304,10 +235,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
           const SizedBox(height: AppSizes.spaceL),
-          CustomButton(
+          NeuButton(
             text: 'Kembali Login',
             onPressed: () => Navigator.pop(context),
-            backgroundColor: AppColors.primary,
           ),
         ],
       ),
