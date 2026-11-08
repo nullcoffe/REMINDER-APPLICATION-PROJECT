@@ -65,8 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             _errorMessage = 'Periksa koneksi internet kamu.';
             break;
           case 'operation-not-allowed':
-            _errorMessage =
-                'Fitur reset password belum diaktifkan di Firebase.';
+            _errorMessage = 'Fitur reset password belum diaktifkan di Firebase.';
             break;
           default:
             _errorMessage = 'Gagal mengirim link reset (${e.code}).';
@@ -110,9 +109,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           padding: const EdgeInsets.all(AppSizes.pagePadding),
           child: Center(
             child: SingleChildScrollView(
-              child: _success
-                  ? _successView(colorScheme)
-                  : _formView(colorScheme),
+              child: _success ? _successView(colorScheme) : _formView(colorScheme),
             ),
           ),
         ),
