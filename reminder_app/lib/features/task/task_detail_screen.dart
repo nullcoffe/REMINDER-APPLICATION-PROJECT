@@ -2,18 +2,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../../app/routes/app_routes.dart';
-import '../../core/constants/app_sizes.dart';
-import '../../core/constants/app_strings.dart';
-import '../../models/task_model.dart';
-import '../../models/checklist_model.dart';
-import '../../services/checklist_service.dart';
-
-// Layar detail tugas dengan stepper, sub-tugas, dan tombol edit.
-=======
 
 import '../../app/routes/app_routes.dart';
 import '../../core/constants/app_colors.dart';
@@ -25,88 +13,10 @@ import '../../models/checklist_model.dart';
 import '../../services/task_service.dart';
 import '../../services/checklist_service.dart';
 
-/// Halaman detail tugas dengan fitur tambah sub-tugas.
->>>>>>> develop
 class TaskDetailScreen extends StatefulWidget {
   final TaskModel task;
 
   const TaskDetailScreen({super.key, required this.task});
-<<<<<<< HEAD
-
-  @override
-  State<TaskDetailScreen> createState() => _TaskDetailScreenState();
-}
-
-class _TaskDetailScreenState extends State<TaskDetailScreen> {
-  final ChecklistService _checklistService = ChecklistService();
-
-  String _formatDate(DateTime date) {
-    final months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mei',
-      'Jun',
-      'Jul',
-      'Agu',
-      'Sep',
-      'Okt',
-      'Nov',
-      'Des',
-    ];
-    return '${date.day} ${months[date.month - 1]} ${date.year}';
-  }
-
-  String _getPriorityLabel(int score) {
-    if (score >= 80) return 'Urgent';
-    if (score >= 60) return 'Tinggi';
-    if (score >= 40) return 'Sedang';
-    return 'Rendah';
-  }
-
-  Color _getPriorityColor(int score) {
-    if (score >= 80) return Colors.red;
-    if (score >= 60) return Colors.orange;
-    if (score >= 40) return Colors.blue;
-    return Colors.grey;
-  }
-
-  // Menghitung progres sub-tugas.
-  int _calculateProgress(List<ChecklistModel> items) {
-    if (items.isEmpty) return 0;
-    final completed = items.where((i) => i.isCompleted).length;
-    return (completed / items.length * 100).round();
-  }
-
-  // Toggle status sub-tugas.
-  Future<void> _toggleSubTask(ChecklistModel item) async {
-    final updated = item.copyWith(
-      isCompleted: !item.isCompleted,
-      updatedAt: Timestamp.now(),
-    );
-    await _checklistService.updateChecklist(updated);
-  }
-
-  // Tandai tugas sebagai selesai.
-  Future<void> _markAsDone() async {
-    final updated = widget.task.copyWith(
-      status: AppStrings.statusDone,
-      updatedAt: Timestamp.now(),
-    );
-    // TODO: panggil taskService.updateTask(updated)
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tugas ditandai selesai!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pop(context);
-    }
-  }
-=======
->>>>>>> develop
 
   @override
   State<TaskDetailScreen> createState() => _TaskDetailScreenState();
@@ -132,12 +42,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Timer? _ticker;
   bool _isUpdating = false;
 
-  // State untuk checklist
   Stream<List<ChecklistModel>>? _checklistStream;
   List<ChecklistModel> _checklistItems = [];
   bool _isLoadingChecklist = true;
 
-  // ✅ Controller untuk tambah sub-tugas baru
   final TextEditingController _newSubTaskController = TextEditingController();
   bool _isAddingSubTask = false;
 
@@ -157,10 +65,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     _newSubTaskController.dispose();
     super.dispose();
   }
-
-  // ===========================================================================
-  // FUNGSI HITUNG STATUS & PROGRESS OTOMATIS
-  // ===========================================================================
 
   double _calculateProgressPercent(List<ChecklistModel> checklist) {
     if (checklist.isEmpty) return 0.0;
@@ -186,10 +90,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     if (index != -1) return index;
     return 0;
   }
-
-  // ===========================================================================
-  // ✅ FUNGSI BARU: Tambah Sub-tugas
-  // ===========================================================================
 
   Future<void> _addSubTask() async {
     final title = _newSubTaskController.text.trim();
@@ -244,10 +144,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
   }
 
-  // ===========================================================================
-  // FUNGSI TOGGLE CHECKLIST ITEM
-  // ===========================================================================
-
   Future<void> _toggleChecklistItem(ChecklistModel item) async {
     try {
       final updatedItem = ChecklistModel(
@@ -288,10 +184,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       );
     }
   }
-
-  // ===========================================================================
-  // FUNGSI HAPUS SUB-TUGAS
-  // ===========================================================================
 
   Future<void> _deleteSubTask(ChecklistModel item) async {
     final confirmed = await showDialog<bool>(
@@ -335,9 +227,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
   }
 
-  // ===========================================================================
-  // DATA TURUNAN
-  // ===========================================================================
   DateTime get _deadline => _task.deadline.toDate();
 
   String _normalize(String value) {
@@ -361,10 +250,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     if (score >= 60) return AppColors.priorityMedium;
     return AppColors.priorityLow;
   }
-
-  // ===========================================================================
-  // AKSI UPDATE STATUS
-  // ===========================================================================
 
   Future<void> _updateStatus(
     String newStatus, {
@@ -398,13 +283,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
       if (showSnackBar) {
         messenger.showSnackBar(
-          const SnackBar(content: Text(AppStrings.taskDetailStatusUpdated)),
+          const SnackBar(content: Text('Status diperbarui')),
         );
       }
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(
-        SnackBar(content: Text('${AppStrings.taskDetailStatusFailed}: $e')),
+        SnackBar(content: Text('Gagal memperbarui status: $e')),
       );
     } finally {
       if (mounted) setState(() => _isUpdating = false);
@@ -415,9 +300,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     Navigator.pushNamed(context, AppRoutes.editTask, arguments: _task);
   }
 
-  // ===========================================================================
-  // KOMPONEN KECIL
-  // ===========================================================================
   BoxDecoration get _cardDecoration {
     return BoxDecoration(
       color: AppColors.surface,
@@ -573,9 +455,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  // ===========================================================================
-  // BAGIAN HALAMAN
-  // ===========================================================================
   Widget _buildChips() {
     final score = PriorityCalculator.calculateScore(_deadline);
     final priorityLabel = PriorityCalculator.getPriorityLabel(_deadline);
@@ -591,14 +470,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ),
         if (_task.difficultyLevel.isNotEmpty)
           _chip(
-            label:
-                '${AppStrings.taskDetailDifficultyPrefix}: '
-                '${_task.difficultyLevel}',
+            label: 'Kesulitan: ${_task.difficultyLevel}',
             color: AppColors.tertiary,
             icon: Icons.speed_outlined,
           ),
         _chip(
-          label: '${AppStrings.taskDetailPriorityPrefix}: $priorityLabel',
+          label: 'Prioritas: $priorityLabel',
           color: _priorityColor(score),
           icon: Icons.priority_high,
         ),
@@ -636,7 +513,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      AppStrings.taskDetailDeadlineLabel,
+                      'Deadline',
                       style: TextStyle(
                         fontSize: AppSizes.fontSizeXS,
                         fontWeight: FontWeight.w600,
@@ -674,13 +551,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     final Color badgeColor;
 
     if (_isDone) {
-      badgeLabel = AppStrings.taskDetailFinished;
+      badgeLabel = 'Selesai';
       badgeColor = AppColors.primary;
     } else if (isOverdue) {
-      badgeLabel = AppStrings.taskDetailOverdue;
+      badgeLabel = 'Terlambat';
       badgeColor = AppColors.error;
     } else {
-      badgeLabel = AppStrings.taskDetailRunning;
+      badgeLabel = 'Berjalan';
       badgeColor = AppColors.success;
     }
 
@@ -693,17 +570,17 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         children: [
           _sectionHeader(
             Icons.timer_outlined,
-            AppStrings.taskDetailTimeLeftTitle,
+            'Sisa Waktu Pengerjaan',
             trailing: _chip(label: badgeLabel, color: badgeColor),
           ),
           const SizedBox(height: AppSizes.spaceM),
           Row(
             children: [
-              _timeBox(days, AppStrings.taskDetailDays),
+              _timeBox(days, 'Hari'),
               const SizedBox(width: AppSizes.spaceS),
-              _timeBox(hours, AppStrings.taskDetailHours),
+              _timeBox(hours, 'Jam'),
               const SizedBox(width: AppSizes.spaceS),
-              _timeBox(minutes, AppStrings.taskDetailMinutes),
+              _timeBox(minutes, 'Menit'),
             ],
           ),
           const SizedBox(height: AppSizes.spaceM),
@@ -724,7 +601,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 SizedBox(width: AppSizes.spaceS),
                 Expanded(
                   child: Text(
-                    AppStrings.taskDetailReminderInfo,
+                    'Pengingat akan dikirim 1 hari sebelum deadline',
                     style: TextStyle(
                       fontSize: AppSizes.fontSizeSmall,
                       color: AppColors.textSecondary,
@@ -739,9 +616,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  // ===========================================================================
-  // ✅ WORKFLOW CARD DENGAN FITUR TAMBAH SUB-TUGAS
-  // ===========================================================================
   Widget _buildWorkflowCard() {
     return StreamBuilder<List<ChecklistModel>>(
       stream: _checklistStream,
@@ -791,10 +665,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             children: [
               _sectionHeader(
                 Icons.alt_route,
-                AppStrings.taskDetailWorkflowTitle,
+                'Tahapan Pengerjaan',
                 trailing: _chip(
-                  label:
-                      '${(progressPercent * 100).round()}% ${AppStrings.taskDetailProgressSuffix}',
+                  label: '${(progressPercent * 100).round()}% Selesai',
                   color: AppColors.primary,
                 ),
               ),
@@ -874,9 +747,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     ),
                   ),
                   subtitle: Text(
-                    item.isCompleted
-                        ? AppStrings.statusDone
-                        : AppStrings.statusTodo,
+                    item.isCompleted ? 'Selesai' : 'Belum',
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeXS,
                       color: AppColors.textSecondary,
@@ -895,7 +766,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.spaceS),
-              // ✅ INPUT TAMBAH SUB-TUGAS BARU
               Container(
                 padding: const EdgeInsets.all(AppSizes.spaceS),
                 decoration: BoxDecoration(
@@ -957,12 +827,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionHeader(Icons.notes, AppStrings.taskDetailDescriptionTitle),
+          _sectionHeader(Icons.notes, 'Deskripsi Tugas'),
           const SizedBox(height: AppSizes.spaceS),
           Text(
-            description.isEmpty
-                ? AppStrings.taskDetailNoDescription
-                : description,
+            description.isEmpty ? 'Tidak ada deskripsi' : description,
             style: TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               height: 1.5,
@@ -989,9 +857,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _isDone
-                ? AppStrings.taskDetailDoneTitle
-                : AppStrings.taskDetailMotivationTitle,
+            _isDone ? 'Kerja Bagus!' : 'Tetap Semangat!',
             style: const TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               fontWeight: FontWeight.bold,
@@ -1001,8 +867,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           const SizedBox(height: AppSizes.spaceXS),
           Text(
             _isDone
-                ? AppStrings.taskDetailDoneBody
-                : AppStrings.taskDetailMotivationBody,
+                ? 'Kamu sudah menyelesaikan tugas ini.'
+                : 'Kamu pasti bisa menyelesaikan tugas ini!',
             style: const TextStyle(
               fontSize: AppSizes.fontSizeSmall,
               color: AppColors.textSecondary,
@@ -1028,7 +894,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               child: OutlinedButton.icon(
                 onPressed: _openEdit,
                 icon: const Icon(Icons.edit_outlined),
-                label: const Text(AppStrings.taskDetailEditButton),
+                label: const Text('Edit Tugas'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.textPrimary,
                   padding: AppSizes.buttonPadding,
@@ -1053,7 +919,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.check_circle_outline),
-                label: const Text(AppStrings.taskDetailCompleteButton),
+                label: const Text('Tandai Selesai'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textPrimary,
@@ -1072,390 +938,25 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     );
   }
 
-  // ===========================================================================
-  // BUILD
-  // ===========================================================================
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final task = widget.task;
-
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Detail Tugas',
           style: TextStyle(
-            color: colorScheme.onSurface,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
-<<<<<<< HEAD
-        iconTheme: IconThemeData(color: colorScheme.onSurface),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.delete_outline, color: colorScheme.error),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  backgroundColor: colorScheme.surface,
-                  title: Text(
-                    'Hapus Tugas',
-                    style: TextStyle(color: colorScheme.onSurface),
-                  ),
-                  content: Text(
-                    'Yakin ingin menghapus tugas ini?',
-                    style: TextStyle(color: colorScheme.onSurfaceVariant),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(ctx),
-                      child: Text(
-                        'Batal',
-                        style: TextStyle(color: colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                    FilledButton(
-                      onPressed: () {
-                        // TODO: panggil taskService.deleteTask(task.id)
-                        Navigator.pop(ctx);
-                        Navigator.pop(context);
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: colorScheme.error,
-                      ),
-                      child: const Text('Hapus'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: StreamBuilder<List<ChecklistModel>>(
-        stream: _checklistService.getChecklist(task.id),
-        builder: (context, snapshot) {
-          final items = snapshot.data ?? [];
-          final progress = _calculateProgress(items);
-          final completedCount = items.where((i) => i.isCompleted).length;
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSizes.pagePadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Badge kategori dan prioritas
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        task.categoryId.toUpperCase(),
-                        style: TextStyle(
-                          color: colorScheme.onPrimaryContainer,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _getPriorityColor(task.priorityScore)
-                            .withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        'Prioritas ${_getPriorityLabel(task.priorityScore)}',
-                        style: TextStyle(
-                          color: _getPriorityColor(task.priorityScore),
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Judul tugas
-                Text(
-                  task.title,
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Badge kesulitan
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colorScheme.tertiaryContainer,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    task.difficultyLevel.isNotEmpty
-                        ? task.difficultyLevel
-                        : 'Sedang',
-                    style: TextStyle(
-                      color: colorScheme.onTertiaryContainer,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Smart Alarm & Deadline
-                Row(
-                  children: [
-                    Icon(Icons.alarm, color: colorScheme.primary, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Sisa Waktu Pengerjaan',
-                      style: TextStyle(
-                        color: colorScheme.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Deadline: ${_formatDate(task.deadline.toDate())}',
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Stepper pengerjaan
-                Text(
-                  'Tahapan Pengerjaan',
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: colorScheme.outline),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildStepItem(
-                            context,
-                            'To Do',
-                            0,
-                            progress,
-                            colorScheme,
-                          ),
-                          _buildStepItem(
-                            context,
-                            'In Progress',
-                            1,
-                            progress,
-                            colorScheme,
-                          ),
-                          _buildStepItem(
-                            context,
-                            'Done',
-                            2,
-                            progress,
-                            colorScheme,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Deskripsi tugas
-                Text(
-                  'Deskripsi Tugas',
-                  style: TextStyle(
-                    color: colorScheme.onSurface,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  task.description.isNotEmpty
-                      ? task.description
-                      : 'Tidak ada deskripsi',
-                  style: TextStyle(
-                    color: colorScheme.onSurfaceVariant,
-                    fontSize: 14,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Daftar sub-tugas
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Daftar Sub-tugas',
-                      style: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '$completedCount dari ${items.length} selesai (${progress}%)',
-                      style: TextStyle(
-                        color: colorScheme.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: colorScheme.outline),
-                  ),
-                  child: Column(
-                    children: [
-                      ...items.map(
-                        (item) => ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 4,
-                          ),
-                          leading: Checkbox(
-                            value: item.isCompleted,
-                            activeColor: colorScheme.primary,
-                            side: BorderSide(color: colorScheme.outline),
-                            onChanged: (_) => _toggleSubTask(item),
-                          ),
-                          title: Text(
-                            item.itemTitle,
-                            style: TextStyle(
-                              color: colorScheme.onSurface,
-                              decoration: item.isCompleted
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (items.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            'Belum ada sub-tugas',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-              ],
-            ),
-          );
-        },
-      ),
-      // Tombol aksi di bawah
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.editTask,
-                      arguments: task,
-                    );
-                  },
-                  icon: Icon(Icons.edit_outlined, color: colorScheme.primary),
-                  label: Text(
-                    'Edit Tugas',
-                    style: TextStyle(color: colorScheme.primary),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: colorScheme.primary),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: _markAsDone,
-                  icon: const Icon(Icons.check_circle),
-                  label: const Text('Tandai Selesai'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-=======
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
         actions: [
           IconButton(
-            tooltip: AppStrings.taskDetailEditButton,
+            tooltip: 'Edit Tugas',
             onPressed: _openEdit,
             icon: const Icon(Icons.edit_outlined),
           ),
@@ -1478,62 +979,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             const SizedBox(height: AppSizes.spaceM),
             _buildMotivationCard(),
           ],
->>>>>>> develop
         ),
       ),
       bottomNavigationBar: _buildBottomBar(),
     );
   }
-<<<<<<< HEAD
-
-  // Widget untuk setiap step di stepper.
-  Widget _buildStepItem(
-    BuildContext context,
-    String label,
-    int stepIndex,
-    int progress,
-    ColorScheme colorScheme,
-  ) {
-    final isCompleted = progress > (stepIndex * 50);
-    final isCurrent = !isCompleted && progress > ((stepIndex - 1) * 50);
-
-    return Column(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: isCompleted
-                ? colorScheme.primary
-                : (isCurrent
-                      ? colorScheme.primaryContainer
-                      : colorScheme.surfaceVariant),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            isCompleted ? Icons.check : Icons.circle_outlined,
-            color: isCompleted
-                ? colorScheme.onPrimary
-                : colorScheme.onSurfaceVariant,
-            size: 20,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: isCompleted || isCurrent
-                ? colorScheme.primary
-                : colorScheme.onSurfaceVariant,
-            fontSize: 12,
-            fontWeight: (isCompleted || isCurrent)
-                ? FontWeight.bold
-                : FontWeight.normal,
-          ),
-        ),
-      ],
-    );
-  }
-=======
->>>>>>> develop
 }
