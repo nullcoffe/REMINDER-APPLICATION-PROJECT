@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/routes/app_routes.dart';
-<<<<<<< HEAD
-=======
-import '../../../core/constants/app_colors.dart';
->>>>>>> develop
 import '../../../core/constants/app_sizes.dart';
 import '../../../models/task_model.dart';
-<<<<<<< HEAD
-import 'skeleton_card.dart';
-=======
 import '../../../services/task_service.dart';
->>>>>>> develop
 
 import 'sambutan.dart';
 import 'pencarian.dart';
@@ -19,7 +11,9 @@ import 'card_item_tugas.dart';
 import 'kosong.dart';
 import 'summary_card.dart';
 import 'filter_bar.dart';
+import 'skeleton_card.dart';
 
+/// Konten utama dashboard yang menampilkan ringkasan dan daftar tugas.
 class DashboardContent extends StatelessWidget {
   final String? userId;
   final TaskService taskService;
@@ -40,6 +34,7 @@ class DashboardContent extends StatelessWidget {
     required this.onFilterChanged,
   });
 
+  /// Menyeragamkan format status dari Firestore.
   String _normalizeStatus(dynamic status) {
     return status
         .toString()
@@ -50,6 +45,7 @@ class DashboardContent extends StatelessWidget {
         .toLowerCase();
   }
 
+  /// Menyaring daftar tugas berdasarkan kategori status.
   List<TaskModel> _applyFilter(List<TaskModel> tasks, String filter) {
     switch (filter) {
       case 'To Do':
@@ -66,7 +62,7 @@ class DashboardContent extends StatelessWidget {
     }
   }
 
-  // Navigasi ke halaman detail tugas.
+  /// Navigasi ke halaman detail tugas.
   void _goToDetail(BuildContext context, TaskModel task) {
     Navigator.pushNamed(context, AppRoutes.taskDetail, arguments: task);
   }
@@ -113,7 +109,6 @@ class DashboardContent extends StatelessWidget {
           return s == 'done' || s == 'completed';
         }).toList();
 
-        // Deadline dalam 3 hari ke depan (atau sudah lewat), hanya tugas aktif.
         final deadlineTasks = activeTasks.where((t) {
           try {
             final deadline = t.deadline.toDate();
@@ -157,11 +152,7 @@ class DashboardContent extends StatelessWidget {
                       title: 'Deadline',
                       value: deadlineTasks.length.toString(),
                       icon: Icons.timer_outlined,
-<<<<<<< HEAD
-                      color: Colors.red,
-=======
-                      color: AppColors.error,
->>>>>>> develop
+                      color: colorScheme.error,
                     ),
                   ),
                 ],
@@ -177,7 +168,7 @@ class DashboardContent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Daftar Tugas Aktif',
                     style: TextStyle(
                       color: colorScheme.onSurface,
@@ -188,25 +179,15 @@ class DashboardContent extends StatelessWidget {
                   Container(
                     padding: AppSizes.badgePadding,
                     decoration: BoxDecoration(
-<<<<<<< HEAD
                       color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '${filteredTasks.length} tugas',
-                      style: TextStyle(
-                        color: colorScheme.onPrimaryContainer,
-=======
-                      color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(
                         AppSizes.radiusDefault,
                       ),
                     ),
                     child: Text(
                       '${filteredTasks.length} tugas',
-                      style: const TextStyle(
-                        color: AppColors.primary,
->>>>>>> develop
+                      style: TextStyle(
+                        color: colorScheme.onPrimaryContainer,
                         fontSize: AppSizes.fontSizeSmall,
                         fontWeight: FontWeight.bold,
                       ),
@@ -220,23 +201,10 @@ class DashboardContent extends StatelessWidget {
               else
                 ...filteredTasks.map(
                   (task) => Padding(
-<<<<<<< HEAD
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: TaskCardItem(
-                      task: task,
-                      onTap: () => _goToDetail(context, task),
-=======
                     padding: const EdgeInsets.only(bottom: AppSizes.spaceM),
                     child: TaskCardItem(
                       task: task,
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.taskDetail,
-                          arguments: task,
-                        );
-                      },
->>>>>>> develop
+                      onTap: () => _goToDetail(context, task),
                     ),
                   ),
                 ),
