@@ -37,4 +37,22 @@ class ChecklistModel {
       'updatedAt': updatedAt,
     };
   }
+
+  ChecklistModel copyWith({
+    String? id,
+    String? taskId,
+    String? itemTitle,
+    bool? isCompleted,
+    Timestamp? createdAt,
+    Timestamp? updatedAt,
+  }) {
+    return ChecklistModel(
+      id: id ?? this.id,
+      taskId: taskId ?? this.taskId,
+      itemTitle: itemTitle ?? this.itemTitle,
+      isCompleted: isCompleted ?? this.isCompleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/widgets/neu_button.dart';
@@ -31,7 +30,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _sendResetEmail() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-
     final email = _emailController.text.trim();
 
     setState(() {
@@ -41,7 +39,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-
       if (!mounted) return;
       setState(() {
         _sentEmail = email;
@@ -77,24 +74,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Lupa Password",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: AppColors.background,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSizes.pagePadding),
           child: Center(
             child: SingleChildScrollView(
-              child: _success ? _successView() : _formView(),
+              child: _success
+                  ? _successView(colorScheme)
+                  : _formView(colorScheme),
             ),
           ),
         ),
@@ -102,15 +105,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  Widget _formView() {
+  Widget _formView(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(AppSizes.spaceL),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(AppSizes.radiusCard),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: colorScheme.shadow.withValues(alpha: 0.2),
             offset: const Offset(4, 4),
             blurRadius: 8,
           ),
@@ -119,13 +122,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.lock_reset, size: 60, color: AppColors.primary),
+          Icon(Icons.lock_reset, size: 60, color: colorScheme.primary),
           const SizedBox(height: AppSizes.spaceL),
-          const Text(
+          Text(
             "Masukkan email akun kamu untuk menerima link reset password",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: colorScheme.onSurfaceVariant,
               fontSize: AppSizes.fontSizeSmall,
             ),
           ),
@@ -147,8 +150,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             Text(
               _errorMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.error,
+              style: TextStyle(
+                color: colorScheme.error,
                 fontSize: AppSizes.fontSizeSmall,
               ),
             ),
@@ -164,15 +167,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  Widget _successView() {
+  Widget _successView(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(AppSizes.spaceL),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(AppSizes.radiusCard),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: colorScheme.shadow.withValues(alpha: 0.2),
             offset: const Offset(4, 4),
             blurRadius: 8,
           ),
@@ -181,13 +184,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.mark_email_read, size: 70, color: AppColors.primary),
+          Icon(Icons.mark_email_read, size: 70, color: colorScheme.primary),
           const SizedBox(height: AppSizes.spaceL),
-          const Text(
+          Text(
             "Link reset password telah dikirim ke:",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.textPrimary,
+              color: colorScheme.onSurface,
               fontSize: AppSizes.fontSizeMedium,
             ),
           ),
@@ -195,18 +198,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Text(
             _sentEmail,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: colorScheme.onSurface,
               fontSize: AppSizes.fontSizeMedium,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: AppSizes.spaceM),
-          const Text(
+          Text(
             "Tidak ketemu? Cek juga folder spam.",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: colorScheme.onSurfaceVariant,
               fontSize: AppSizes.fontSizeSmall,
             ),
           ),

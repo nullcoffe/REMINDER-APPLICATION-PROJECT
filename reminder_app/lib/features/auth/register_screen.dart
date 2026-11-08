@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../app/routes/app_routes.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/widgets/neu_button.dart';
@@ -17,7 +16,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // Form key dan controller untuk menangkap input user
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -25,7 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _authService = AuthService();
 
-  // State untuk mengatur tampilan UI
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
@@ -39,34 +36,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  // Fungsi utama untuk memproses registrasi ke Firebase
   Future<void> _handleRegister() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-
     setState(() => _isLoading = true);
 
     try {
-      // Panggil method register dari AuthService
       await _authService.register(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-
       if (!mounted) return;
-
-      // Tampilkan pesan sukses dan arahkan ke login
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Registrasi berhasil! Silakan login.'),
-          backgroundColor: AppColors.success,
+          backgroundColor: Colors.green,
         ),
       );
-
       Navigator.pushReplacementNamed(context, AppRoutes.login);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-
-      // Terjemahkan kode error Firebase ke bahasa Indonesia
       String message;
       switch (e.code) {
         case 'email-already-in-use':
@@ -81,29 +69,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
         default:
           message = 'Registrasi gagal: ${e.message}';
       }
-
       _showErrorSnackBar(message);
     } catch (e) {
       if (!mounted) return;
       _showErrorSnackBar('Terjadi kesalahan: ${e.toString()}');
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  // Helper untuk menampilkan pesan error
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: AppColors.error),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSizes.pagePadding),
@@ -112,23 +98,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Tombol Kembali
                 Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceM),
-
-                // Logo Aplikasi
                 Center(
                   child: Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(AppSizes.radiusCard),
                     ),
                     child: ClipRRect(
@@ -141,13 +124,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceL),
-
-                // Judul dan Subjudul
                 Text(
                   AppStrings.registerTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: colorScheme.onSurface,
                     fontSize: AppSizes.fontSizeXLarge,
                     fontWeight: FontWeight.bold,
                   ),
@@ -157,21 +138,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   AppStrings.registerSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: AppSizes.fontSizeSmall,
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceXL),
-
-                // Container Form dengan efek bayangan
                 Container(
                   padding: const EdgeInsets.all(AppSizes.spaceL),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(AppSizes.radiusCard),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
+                        color: colorScheme.shadow.withValues(alpha: 0.2),
                         offset: const Offset(4, 4),
                         blurRadius: 8,
                       ),
@@ -180,11 +159,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Input Nama Lengkap
                       Text(
                         AppStrings.registerFullNameLabel,
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                           fontSize: AppSizes.fontSizeSmall,
                           fontWeight: FontWeight.bold,
                         ),
@@ -202,15 +180,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: AppSizes.spaceM),
-
-                      // Input Email
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             AppStrings.registerEmailLabel,
                             style: TextStyle(
-                              color: AppColors.textPrimary,
+                              color: colorScheme.onSurface,
                               fontSize: AppSizes.fontSizeSmall,
                               fontWeight: FontWeight.bold,
                             ),
@@ -218,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Text(
                             AppStrings.registerEmailHelper,
                             style: TextStyle(
-                              color: AppColors.textSecondary,
+                              color: colorScheme.onSurfaceVariant,
                               fontSize: AppSizes.fontSizeXS,
                             ),
                           ),
@@ -238,12 +214,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: AppSizes.spaceM),
-
-                      // Input Kata Sandi
                       Text(
                         AppStrings.registerPasswordLabel,
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                           fontSize: AppSizes.fontSizeSmall,
                           fontWeight: FontWeight.bold,
                         ),
@@ -259,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             _obscurePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: AppColors.textSecondary,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                           onPressed: () => setState(
                             () => _obscurePassword = !_obscurePassword,
@@ -276,15 +250,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: AppSizes.spaceS),
-                      _buildPasswordRule(AppStrings.registerPasswordRule1),
-                      _buildPasswordRule(AppStrings.registerPasswordRule2),
+                      _buildPasswordRule(
+                        AppStrings.registerPasswordRule1,
+                        colorScheme,
+                      ),
+                      _buildPasswordRule(
+                        AppStrings.registerPasswordRule2,
+                        colorScheme,
+                      ),
                       const SizedBox(height: AppSizes.spaceM),
-
-                      // Input Konfirmasi Kata Sandi
                       Text(
                         AppStrings.registerConfirmPasswordLabel,
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: colorScheme.onSurface,
                           fontSize: AppSizes.fontSizeSmall,
                           fontWeight: FontWeight.bold,
                         ),
@@ -300,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             _obscureConfirmPassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: AppColors.textSecondary,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                           onPressed: () => setState(
                             () => _obscureConfirmPassword =
@@ -318,8 +296,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                       const SizedBox(height: AppSizes.spaceL),
-
-                      // Tombol Daftar
                       NeuButton(
                         text: _isLoading
                             ? 'Memproses...'
@@ -331,21 +307,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceL),
-
-                // Link ke Halaman Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       AppStrings.registerHasAccount,
-                      style: TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: colorScheme.onSurfaceVariant),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         AppStrings.registerLoginNow,
                         style: TextStyle(
-                          color: AppColors.primary,
+                          color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -360,18 +334,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Helper untuk menampilkan aturan kata sandi
-  Widget _buildPasswordRule(String text) {
+  Widget _buildPasswordRule(String text, ColorScheme colorScheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
-          Icon(Icons.check_circle, color: AppColors.primary, size: 14),
+          Icon(Icons.check_circle, color: colorScheme.primary, size: 14),
           const SizedBox(width: 6),
           Text(
             text,
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: colorScheme.onSurfaceVariant,
               fontSize: AppSizes.fontSizeXS,
             ),
           ),

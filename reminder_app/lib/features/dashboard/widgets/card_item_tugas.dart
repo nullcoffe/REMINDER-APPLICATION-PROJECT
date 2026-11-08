@@ -4,17 +4,15 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/widgets/neu_card.dart';
 import '../../../models/task_model.dart';
 
-// Widget untuk menampilkan satu kartu tugas di dashboard.
+// Widget kartu tugas dengan animasi skala saat ditekan.
 class TaskCardItem extends StatelessWidget {
   final TaskModel task;
   final VoidCallback? onTap;
 
   const TaskCardItem({super.key, required this.task, this.onTap});
 
-  // Menentukan apakah tugas bersifat urgent berdasarkan skor prioritas.
   bool get _isUrgent => task.priorityScore >= 80;
 
-  // Memformat Timestamp deadline menjadi teks tanggal yang mudah dibaca.
   String get _deadlineText {
     try {
       final DateTime date = task.deadline.toDate();
@@ -29,11 +27,12 @@ class TaskCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mengambil skema warna dari tema aktif.
     final colorScheme = Theme.of(context).colorScheme;
 
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+      splashColor: colorScheme.primary.withValues(alpha: 0.1),
       child: NeuCard(
         padding: const EdgeInsets.all(AppSizes.spaceM),
         child: Column(
@@ -43,7 +42,10 @@ class TaskCardItem extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(8),
@@ -59,9 +61,14 @@ class TaskCardItem extends StatelessWidget {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: _isUrgent ? colorScheme.errorContainer : colorScheme.secondaryContainer,
+                    color: _isUrgent
+                        ? colorScheme.errorContainer
+                        : colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -70,13 +77,17 @@ class TaskCardItem extends StatelessWidget {
                       Icon(
                         Icons.access_time,
                         size: 12,
-                        color: _isUrgent ? colorScheme.error : colorScheme.secondary,
+                        color: _isUrgent
+                            ? colorScheme.error
+                            : colorScheme.secondary,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         _deadlineText,
                         style: TextStyle(
-                          color: _isUrgent ? colorScheme.error : colorScheme.secondary,
+                          color: _isUrgent
+                              ? colorScheme.error
+                              : colorScheme.secondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -87,47 +98,34 @@ class TaskCardItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-
-            // Baris tengah: Checkbox, Judul, dan Deskripsi
-            Row(
+            // Judul dan Deskripsi
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Checkbox(
-                  value: false,
-                  activeColor: colorScheme.primary,
-                  checkColor: colorScheme.onPrimary,
-                  side: BorderSide(color: colorScheme.outline),
-                  onChanged: (value) {},
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        style: TextStyle(
-                          color: colorScheme.onSurface,
-                          fontSize: AppSizes.fontSizeMedium,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        task.description.isNotEmpty ? task.description : 'Tidak ada deskripsi',
-                        style: TextStyle(
-                          color: colorScheme.onSurfaceVariant,
-                          fontSize: AppSizes.fontSizeSmall,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                Text(
+                  task.title,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontSize: AppSizes.fontSizeMedium,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  task.description.isNotEmpty
+                      ? task.description
+                      : 'Tidak ada deskripsi',
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: AppSizes.fontSizeSmall,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
             const SizedBox(height: 12),
-
-            // Bagian Progress Pengerjaan
+            // Progress bar
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -141,7 +139,10 @@ class TaskCardItem extends StatelessWidget {
                     children: [
                       Text(
                         'Progres Pengerjaan',
-                        style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12),
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
                       ),
                       Text(
                         '0%',
@@ -159,7 +160,9 @@ class TaskCardItem extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: 0,
                       backgroundColor: colorScheme.surface,
-                      valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        colorScheme.primary,
+                      ),
                       minHeight: 6,
                     ),
                   ),
@@ -167,20 +170,26 @@ class TaskCardItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-
-            // Baris bawah: Prioritas, Kesulitan, dan Subtask
+            // Baris bawah: Prioritas, Kesulitan, Subtask
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: _isUrgent ? colorScheme.errorContainer : colorScheme.secondaryContainer,
+                    color: _isUrgent
+                        ? colorScheme.errorContainer
+                        : colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     _isUrgent ? 'Urgent' : 'Normal',
                     style: TextStyle(
-                      color: _isUrgent ? colorScheme.error : colorScheme.secondary,
+                      color: _isUrgent
+                          ? colorScheme.error
+                          : colorScheme.secondary,
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -188,13 +197,18 @@ class TaskCardItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.tertiaryContainer,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    task.difficultyLevel.isNotEmpty ? task.difficultyLevel : 'Sedang',
+                    task.difficultyLevel.isNotEmpty
+                        ? task.difficultyLevel
+                        : 'Sedang',
                     style: TextStyle(
                       color: colorScheme.onTertiaryContainer,
                       fontSize: 10,
@@ -203,11 +217,18 @@ class TaskCardItem extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.checklist, size: 16, color: colorScheme.onSurfaceVariant),
+                Icon(
+                  Icons.checklist,
+                  size: 16,
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '0 Subtask',
-                  style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12),
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

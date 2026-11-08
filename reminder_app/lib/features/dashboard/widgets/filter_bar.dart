@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
-
 // Widget untuk menampilkan pilihan filter daftar tugas.
-// Widget ini hanya mengatur tampilan dan mengirimkan
-// pilihan filter ke halaman yang memanggilnya.
 class FilterBar extends StatelessWidget {
-  // Daftar pilihan filter yang akan ditampilkan.
   final List<String> filters;
-
-  // Filter yang sedang dipilih oleh pengguna.
   final String selectedFilter;
-
-  // Fungsi yang dipanggil ketika pengguna memilih filter.
   final ValueChanged<String> onFilterChanged;
 
   const FilterBar({
@@ -24,11 +15,12 @@ class FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: filters.map((filter) {
-          // Memeriksa apakah filter ini sedang dipilih.
           final bool isSelected = filter == selectedFilter;
 
           return Padding(
@@ -36,17 +28,19 @@ class FilterBar extends StatelessWidget {
             child: ChoiceChip(
               label: Text(filter),
               selected: isSelected,
-              selectedColor: AppColors.primary,
-              backgroundColor: AppColors.surface,
+              selectedColor: colorScheme.primary,
+              backgroundColor: colorScheme.surface,
               labelStyle: TextStyle(
-                color: isSelected ? Colors.white : AppColors.textPrimary,
+                color: isSelected
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSurface,
                 fontWeight: FontWeight.w600,
               ),
               showCheckmark: false,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
                 side: BorderSide(
-                  color: isSelected ? AppColors.primary : AppColors.border,
+                  color: isSelected ? colorScheme.primary : colorScheme.outline,
                 ),
               ),
               onSelected: (_) {
