@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/routes/app_routes.dart';
+<<<<<<< HEAD
+=======
 import '../../../core/constants/app_colors.dart';
+>>>>>>> develop
 import '../../../core/constants/app_sizes.dart';
 import '../../../models/task_model.dart';
+<<<<<<< HEAD
+import 'skeleton_card.dart';
+=======
 import '../../../services/task_service.dart';
+>>>>>>> develop
 
 import 'sambutan.dart';
 import 'pencarian.dart';
@@ -59,20 +66,39 @@ class DashboardContent extends StatelessWidget {
     }
   }
 
+  // Navigasi ke halaman detail tugas.
+  void _goToDetail(BuildContext context, TaskModel task) {
+    Navigator.pushNamed(context, AppRoutes.taskDetail, arguments: task);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     if (userId == null) {
-      return const Center(child: Text('Silakan login terlebih dahulu'));
+      return Center(
+        child: Text(
+          'Silakan login terlebih dahulu',
+          style: TextStyle(color: colorScheme.onSurface),
+        ),
+      );
     }
 
     return StreamBuilder<List<TaskModel>>(
       stream: taskService.getTasks(userId!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Column(
+            children: const [SkeletonCard(), SkeletonCard(), SkeletonCard()],
+          );
         }
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+            child: Text(
+              'Error: ${snapshot.error}',
+              style: TextStyle(color: colorScheme.onSurface),
+            ),
+          );
         }
 
         final List<TaskModel> allTasks = snapshot.data ?? [];
@@ -113,7 +139,7 @@ class DashboardContent extends StatelessWidget {
                       title: 'Tugas Aktif',
                       value: activeTasks.length.toString(),
                       icon: Icons.assignment_outlined,
-                      color: AppColors.primary,
+                      color: colorScheme.primary,
                     ),
                   ),
                   const SizedBox(width: AppSizes.spaceS),
@@ -122,7 +148,7 @@ class DashboardContent extends StatelessWidget {
                       title: 'Selesai',
                       value: completedTasks.length.toString(),
                       icon: Icons.check_circle_outline,
-                      color: AppColors.success,
+                      color: Colors.green,
                     ),
                   ),
                   const SizedBox(width: AppSizes.spaceS),
@@ -131,7 +157,11 @@ class DashboardContent extends StatelessWidget {
                       title: 'Deadline',
                       value: deadlineTasks.length.toString(),
                       icon: Icons.timer_outlined,
+<<<<<<< HEAD
+                      color: Colors.red,
+=======
                       color: AppColors.error,
+>>>>>>> develop
                     ),
                   ),
                 ],
@@ -150,7 +180,7 @@ class DashboardContent extends StatelessWidget {
                   const Text(
                     'Daftar Tugas Aktif',
                     style: TextStyle(
-                      color: AppColors.textPrimary,
+                      color: colorScheme.onSurface,
                       fontSize: AppSizes.fontSizeLarge,
                       fontWeight: FontWeight.bold,
                     ),
@@ -158,6 +188,15 @@ class DashboardContent extends StatelessWidget {
                   Container(
                     padding: AppSizes.badgePadding,
                     decoration: BoxDecoration(
+<<<<<<< HEAD
+                      color: colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '${filteredTasks.length} tugas',
+                      style: TextStyle(
+                        color: colorScheme.onPrimaryContainer,
+=======
                       color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(
                         AppSizes.radiusDefault,
@@ -167,6 +206,7 @@ class DashboardContent extends StatelessWidget {
                       '${filteredTasks.length} tugas',
                       style: const TextStyle(
                         color: AppColors.primary,
+>>>>>>> develop
                         fontSize: AppSizes.fontSizeSmall,
                         fontWeight: FontWeight.bold,
                       ),
@@ -180,6 +220,12 @@ class DashboardContent extends StatelessWidget {
               else
                 ...filteredTasks.map(
                   (task) => Padding(
+<<<<<<< HEAD
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: TaskCardItem(
+                      task: task,
+                      onTap: () => _goToDetail(context, task),
+=======
                     padding: const EdgeInsets.only(bottom: AppSizes.spaceM),
                     child: TaskCardItem(
                       task: task,
@@ -190,6 +236,7 @@ class DashboardContent extends StatelessWidget {
                           arguments: task,
                         );
                       },
+>>>>>>> develop
                     ),
                   ),
                 ),

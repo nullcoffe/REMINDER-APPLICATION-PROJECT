@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/priority_calculator.dart';
@@ -9,13 +8,20 @@ import '../../../core/widgets/neu_card.dart';
 import '../../../models/task_model.dart';
 import '../../../services/task_service.dart';
 
+<<<<<<< HEAD
+// Widget kartu tugas dengan animasi skala saat ditekan.
+=======
 /// Kartu tugas pada dashboard.
+>>>>>>> develop
 class TaskCardItem extends StatelessWidget {
   final TaskModel task;
   final VoidCallback? onTap;
 
   const TaskCardItem({super.key, required this.task, this.onTap});
 
+<<<<<<< HEAD
+  bool get _isUrgent => task.priorityScore >= 80;
+=======
   // ===========================================================================
   // DATA TURUNAN
   // ===========================================================================
@@ -52,6 +58,7 @@ class TaskCardItem extends StatelessWidget {
     if (_score >= 60) return AppColors.priorityMedium;
     return AppColors.priorityLow;
   }
+>>>>>>> develop
 
   String get _deadlineText {
     final day = _deadline.day.toString().padLeft(2, '0');
@@ -129,6 +136,14 @@ class TaskCardItem extends StatelessWidget {
   // ===========================================================================
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.radiusCard),
+      splashColor: colorScheme.primary.withValues(alpha: 0.1),
+=======
     final deadlineColor = _isUrgent
         ? AppColors.priorityUrgent
         : AppColors.secondary;
@@ -136,6 +151,7 @@ class TaskCardItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
+>>>>>>> develop
       child: NeuCard(
         padding: const EdgeInsets.all(AppSizes.spaceM),
         child: Column(
@@ -144,6 +160,75 @@ class TaskCardItem extends StatelessWidget {
             // Kategori dan deadline.
             Row(
               children: [
+<<<<<<< HEAD
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    task.categoryId.isNotEmpty ? task.categoryId : 'Umum',
+                    style: TextStyle(
+                      color: colorScheme.onPrimaryContainer,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _isUrgent
+                        ? colorScheme.errorContainer
+                        : colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 12,
+                        color: _isUrgent
+                            ? colorScheme.error
+                            : colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _deadlineText,
+                        style: TextStyle(
+                          color: _isUrgent
+                              ? colorScheme.error
+                              : colorScheme.secondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Judul dan Deskripsi
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  task.title,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontSize: AppSizes.fontSizeMedium,
+                    fontWeight: FontWeight.bold,
+=======
                 _badge(
                   label: task.categoryId.isNotEmpty
                       ? task.categoryId
@@ -198,19 +283,42 @@ class TaskCardItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
+>>>>>>> develop
                   ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  task.description.isNotEmpty
+                      ? task.description
+                      : 'Tidak ada deskripsi',
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: AppSizes.fontSizeSmall,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
+<<<<<<< HEAD
+            const SizedBox(height: 12),
+            // Progress bar
+=======
 
             const SizedBox(height: AppSizes.spaceM),
 
             // Progres berdasarkan status tugas.
+>>>>>>> develop
             Container(
               padding: const EdgeInsets.all(AppSizes.spaceM),
               decoration: BoxDecoration(
+<<<<<<< HEAD
+                color: colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+=======
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(AppSizes.radiusBadge),
+>>>>>>> develop
               ),
               child: Column(
                 children: [
@@ -220,6 +328,17 @@ class TaskCardItem extends StatelessWidget {
                       const Text(
                         AppStrings.taskCardProgressLabel,
                         style: TextStyle(
+<<<<<<< HEAD
+                          color: colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        '0%',
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontSize: 12,
+=======
                           color: AppColors.textSecondary,
                           fontSize: AppSizes.fontSizeXS,
                         ),
@@ -229,6 +348,7 @@ class TaskCardItem extends StatelessWidget {
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: AppSizes.fontSizeXS,
+>>>>>>> develop
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -238,10 +358,17 @@ class TaskCardItem extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppSizes.spaceXS),
                     child: LinearProgressIndicator(
+<<<<<<< HEAD
+                      value: 0,
+                      backgroundColor: colorScheme.surface,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        colorScheme.primary,
+=======
                       value: _progress,
                       backgroundColor: AppColors.surface,
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         AppColors.primary,
+>>>>>>> develop
                       ),
                       minHeight: 6,
                     ),
@@ -249,6 +376,33 @@ class TaskCardItem extends StatelessWidget {
                 ],
               ),
             ),
+<<<<<<< HEAD
+            const SizedBox(height: 12),
+            // Baris bawah: Prioritas, Kesulitan, Subtask
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _isUrgent
+                        ? colorScheme.errorContainer
+                        : colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    _isUrgent ? 'Urgent' : 'Normal',
+                    style: TextStyle(
+                      color: _isUrgent
+                          ? colorScheme.error
+                          : colorScheme.secondary,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+=======
 
             const SizedBox(height: AppSizes.spaceM),
 
@@ -259,6 +413,7 @@ class TaskCardItem extends StatelessWidget {
                   label: PriorityCalculator.getPriorityLabel(_deadline),
                   color: _priorityColor,
                   icon: Icons.flag_outlined,
+>>>>>>> develop
                 ),
                 const SizedBox(width: AppSizes.spaceS),
                 if (task.difficultyLevel.isNotEmpty)
@@ -267,6 +422,38 @@ class TaskCardItem extends StatelessWidget {
                     color: AppColors.tertiary,
                     icon: Icons.speed_outlined,
                   ),
+<<<<<<< HEAD
+                  decoration: BoxDecoration(
+                    color: colorScheme.tertiaryContainer,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    task.difficultyLevel.isNotEmpty
+                        ? task.difficultyLevel
+                        : 'Sedang',
+                    style: TextStyle(
+                      color: colorScheme.onTertiaryContainer,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.checklist,
+                  size: 16,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '0 Subtask',
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+=======
+>>>>>>> develop
               ],
             ),
           ],

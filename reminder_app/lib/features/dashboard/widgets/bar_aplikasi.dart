@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/routes/app_routes.dart';
-import '../../../core/constants/app_colors.dart';
 
+// AppBar dashboard dengan logo, judul, dan ikon notifikasi.
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int unreadNotificationCount;
 
@@ -13,8 +13,10 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return AppBar(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.surface,
       elevation: 0,
       title: Row(
         children: [
@@ -22,7 +24,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(8),
             ),
             child: ClipRRect(
@@ -34,13 +36,13 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           const SizedBox(width: 12),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'TASKZILLA',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
@@ -49,7 +51,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               Text(
                 'Dashboard',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: colorScheme.onSurface,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -65,9 +67,9 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.notifications_outlined,
-                      color: AppColors.textPrimary,
+                      color: colorScheme.onSurface,
                       size: 28,
                     ),
                     Positioned(
@@ -98,9 +100,9 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ],
                 )
-              : const Icon(
+              : Icon(
                   Icons.notifications_outlined,
-                  color: AppColors.textPrimary,
+                  color: colorScheme.onSurface,
                   size: 28,
                 ),
         ),

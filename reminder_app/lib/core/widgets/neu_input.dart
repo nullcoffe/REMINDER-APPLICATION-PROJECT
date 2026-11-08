@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
 
+// Input field dengan border dan sudut melengkung.
 class NeuInput extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
@@ -25,24 +25,25 @@ class NeuInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.background, // Warna gelap dari constants
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(AppSizes.radiusInput),
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: colorScheme.outline, width: 1),
       ),
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
         validator: validator,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+        style: TextStyle(color: colorScheme.onSurface, fontSize: 14),
         decoration: InputDecoration(
           hintText: hintText,
-          // Menggunakan withValues karena withOpacity sudah deprecated
-          hintStyle: TextStyle(color: AppColors.secondary),
+          hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
           prefixIcon: prefixIcon != null
-              ? Icon(prefixIcon, color: AppColors.tertiary, size: 20)
+              ? Icon(prefixIcon, color: colorScheme.primary, size: 20)
               : null,
           suffixIcon: suffixIcon,
           border: InputBorder.none,
@@ -50,7 +51,6 @@ class NeuInput extends StatelessWidget {
             horizontal: 16,
             vertical: 14,
           ),
-          // BARIS PENTING INI: Mematikan background putih bawaan Material 3
           filled: true,
           fillColor: Colors.transparent,
         ),

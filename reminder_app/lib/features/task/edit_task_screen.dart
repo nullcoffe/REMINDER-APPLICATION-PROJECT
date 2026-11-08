@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+<<<<<<< HEAD
+=======
 import '../../core/constants/app_colors.dart';
+>>>>>>> develop
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../models/task_model.dart';
@@ -9,6 +12,7 @@ import '../../models/checklist_model.dart';
 import '../../services/task_service.dart';
 import '../../services/checklist_service.dart';
 
+// Layar untuk mengedit detail tugas yang sudah ada.
 class EditTaskScreen extends StatefulWidget {
   final TaskModel task;
   const EditTaskScreen({super.key, required this.task});
@@ -18,6 +22,10 @@ class EditTaskScreen extends StatefulWidget {
 }
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
+<<<<<<< HEAD
+  // Inisialisasi layanan dan kunci form.
+=======
+>>>>>>> develop
   final _formKey = GlobalKey<FormState>();
   final TaskService _taskService = TaskService();
   final ChecklistService _checklistService = ChecklistService();
@@ -25,6 +33,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _newSubTaskController;
+<<<<<<< HEAD
+=======
 
   late String _selectedCategory;
   late String _selectedPriority;
@@ -39,7 +49,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     AppStrings.priorityHigh,
     AppStrings.priorityUrgent,
   ];
+>>>>>>> develop
 
+  late String _selectedCategory;
+  late String _selectedPriority;
+  late DateTime _deadline;
+
+  bool _isSaving = false;
+
+  final List<String> _priorities = [
+    AppStrings.priorityLow,
+    AppStrings.priorityMedium,
+    AppStrings.priorityHigh,
+    AppStrings.priorityUrgent,
+  ];
+
+  // Mengisi controller dan state awal dari data tugas.
   @override
   void initState() {
     super.initState();
@@ -57,6 +82,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     _newSubTaskController = TextEditingController();
   }
 
+  // Membersihkan controller dari memori saat widget dihancurkan.
   @override
   void dispose() {
     _titleController.dispose();
@@ -65,6 +91,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     super.dispose();
   }
 
+<<<<<<< HEAD
+  // Konversi antara skor numerik dan label string prioritas.
+=======
+>>>>>>> develop
   String _getPriorityFromScore(int score) {
     if (score >= 80) return AppStrings.priorityUrgent;
     if (score >= 60) return AppStrings.priorityHigh;
@@ -79,6 +109,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     return 20;
   }
 
+<<<<<<< HEAD
+  // Memformat DateTime menjadi string yang mudah dibaca.
+=======
+>>>>>>> develop
   String _formatDeadline(DateTime date) {
     final months = [
       'Jan',
@@ -102,12 +136,18 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     return '$day $month $year, $hour:$minute WIB';
   }
 
+<<<<<<< HEAD
+  // Menampilkan pemilih tanggal dan waktu untuk deadline.
+=======
+>>>>>>> develop
   Future<void> _pickDeadline() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _deadline,
       firstDate: DateTime.now(),
       lastDate: DateTime(2035),
+<<<<<<< HEAD
+=======
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -118,6 +158,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           child: child!,
         );
       },
+>>>>>>> develop
     );
 
     if (pickedDate != null) {
@@ -140,6 +181,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     }
   }
 
+<<<<<<< HEAD
+  // Menambahkan sub-tugas baru ke Firestore.
+=======
+>>>>>>> develop
   Future<void> _addSubTaskDirect(String title) async {
     try {
       final docRef = FirebaseFirestore.instance.collection('checklist').doc();
@@ -160,6 +205,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     }
   }
 
+<<<<<<< HEAD
+  // Menghapus sub-tugas dari Firestore.
+=======
+>>>>>>> develop
   Future<void> _deleteSubTask(String subTaskId) async {
     try {
       await _checklistService.deleteChecklist(subTaskId);
@@ -167,7 +216,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Sub-tugas dihapus'),
+<<<<<<< HEAD
+            backgroundColor: Colors.red,
+=======
             backgroundColor: AppColors.error,
+>>>>>>> develop
           ),
         );
       }
@@ -176,13 +229,21 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Gagal menghapus: $e'),
+<<<<<<< HEAD
+            backgroundColor: Colors.red,
+=======
             backgroundColor: AppColors.error,
+>>>>>>> develop
           ),
         );
       }
     }
   }
 
+<<<<<<< HEAD
+  // Memvalidasi form dan menyimpan perubahan tugas.
+=======
+>>>>>>> develop
   Future<void> _saveTask() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSaving = true);
@@ -207,8 +268,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+<<<<<<< HEAD
+        content: const Text('Tugas berhasil diperbarui!'),
+          backgroundColor: Colors.green,
+=======
           content: Text(AppStrings.taskAddedSuccess),
           backgroundColor: AppColors.success,
+>>>>>>> develop
         ),
       );
       Navigator.pop(context, true);
@@ -217,7 +283,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Gagal menyimpan: $e'),
+<<<<<<< HEAD
+          backgroundColor: Colors.red,
+=======
           backgroundColor: AppColors.error,
+>>>>>>> develop
         ),
       );
     } finally {
@@ -227,19 +297,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil skema warna dari tema aktif untuk menyesuaikan UI.
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           AppStrings.editTaskTitle,
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: AppColors.surface,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSizes.pagePadding),
@@ -248,11 +321,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+<<<<<<< HEAD
+              // Input teks untuk judul tugas.
+              Text(
+                'Judul Tugas *',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 1. Judul Tugas
               const Text(
                 'Judul Tugas *',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -260,6 +341,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _titleController,
+<<<<<<< HEAD
+                style: TextStyle(color: colorScheme.onSurface),
+                validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
+                decoration: InputDecoration(
+                  hintText: 'Contoh: Laporan Praktikum',
+                  hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                  filled: true,
+                  fillColor: colorScheme.surface,
+=======
                 style: const TextStyle(color: AppColors.textPrimary),
                 validator: (v) => v!.isEmpty ? 'Wajib diisi' : null,
                 decoration: InputDecoration(
@@ -269,6 +359,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   ),
                   filled: true,
                   fillColor: AppColors.surface,
+>>>>>>> develop
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -281,11 +372,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 20),
 
+<<<<<<< HEAD
+              // Input teks untuk deskripsi tugas.
+              Text(
+                'Deskripsi Tugas (Opsional)',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 2. Deskripsi
               const Text(
                 'Deskripsi Tugas (Opsional)',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -294,6 +393,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 4,
+<<<<<<< HEAD
+                style: TextStyle(color: colorScheme.onSurface),
+                decoration: InputDecoration(
+                  hintText: 'Detail tugas...',
+                  hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                  filled: true,
+                  fillColor: colorScheme.surface,
+=======
                 style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: 'Detail tugas...',
@@ -302,6 +409,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   ),
                   filled: true,
                   fillColor: AppColors.surface,
+>>>>>>> develop
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -311,11 +419,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 20),
 
+<<<<<<< HEAD
+              // Dropdown untuk memilih kategori tugas.
+              Text(
+                'Kategori',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 3. Kategori (Sudah disederhanakan dari Mata Kuliah)
               const Text(
                 'Kategori',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -324,13 +440,31 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
+<<<<<<< HEAD
+                  color: colorScheme.surface,
+=======
                   color: AppColors.surface,
+>>>>>>> develop
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _selectedCategory,
                     isExpanded: true,
+<<<<<<< HEAD
+                    dropdownColor: colorScheme.surface,
+                    style: TextStyle(color: colorScheme.onSurface),
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    items: AppStrings.categories
+                        .map(
+                          (cat) =>
+                              DropdownMenuItem(value: cat, child: Text(cat)),
+                        )
+                        .toList(),
+=======
                     dropdownColor: AppColors.surface,
                     style: const TextStyle(color: AppColors.textPrimary),
                     icon: const Icon(
@@ -340,6 +474,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     items: AppStrings.categories.map((cat) {
                       return DropdownMenuItem(value: cat, child: Text(cat));
                     }).toList(),
+>>>>>>> develop
                     onChanged: (val) =>
                         setState(() => _selectedCategory = val!),
                   ),
@@ -347,11 +482,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 20),
 
+<<<<<<< HEAD
+              // Pemilih tenggat waktu dan pengingat.
+              Text(
+                'Tenggat Waktu & Pengingat',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 4. Tenggat Waktu
               const Text(
                 'Tenggat Waktu & Pengingat',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -362,29 +505,50 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
+<<<<<<< HEAD
+                    color: colorScheme.surface,
+=======
                     color: AppColors.surface,
+>>>>>>> develop
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
+<<<<<<< HEAD
+                      Icon(
+                        Icons.calendar_today,
+                        color: colorScheme.primary,
+=======
                       const Icon(
                         Icons.calendar_today,
                         color: AppColors.primary,
+>>>>>>> develop
                         size: 20,
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           _formatDeadline(_deadline),
+<<<<<<< HEAD
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+=======
                           style: const TextStyle(
                             color: AppColors.textPrimary,
+>>>>>>> develop
                             fontSize: 14,
                           ),
                         ),
                       ),
+<<<<<<< HEAD
+                      Icon(
+                        Icons.edit,
+                        color: colorScheme.onSurfaceVariant,
+=======
                       const Icon(
                         Icons.edit,
                         color: AppColors.textSecondary,
+>>>>>>> develop
                         size: 16,
                       ),
                     ],
@@ -393,11 +557,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 20),
 
+<<<<<<< HEAD
+              // Dropdown untuk memilih tingkat prioritas.
+              Text(
+                'Prioritas Tugas',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 5. Prioritas
               const Text(
                 'Prioritas Tugas',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -406,13 +578,28 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
+<<<<<<< HEAD
+                  color: colorScheme.surface,
+=======
                   color: AppColors.surface,
+>>>>>>> develop
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _selectedPriority,
                     isExpanded: true,
+<<<<<<< HEAD
+                    dropdownColor: colorScheme.surface,
+                    style: TextStyle(color: colorScheme.onSurface),
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    items: _priorities
+                        .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                        .toList(),
+=======
                     dropdownColor: AppColors.surface,
                     style: const TextStyle(color: AppColors.textPrimary),
                     icon: const Icon(
@@ -422,6 +609,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     items: _priorities.map((p) {
                       return DropdownMenuItem(value: p, child: Text(p));
                     }).toList(),
+>>>>>>> develop
                     onChanged: (val) =>
                         setState(() => _selectedPriority = val!),
                   ),
@@ -429,11 +617,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 24),
 
+<<<<<<< HEAD
+              // Daftar sub-tugas (checklist) dan tombol tambah.
+              Text(
+                'Sub-tugas (Checklist)',
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+=======
               // 6. Sub-tugas (Checklist)
               const Text(
                 'Sub-tugas (Checklist)',
                 style: TextStyle(
                   color: AppColors.textSecondary,
+>>>>>>> develop
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -441,7 +637,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
+<<<<<<< HEAD
+                  color: colorScheme.surface,
+=======
                   color: AppColors.surface,
+>>>>>>> develop
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: StreamBuilder<List<ChecklistModel>>(
@@ -473,7 +673,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             title: Text(
                               item.itemTitle,
                               style: TextStyle(
+<<<<<<< HEAD
+                                color: colorScheme.onSurface,
+=======
                                 color: AppColors.textPrimary,
+>>>>>>> develop
                                 decoration: item.isCompleted
                                     ? TextDecoration.lineThrough
                                     : null,
@@ -482,19 +686,32 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.close,
+<<<<<<< HEAD
+                                color: Colors.red,
+=======
                                 color: AppColors.error,
+>>>>>>> develop
                                 size: 20,
                               ),
                               onPressed: () => _deleteSubTask(item.id),
                             ),
                           ),
                         ),
+<<<<<<< HEAD
+=======
 
+>>>>>>> develop
                         if (items.isEmpty)
                           const Padding(
                             padding: EdgeInsets.all(20),
                             child: Text(
                               'Belum ada sub-tugas',
+<<<<<<< HEAD
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        Divider(color: colorScheme.outline, height: 1),
+=======
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 12,
@@ -504,11 +721,25 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
                         Divider(color: AppColors.border, height: 1),
 
+>>>>>>> develop
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
                               IconButton(
+<<<<<<< HEAD
+                                icon: Icon(
+                                  Icons.add_circle_outline,
+                                  color: colorScheme.primary,
+                                ),
+                                onPressed: () =>
+                                    _showAddSubTaskDialog(colorScheme),
+                              ),
+                              Text(
+                                'Tambah sub-tugas',
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+=======
                                 icon: const Icon(
                                   Icons.add_circle_outline,
                                   color: AppColors.primary,
@@ -519,6 +750,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                 'Tambah sub-tugas',
                                 style: TextStyle(
                                   color: AppColors.primary,
+>>>>>>> develop
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -532,14 +764,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               ),
               const SizedBox(height: 32),
 
+<<<<<<< HEAD
+              // Tombol untuk menyimpan perubahan tugas.
+=======
               // Tombol Simpan
+>>>>>>> develop
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _isSaving ? null : _saveTask,
                   style: ElevatedButton.styleFrom(
+<<<<<<< HEAD
+                    backgroundColor: colorScheme.primary,
+=======
                     backgroundColor: AppColors.primary,
+>>>>>>> develop
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -553,10 +793,17 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             strokeWidth: 2,
                           ),
                         )
+<<<<<<< HEAD
+                      : Text(
+                          'Simpan Perubahan',
+                          style: TextStyle(
+                            color: colorScheme.onPrimary,
+=======
                       : const Text(
                           'Simpan Perubahan',
                           style: TextStyle(
                             color: Colors.white,
+>>>>>>> develop
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -571,11 +818,31 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     );
   }
 
+<<<<<<< HEAD
+  // Menampilkan dialog untuk menambahkan sub-tugas baru.
+  Future<void> _showAddSubTaskDialog(ColorScheme colorScheme) async {
+=======
   Future<void> _showAddSubTaskDialog() async {
+>>>>>>> develop
     final controller = TextEditingController();
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
+<<<<<<< HEAD
+        backgroundColor: colorScheme.surface,
+        title: Text(
+          'Tambah Sub-tugas',
+          style: TextStyle(color: colorScheme.onSurface),
+        ),
+        content: TextField(
+          controller: controller,
+          style: TextStyle(color: colorScheme.onSurface),
+          decoration: InputDecoration(
+            hintText: 'Judul sub-tugas...',
+            hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+            filled: true,
+            fillColor: colorScheme.background,
+=======
         backgroundColor: AppColors.surface,
         title: const Text(
           'Tambah Sub-tugas',
@@ -591,6 +858,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             ),
             filled: true,
             fillColor: AppColors.background,
+>>>>>>> develop
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -607,9 +875,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+<<<<<<< HEAD
+            child: Text(
+              'Batal',
+              style: TextStyle(color: colorScheme.onSurfaceVariant),
+=======
             child: const Text(
               'Batal',
               style: TextStyle(color: AppColors.textSecondary),
+>>>>>>> develop
             ),
           ),
           FilledButton(
@@ -619,7 +893,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 if (mounted) Navigator.pop(context);
               }
             },
+<<<<<<< HEAD
+            style: FilledButton.styleFrom(backgroundColor: colorScheme.primary),
+=======
             style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
+>>>>>>> develop
             child: const Text('Tambah'),
           ),
         ],

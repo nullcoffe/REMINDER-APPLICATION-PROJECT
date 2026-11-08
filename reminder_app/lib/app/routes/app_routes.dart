@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Import model data dan konstanta
 import '../../core/constants/app_strings.dart';
 import '../../models/task_model.dart';
 
@@ -19,7 +20,6 @@ import '../../features/task/edit_task_screen.dart';
 import '../../features/task/task_detail_screen.dart';
 
 /// Kelas untuk mengelola routing aplikasi.
-/// Berisi konstanta nama rute dan generator rute global.
 class AppRoutes {
   AppRoutes._();
 
@@ -36,11 +36,9 @@ class AppRoutes {
   static const String notification = '/notification';
   static const String profile = '/profile';
 
-  /// Rute awal yang dijalankan saat aplikasi dibuka.
   static const String initialRoute = splash;
 
   /// Generator rute global untuk MaterialApp.
-  /// Menangani navigasi ke setiap layar berdasarkan nama rute.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -61,6 +59,7 @@ class AppRoutes {
       case addTask:
         return MaterialPageRoute(builder: (_) => const AddTaskScreen());
 
+      // Menerima objek TaskModel langsung dengan pengecekan tipe
       case editTask:
         {
           final args = settings.arguments;
@@ -79,6 +78,7 @@ class AppRoutes {
           );
         }
 
+      // Menerima objek TaskModel langsung dengan pengecekan tipe
       case taskDetail:
         {
           final args = settings.arguments;
@@ -90,7 +90,7 @@ class AppRoutes {
           return MaterialPageRoute(
             builder: (_) => Scaffold(
               appBar: AppBar(title: const Text(AppStrings.taskDetailTitle)),
-              body: const Center(child: Text(AppStrings.taskDetailNotFound)),
+              body: const Center(child: Text('Data tugas tidak ditemukan.')),
             ),
           );
         }

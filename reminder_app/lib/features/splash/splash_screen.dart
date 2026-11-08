@@ -9,10 +9,6 @@ import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 
 /// Splash Screen TaskZilla.
-///
-/// Tampil pertama kali saat aplikasi dibuka. Setelah 3 detik:
-/// - pengguna yang sudah login diarahkan ke Dashboard,
-/// - pengguna yang belum login diarahkan ke Login.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -22,8 +18,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   static const String _logoPath = 'assets/logotaskzilla.jpeg';
-
-  /// Menyimpan timer agar bisa dibatalkan ketika halaman ditutup.
   Timer? _navigationTimer;
 
   @override
@@ -33,14 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateNext() {
-    // Pastikan widget masih aktif sebelum melakukan navigasi.
     if (!mounted) return;
-
     final user = FirebaseAuth.instance.currentUser;
     final nextRoute = user != null ? AppRoutes.dashboard : AppRoutes.login;
-
-    // pushReplacementNamed mencegah pengguna kembali ke Splash
-    // menggunakan tombol Back.
     Navigator.of(context).pushReplacementNamed(nextRoute);
   }
 
@@ -53,13 +42,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryTeal,
+      backgroundColor: AppColors.primary,
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo TaskZilla di dalam lingkaran putih.
               Container(
                 width: 140,
                 height: 140,
@@ -78,22 +66,17 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Image.asset(
                     _logoPath,
                     fit: BoxFit.cover,
-                    // Jika gambar gagal dimuat, tampilkan ikon pengganti
-                    // agar aplikasi tidak crash.
                     errorBuilder: (context, error, stackTrace) {
                       return const Icon(
                         Icons.pets,
                         size: 80,
-                        color: AppColors.primaryTeal,
+                        color: AppColors.primary,
                       );
                     },
                   ),
                 ),
               ),
-
               const SizedBox(height: AppSizes.spaceL),
-
-              // Nama aplikasi.
               const Text(
                 AppStrings.appName,
                 style: TextStyle(
@@ -103,10 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   letterSpacing: 1.5,
                 ),
               ),
-
               const SizedBox(height: AppSizes.spaceS),
-
-              // Label dan tagline aplikasi.
               const Text(
                 AppStrings.splashLabel,
                 style: TextStyle(
@@ -125,10 +105,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   style: TextStyle(fontSize: 14, color: Colors.white70),
                 ),
               ),
-
               const SizedBox(height: 48),
-
-              // Indikator bahwa aplikasi sedang mempersiapkan halaman.
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),

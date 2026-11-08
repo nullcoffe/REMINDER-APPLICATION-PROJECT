@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../app/routes/app_routes.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/widgets/neu_button.dart';
@@ -17,13 +16,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Form key dan controller untuk menangkap input user
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
 
-  // State untuk mengatur tampilan UI
   bool _obscurePassword = true;
   bool _rememberMe = false;
   bool _isLoading = false;
@@ -35,6 +32,48 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+<<<<<<< HEAD
+  Future<void> _handleLogin() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    setState(() => _isLoading = true);
+
+    try {
+      await _authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      String message;
+      switch (e.code) {
+        case 'user-not-found':
+          message = 'Email tidak terdaftar';
+          break;
+        case 'wrong-password':
+          message = 'Kata sandi salah';
+          break;
+        case 'invalid-email':
+          message = 'Format email tidak valid';
+          break;
+        case 'too-many-requests':
+          message = 'Terlalu banyak percobaan, coba lagi nanti';
+          break;
+        default:
+          message = 'Login gagal: ${e.message}';
+      }
+      _showErrorSnackBar(message);
+    } catch (e) {
+      if (!mounted) return;
+      _showErrorSnackBar('Terjadi kesalahan: ${e.toString()}');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+=======
   // Fungsi utama untuk memproses login ke Firebase
 
 Future<void> _handleLogin() async {
@@ -102,22 +141,24 @@ Future<void> _handleLogin() async {
   } finally {
     if (mounted) {
       setState(() => _isLoading = false);
+>>>>>>> develop
     }
   }
 }
 
 
-  // Helper untuk menampilkan pesan error
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: AppColors.error),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSizes.pagePadding),
@@ -127,14 +168,12 @@ Future<void> _handleLogin() async {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: AppSizes.spaceL),
-
-                // Bagian Logo
                 Center(
                   child: Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(AppSizes.radiusCard),
                     ),
                     child: ClipRRect(
@@ -147,13 +186,11 @@ Future<void> _handleLogin() async {
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceL),
-
-                // Judul dan Subjudul
                 Text(
                   AppStrings.loginTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: colorScheme.onSurface,
                     fontSize: AppSizes.fontSizeXLarge,
                     fontWeight: FontWeight.bold,
                   ),
@@ -163,21 +200,19 @@ Future<void> _handleLogin() async {
                   AppStrings.loginSubtitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: colorScheme.onSurfaceVariant,
                     fontSize: AppSizes.fontSizeSmall,
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceXL),
-
-                // Container Form dengan efek bayangan
                 Container(
                   padding: const EdgeInsets.all(AppSizes.spaceL),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(AppSizes.radiusCard),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: colorScheme.shadow.withValues(alpha: 0.2),
                         offset: const Offset(4, 4),
                         blurRadius: 8,
                       ),
@@ -185,7 +220,6 @@ Future<void> _handleLogin() async {
                   ),
                   child: Column(
                     children: [
-                      // Input Email
                       NeuInput(
                         hintText: AppStrings.loginEmailHint,
                         controller: _emailController,
@@ -193,8 +227,6 @@ Future<void> _handleLogin() async {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: AppSizes.spaceM),
-
-                      // Input Password
                       NeuInput(
                         hintText: AppStrings.loginPasswordHint,
                         controller: _passwordController,
@@ -205,7 +237,7 @@ Future<void> _handleLogin() async {
                             _obscurePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: AppColors.textSecondary,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                           onPressed: () {
                             setState(() {
@@ -215,8 +247,6 @@ Future<void> _handleLogin() async {
                         ),
                       ),
                       const SizedBox(height: AppSizes.spaceS),
-
-                      // Opsi Ingat Saya dan Lupa Password
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -224,8 +254,9 @@ Future<void> _handleLogin() async {
                             children: [
                               Checkbox(
                                 value: _rememberMe,
-                                activeColor: AppColors.primary,
-                                checkColor: Colors.white,
+                                activeColor: colorScheme.primary,
+                                checkColor: colorScheme.onPrimary,
+                                side: BorderSide(color: colorScheme.outline),
                                 onChanged: (value) {
                                   setState(() {
                                     _rememberMe = value ?? false;
@@ -235,7 +266,7 @@ Future<void> _handleLogin() async {
                               Text(
                                 AppStrings.loginRememberMe,
                                 style: TextStyle(
-                                  color: AppColors.textSecondary,
+                                  color: colorScheme.onSurfaceVariant,
                                   fontSize: AppSizes.fontSizeSmall,
                                 ),
                               ),
@@ -251,7 +282,7 @@ Future<void> _handleLogin() async {
                             child: Text(
                               AppStrings.loginForgotPassword,
                               style: TextStyle(
-                                color: AppColors.primary,
+                                color: colorScheme.primary,
                                 fontSize: AppSizes.fontSizeSmall,
                               ),
                             ),
@@ -259,8 +290,6 @@ Future<void> _handleLogin() async {
                         ],
                       ),
                       const SizedBox(height: AppSizes.spaceM),
-
-                      // Tombol Login Utama
                       NeuButton(
                         text: _isLoading
                             ? 'Memproses...'
@@ -271,14 +300,12 @@ Future<void> _handleLogin() async {
                   ),
                 ),
                 const SizedBox(height: AppSizes.spaceL),
-
-                // Link ke Halaman Register
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       AppStrings.loginNoAccount,
-                      style: TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: colorScheme.onSurfaceVariant),
                     ),
                     TextButton(
                       onPressed: () {
@@ -287,7 +314,7 @@ Future<void> _handleLogin() async {
                       child: Text(
                         AppStrings.loginRegisterNow,
                         style: TextStyle(
-                          color: AppColors.primary,
+                          color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
