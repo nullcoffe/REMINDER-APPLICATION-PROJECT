@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/routes/app_routes.dart';
+<<<<<<< HEAD
+=======
+import '../../../core/constants/app_colors.dart';
+>>>>>>> develop
 import '../../../core/constants/app_sizes.dart';
-import '../../../services/task_service.dart';
 import '../../../models/task_model.dart';
+<<<<<<< HEAD
 import 'skeleton_card.dart';
+=======
+import '../../../services/task_service.dart';
+>>>>>>> develop
 
 import 'sambutan.dart';
 import 'pencarian.dart';
@@ -95,14 +102,19 @@ class DashboardContent extends StatelessWidget {
         }
 
         final List<TaskModel> allTasks = snapshot.data ?? [];
-        final activeTasks = allTasks
-            .where((t) => _normalizeStatus(t.status) != 'done')
-            .toList();
-        final completedTasks = allTasks
-            .where((t) => _normalizeStatus(t.status) == 'done')
-            .toList();
 
-        final deadlineTasks = allTasks.where((t) {
+        final activeTasks = allTasks.where((t) {
+          final s = _normalizeStatus(t.status);
+          return s != 'done' && s != 'completed';
+        }).toList();
+
+        final completedTasks = allTasks.where((t) {
+          final s = _normalizeStatus(t.status);
+          return s == 'done' || s == 'completed';
+        }).toList();
+
+        // Deadline dalam 3 hari ke depan (atau sudah lewat), hanya tugas aktif.
+        final deadlineTasks = activeTasks.where((t) {
           try {
             final deadline = t.deadline.toDate();
             return deadline.difference(DateTime.now()).inDays <= 3;
@@ -145,7 +157,11 @@ class DashboardContent extends StatelessWidget {
                       title: 'Deadline',
                       value: deadlineTasks.length.toString(),
                       icon: Icons.timer_outlined,
+<<<<<<< HEAD
                       color: Colors.red,
+=======
+                      color: AppColors.error,
+>>>>>>> develop
                     ),
                   ),
                 ],
@@ -161,7 +177,7 @@ class DashboardContent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Daftar Tugas Aktif',
                     style: TextStyle(
                       color: colorScheme.onSurface,
@@ -170,11 +186,9 @@ class DashboardContent extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
+                    padding: AppSizes.badgePadding,
                     decoration: BoxDecoration(
+<<<<<<< HEAD
                       color: colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -182,6 +196,17 @@ class DashboardContent extends StatelessWidget {
                       '${filteredTasks.length} tugas',
                       style: TextStyle(
                         color: colorScheme.onPrimaryContainer,
+=======
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(
+                        AppSizes.radiusDefault,
+                      ),
+                    ),
+                    child: Text(
+                      '${filteredTasks.length} tugas',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+>>>>>>> develop
                         fontSize: AppSizes.fontSizeSmall,
                         fontWeight: FontWeight.bold,
                       ),
@@ -195,10 +220,23 @@ class DashboardContent extends StatelessWidget {
               else
                 ...filteredTasks.map(
                   (task) => Padding(
+<<<<<<< HEAD
                     padding: const EdgeInsets.only(bottom: 16),
                     child: TaskCardItem(
                       task: task,
                       onTap: () => _goToDetail(context, task),
+=======
+                    padding: const EdgeInsets.only(bottom: AppSizes.spaceM),
+                    child: TaskCardItem(
+                      task: task,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.taskDetail,
+                          arguments: task,
+                        );
+                      },
+>>>>>>> develop
                     ),
                   ),
                 ),

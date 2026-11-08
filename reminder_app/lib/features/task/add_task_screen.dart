@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
-import '../../core/utils/priority_calculator.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../models/task_model.dart';
 import '../../models/checklist_model.dart';
@@ -21,19 +20,40 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController _titleController = TextEditingController();
+
   final TextEditingController _descriptionController = TextEditingController();
+<<<<<<< HEAD
   final TextEditingController _subTaskController = TextEditingController();
+=======
+
+>>>>>>> develop
   final TaskService _taskService = TaskService();
   final ChecklistService _checklistService = ChecklistService();
 
   DateTime? _selectedDate;
+
+  late String _selectedCategory = AppStrings.categories.first;
+
+  String _selectedPriority = AppStrings.priorityMedium;
+
   bool _isSaving = false;
+<<<<<<< HEAD
   late String _selectedCategory = AppStrings.categories.first;
   late String _selectedDifficulty = AppStrings.difficulties[1];
 
   // Daftar sub-tugas disimpan sementara sebelum tugas dibuat.
   final List<String> _subTasks = [];
+=======
+
+  final List<String> _priorities = [
+    AppStrings.priorityLow,
+    AppStrings.priorityMedium,
+    AppStrings.priorityHigh,
+    AppStrings.priorityUrgent,
+  ];
+>>>>>>> develop
 
   @override
   void dispose() {
@@ -43,16 +63,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     super.dispose();
   }
 
+<<<<<<< HEAD
   String _formatDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
     return '$day/$month/${date.year}';
   }
 
+=======
+>>>>>>> develop
   // Memilih tanggal deadline.
   Future<void> _pickDate() async {
+    final now = DateTime.now();
+
     final DateTime? picked = await showDatePicker(
       context: context,
+<<<<<<< HEAD
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2030),
@@ -66,6 +92,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   void _addSubTask() {
     final title = _subTaskController.text.trim();
     if (title.isNotEmpty) {
+=======
+      initialDate: _selectedDate ?? now,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(2035),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.primaryTeal,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && mounted) {
+>>>>>>> develop
       setState(() {
         _subTasks.add(title);
         _subTaskController.clear();
@@ -73,18 +117,45 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
   }
 
+<<<<<<< HEAD
   // Menghapus sub-tugas dari daftar sementara.
   void _removeSubTask(int index) {
     setState(() => _subTasks.removeAt(index));
   }
 
   // Menyimpan tugas beserta sub-tugas ke Firestore.
+=======
+  // Mengubah label prioritas menjadi skor numerik.
+  int _getPriorityScore() {
+    if (_selectedPriority == AppStrings.priorityLow) {
+      return 20;
+    }
+
+    if (_selectedPriority == AppStrings.priorityMedium) {
+      return 40;
+    }
+
+    if (_selectedPriority == AppStrings.priorityHigh) {
+      return 60;
+    }
+
+    if (_selectedPriority == AppStrings.priorityUrgent) {
+      return 80;
+    }
+
+    throw Exception('Prioritas yang dipilih tidak valid.');
+  }
+
+  // Menyimpan task ke Firestore.
+>>>>>>> develop
   Future<void> _saveTask() async {
     if (_isSaving) return;
-    if (!_formKey.currentState!.validate()) return;
 
-    final selectedDate = _selectedDate;
-    if (selectedDate == null) {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (_selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Silakan pilih deadline tugas terlebih dahulu!'),
@@ -94,6 +165,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
 
     final user = FirebaseAuth.instance.currentUser;
+
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Silakan login terlebih dahulu.')),
@@ -101,6 +173,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       return;
     }
 
+<<<<<<< HEAD
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
@@ -112,16 +185,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
       final task = TaskModel(
         id: taskId,
+=======
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      // Membuat ID dokumen unik.
+      final taskRef = FirebaseFirestore.instance.collection('tasks').doc();
+
+      final task = TaskModel(
+        id: taskRef.id,
+>>>>>>> develop
         title: _titleController.text.trim(),
         description: _descriptionController.text.trim(),
         categoryId: _selectedCategory,
         userId: user.uid,
-        deadline: Timestamp.fromDate(selectedDate),
-        difficultyLevel: _selectedDifficulty,
-        priorityScore: PriorityCalculator.calculateScore(selectedDate),
-        status: AppStrings.statusTodo,
-        createdAt: now,
-        updatedAt: now,
+        deadline: Timestamp.fromDate(_selectedDate!),
+        difficultyLevel: 'medium',
+        priorityScore: _getPriorityScore(),
+        status: 'to-do',
       );
 
       await _taskService.createTask(task);
@@ -140,17 +223,39 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       }
 
       if (!mounted) return;
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Tugas berhasil ditambahkan!')),
+
+      // Diubah menggunakan AppStrings.taskAddedSuccess ("Tugas tersimpan")
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(AppStrings.taskAddedSuccess)),
       );
-      navigator.pop();
+
+      Navigator.pop(context, true);
+    } on FirebaseException catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Gagal menyimpan tugas: ${e.code} - ${e.message ?? ''}',
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text('Gagal menyimpan tugas: $e')),
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal menyimpan tugas: $e'),
+          duration: const Duration(seconds: 5),
+        ),
       );
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
     }
   }
 
@@ -161,6 +266,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text(
           AppStrings.addTaskTitle,
           style: TextStyle(
@@ -170,6 +276,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         ),
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
+=======
+        title: const Text(AppStrings.addTaskTitle),
+        backgroundColor: AppColors.primaryTeal,
+>>>>>>> develop
         elevation: 0,
         iconTheme: IconThemeData(color: colorScheme.onSurface),
       ),
@@ -180,8 +290,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+<<<<<<< HEAD
               // Input judul tugas.
               TextFormField(
+=======
+              // Judul task.
+              CustomTextField(
+>>>>>>> develop
                 controller: _titleController,
                 style: TextStyle(color: colorScheme.onSurface),
                 decoration: InputDecoration(
@@ -215,12 +330,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   if (value == null || value.trim().isEmpty) {
                     return AppStrings.fieldRequired;
                   }
+
                   return null;
                 },
               ),
+
               const SizedBox(height: AppSizes.spaceM),
 
+<<<<<<< HEAD
               // Input deskripsi tugas.
+=======
+              // Deskripsi task.
+>>>>>>> develop
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 3,
@@ -240,7 +361,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
+<<<<<<< HEAD
                     borderSide: BorderSide(color: colorScheme.outline),
+=======
+                    borderSide: const BorderSide(color: AppColors.borderLight),
+>>>>>>> develop
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
@@ -253,9 +378,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   fillColor: colorScheme.surface,
                 ),
               ),
+
               const SizedBox(height: AppSizes.spaceM),
 
+<<<<<<< HEAD
               // Dropdown kategori.
+=======
+              // Kategori.
+>>>>>>> develop
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: InputDecoration(
@@ -289,15 +419,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   Icons.arrow_drop_down,
                   color: colorScheme.onSurfaceVariant,
                 ),
-                items: AppStrings.categories.map((String cat) {
-                  return DropdownMenuItem(value: cat, child: Text(cat));
+                items: AppStrings.categories.map((cat) {
+                  return DropdownMenuItem<String>(value: cat, child: Text(cat));
                 }).toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _selectedCategory = val);
-                },
+                onChanged: _isSaving
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedCategory = value;
+                          });
+                        }
+                      },
               ),
+
               const SizedBox(height: AppSizes.spaceM),
 
+<<<<<<< HEAD
               // Dropdown tingkat kesulitan.
               DropdownButtonFormField<String>(
                 value: _selectedDifficulty,
@@ -307,6 +445,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   prefixIcon: Icon(
                     Icons.speed_outlined,
                     color: colorScheme.primary,
+=======
+              // Prioritas.
+              DropdownButtonFormField<String>(
+                value: _selectedPriority,
+                decoration: InputDecoration(
+                  labelText: 'Prioritas',
+                  prefixIcon: const Icon(
+                    Icons.flag_outlined,
+                    color: AppColors.primaryTeal,
+>>>>>>> develop
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
@@ -332,18 +480,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   Icons.arrow_drop_down,
                   color: colorScheme.onSurfaceVariant,
                 ),
-                items: AppStrings.difficulties.map((String level) {
-                  return DropdownMenuItem(value: level, child: Text(level));
+                items: _priorities.map((priority) {
+                  return DropdownMenuItem<String>(
+                    value: priority,
+                    child: Text(priority),
+                  );
                 }).toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _selectedDifficulty = val);
-                },
+                onChanged: _isSaving
+                    ? null
+                    : (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedPriority = value;
+                          });
+                        }
+                      },
               ),
+
               const SizedBox(height: AppSizes.spaceM),
 
+<<<<<<< HEAD
               // Pemilih tanggal deadline.
+=======
+              // Deadline.
+>>>>>>> develop
               InkWell(
-                onTap: _pickDate,
+                onTap: _isSaving ? null : _pickDate,
                 borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                 child: Container(
                   padding: AppSizes.inputPadding,
@@ -363,12 +525,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         child: Text(
                           _selectedDate == null
                               ? 'Pilih Deadline Tugas'
+<<<<<<< HEAD
                               : 'Deadline: ${_formatDate(_selectedDate!)}',
                           style: TextStyle(
                             fontSize: 15,
                             color: _selectedDate == null
                                 ? colorScheme.onSurfaceVariant
                                 : colorScheme.onSurface,
+=======
+                              : 'Deadline: '
+                                    '${_selectedDate!.day}/'
+                                    '${_selectedDate!.month}/'
+                                    '${_selectedDate!.year}',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: _selectedDate == null
+                                ? AppColors.textSecondary
+                                : AppColors.textPrimary,
+>>>>>>> develop
                             fontWeight: _selectedDate == null
                                 ? FontWeight.normal
                                 : FontWeight.w600,
@@ -380,6 +554,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
               ),
 
+<<<<<<< HEAD
               // Keterangan prioritas otomatis.
               if (_selectedDate != null) ...[
                 const SizedBox(height: AppSizes.spaceS),
@@ -493,6 +668,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 const Center(child: CircularProgressIndicator())
               else
                 CustomButton(text: 'Simpan Tugas', onPressed: _saveTask),
+=======
+              const SizedBox(height: AppSizes.spaceL),
+
+              // Tombol simpan.
+              CustomButton(
+                text: _isSaving ? 'Menyimpan...' : 'Simpan Tugas',
+                onPressed: () {
+                  if (_isSaving) return;
+                  _saveTask();
+                },
+              ),
+>>>>>>> develop
             ],
           ),
         ),

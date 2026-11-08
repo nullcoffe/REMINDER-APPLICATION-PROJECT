@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+<<<<<<< HEAD
   Future<void> _handleLogin() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _isLoading = true);
@@ -72,8 +73,79 @@ class _LoginScreenState extends State<LoginScreen> {
       _showErrorSnackBar('Terjadi kesalahan: ${e.toString()}');
     } finally {
       if (mounted) setState(() => _isLoading = false);
+=======
+  // Fungsi utama untuk memproses login ke Firebase
+
+Future<void> _handleLogin() async {
+  if (!(_formKey.currentState?.validate() ?? false)) {
+    return;
+  }
+
+  setState(() => _isLoading = true);
+
+  try {
+    await _authService.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRoutes.dashboard,
+      (route) => false,
+    );
+  } on FirebaseAuthException catch (e) {
+    if (!mounted) return;
+
+    String message;
+
+    switch (e.code) {
+      case 'invalid-credential':
+      case 'invalid-login-credentials':
+      case 'wrong-password':
+        message = 'Email atau kata sandi tidak sesuai.';
+        break;
+
+      case 'user-not-found':
+        message = 'Email belum terdaftar.';
+        break;
+
+      case 'user-disabled':
+        message = 'Akun ini telah dinonaktifkan.';
+        break;
+
+      case 'invalid-email':
+        message = 'Format email tidak valid.';
+        break;
+
+      case 'too-many-requests':
+        message = 'Terlalu banyak percobaan. Coba lagi nanti.';
+        break;
+
+      case 'network-request-failed':
+        message = 'Koneksi internet bermasalah.';
+        break;
+
+      default:
+        message = 'Login gagal [${e.code}]: '
+            '${e.message ?? "Terjadi kesalahan autentikasi."}';
+    }
+
+    _showErrorSnackBar(message);
+  } catch (e) {
+    if (!mounted) return;
+
+    _showErrorSnackBar('Terjadi kesalahan: $e');
+  } finally {
+    if (mounted) {
+      setState(() => _isLoading = false);
+>>>>>>> develop
     }
   }
+}
+
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-// Import model data
+// Import model data dan konstanta
+import '../../core/constants/app_strings.dart';
 import '../../models/task_model.dart';
 
 // Import fitur autentikasi
@@ -37,6 +38,7 @@ class AppRoutes {
 
   static const String initialRoute = splash;
 
+  /// Generator rute global untuk MaterialApp.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
@@ -57,19 +59,41 @@ class AppRoutes {
       case addTask:
         return MaterialPageRoute(builder: (_) => const AddTaskScreen());
 
-      // Menerima objek TaskModel langsung
+      // Menerima objek TaskModel langsung dengan pengecekan tipe
       case editTask:
-        final task = settings.arguments as TaskModel;
-        return MaterialPageRoute(
-          builder: (_) => EditTaskScreen(task: task),
-        );
+        {
+          final args = settings.arguments;
+          if (args is TaskModel) {
+            return MaterialPageRoute(
+              builder: (_) => EditTaskScreen(task: args),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              appBar: AppBar(title: const Text('Edit Tugas')),
+              body: const Center(
+                child: Text('Data tugas tidak ditemukan untuk diedit.'),
+              ),
+            ),
+          );
+        }
 
-      // Menerima objek TaskModel langsung
+      // Menerima objek TaskModel langsung dengan pengecekan tipe
       case taskDetail:
-        final task = settings.arguments as TaskModel;
-        return MaterialPageRoute(
-          builder: (_) => TaskDetailScreen(task: task),
-        );
+        {
+          final args = settings.arguments;
+          if (args is TaskModel) {
+            return MaterialPageRoute(
+              builder: (_) => TaskDetailScreen(task: args),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (_) => Scaffold(
+              appBar: AppBar(title: const Text(AppStrings.taskDetailTitle)),
+              body: const Center(child: Text('Data tugas tidak ditemukan.')),
+            ),
+          );
+        }
 
       case history:
         return MaterialPageRoute(builder: (_) => const HistoryScreen());
@@ -85,7 +109,9 @@ class AppRoutes {
           builder: (_) => Scaffold(
             appBar: AppBar(title: const Text('Rute Tidak Ditemukan')),
             body: Center(
-              child: Text('Halaman dengan rute "${settings.name}" tidak ditemukan.'),
+              child: Text(
+                'Halaman dengan rute "${settings.name}" tidak ditemukan.',
+              ),
             ),
           ),
         );

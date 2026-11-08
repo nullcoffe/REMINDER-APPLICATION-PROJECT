@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'widgets/settings_tile.dart';
+import 'widgets/logout_helper.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -188,10 +189,9 @@ class ProfileScreen extends StatelessWidget {
                       FilledButton(
                         onPressed: () {
                           Navigator.pop(dialogContext);
-                          _showMessage(
-                            context,
-                            'Fitur logout belum dihubungkan.',
-                          );
+                          jalankanLogout(context);
+                          
+                        
                         },
                         child: const Text('Keluar'),
                       ),
