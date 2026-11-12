@@ -50,7 +50,7 @@ class GreetingCard extends StatelessWidget {
               child: Image.network(
                 'https://via.placeholder.com/60',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   color: colorScheme.surfaceContainerHighest,
                   child: Icon(
                     Icons.person,

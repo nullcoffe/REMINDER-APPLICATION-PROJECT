@@ -31,7 +31,7 @@ class NeuCard extends StatelessWidget {
           // Bayangan terang (kiri-atas)
           BoxShadow(
             color: isDark
-                ? colorScheme.surfaceVariant.withValues(alpha: 0.3)
+                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
                 : Colors.white.withValues(alpha: 0.8),
             offset: const Offset(-8, -8),
             blurRadius: 16,

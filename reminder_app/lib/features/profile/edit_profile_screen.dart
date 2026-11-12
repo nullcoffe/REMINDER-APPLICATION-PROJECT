@@ -29,18 +29,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _loadUserData() async {
     if (_user == null) return;
 
-    _emailController.text = _user!.email ?? '';
+    _emailController.text = _user.email ?? '';
 
     try {
       final doc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_user!.uid)
+          .doc(_user.uid)
           .get();
 
       if (doc.exists) {
         _nameController.text = doc.data()?['displayName'] ?? '';
       } else {
-        _nameController.text = _user!.displayName ?? '';
+        _nameController.text = _user.displayName ?? '';
       }
     } catch (e) {
       debugPrint('Gagal memuat data user: $e');
@@ -58,16 +58,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     try {
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(_user!.uid)
+          .doc(_user.uid)
           .set({
         'displayName': _nameController.text.trim(),
-        'email': _user!.email,
-        'uid': _user!.uid,
+        'email': _user.email,
+        'uid': _user.uid,
         'updatedAt': Timestamp.now(),
       }, SetOptions(merge: true));
 
-      if (_nameController.text.trim() != _user!.displayName) {
-        await _user!.updateDisplayName(_nameController.text.trim());
+      if (_nameController.text.trim() != _user.displayName) {
+        await _user.updateDisplayName(_nameController.text.trim());
       }
 
       if (mounted) {
@@ -148,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         hintText: 'Email tidak dapat diubah di sini',
                         prefixIcon: Icon(Icons.email_outlined, color: cs.primary),
                         filled: true,
-                        fillColor: cs.surfaceVariant,
+                        fillColor: cs.surfaceContainerHighest,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: cs.outline),

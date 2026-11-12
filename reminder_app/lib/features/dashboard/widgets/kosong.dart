@@ -20,7 +20,7 @@ class EmptyStateWidget extends StatelessWidget {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: colorScheme.surfaceVariant,
+              color: colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppSizes.radiusCard),
             ),
             child: ClipRRect(

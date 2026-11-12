@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: DashboardAppBar(
         unreadNotificationCount: _unreadNotificationCount,
       ),

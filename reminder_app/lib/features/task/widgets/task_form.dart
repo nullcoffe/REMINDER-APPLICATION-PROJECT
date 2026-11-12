@@ -100,7 +100,7 @@ class _TaskFormState extends State<TaskForm> {
 
         // Pilihan kategori tugas.
         DropdownButtonFormField<String>(
-          value: AppStrings.categories.contains(
+          initialValue: AppStrings.categories.contains(
             widget.selectedCategory,
           )
               ? widget.selectedCategory

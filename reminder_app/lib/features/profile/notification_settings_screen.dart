@@ -147,7 +147,7 @@ class _NotificationSettingsScreenState
           style: TextStyle(color: cs.onSurfaceVariant, fontSize: 12),
         ),
         value: value,
-        activeColor: cs.primary,
+        activeThumbColor: cs.primary,
         onChanged: onChanged,
       ),
     );

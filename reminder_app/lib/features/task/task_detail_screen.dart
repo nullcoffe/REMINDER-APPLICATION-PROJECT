@@ -349,7 +349,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             ),
           ),
         ),
-        if (trailing != null) trailing,
+        ?trailing,
       ],
     );
   }
@@ -359,7 +359,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: AppSizes.spaceM),
         decoration: BoxDecoration(
-          color: _cs.surfaceVariant,
+          color: _cs.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
         ),
         child: Column(
@@ -419,7 +419,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 height: AppSizes.spaceXL,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: reached ? _cs.primary : _cs.surfaceVariant,
+                  color: reached ? _cs.primary : _cs.surfaceContainerHighest,
                   border: Border.all(
                     color: isCurrent ? _cs.tertiary : _cs.outline,
                     width: 2,
@@ -585,7 +585,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             width: double.infinity,
             padding: AppSizes.inputPadding,
             decoration: BoxDecoration(
-              color: _cs.surfaceVariant,
+              color: _cs.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
             child: Row(
@@ -672,7 +672,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 borderRadius: BorderRadius.circular(AppSizes.spaceXS),
                 child: LinearProgressIndicator(
                   value: progressPercent,
-                  backgroundColor: _cs.surfaceVariant,
+                  backgroundColor: _cs.surfaceContainerHighest,
                   valueColor: AlwaysStoppedAnimation<Color>(_cs.primary),
                   minHeight: 8,
                 ),
@@ -763,7 +763,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               Container(
                 padding: const EdgeInsets.all(AppSizes.spaceS),
                 decoration: BoxDecoration(
-                  color: _cs.surfaceVariant,
+                  color: _cs.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
                   border: Border.all(color: _cs.outline),
                 ),
@@ -912,7 +912,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _cs.primary,
                   foregroundColor: _cs.onPrimary,
-                  disabledBackgroundColor: _cs.surfaceVariant,
+                  disabledBackgroundColor: _cs.surfaceContainerHighest,
                   disabledForegroundColor: _cs.onSurfaceVariant,
                   padding: AppSizes.buttonPadding,
                   shape: RoundedRectangleBorder(
@@ -930,7 +930,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _cs.background,
+      backgroundColor: _cs.surface,
       appBar: AppBar(
         title: Text(
           'Detail Tugas',

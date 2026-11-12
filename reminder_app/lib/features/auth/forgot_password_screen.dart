@@ -157,11 +157,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               prefixIcon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
-                if (value == null || value.trim().isEmpty)
+                if (value == null || value.trim().isEmpty) {
                   return AppStrings.fieldRequired;
+                }
                 final emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-                if (!emailPattern.hasMatch(value.trim()))
+                if (!emailPattern.hasMatch(value.trim())) {
                   return 'Masukkan alamat email yang valid.';
+                }
                 return null;
               },
             ),
