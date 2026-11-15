@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../models/task_model.dart';
 
@@ -12,6 +11,7 @@ class ProductivityChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final now = DateTime.now();
     final Map<int, int> tasksPerDay = {};
 
@@ -48,34 +48,27 @@ class ProductivityChart extends StatelessWidget {
       padding: const EdgeInsets.all(AppSizes.spaceM),
       margin: const EdgeInsets.only(bottom: AppSizes.spaceM),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: cs.surface,
         borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-        boxShadow: [
-          BoxShadow(
-            // Perbaikan: withOpacity diganti dengan withValues
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: cs.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Produktivitas 7 Hari Terakhir',
             style: TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: cs.onSurface,
             ),
           ),
           const SizedBox(height: AppSizes.spaceS),
           Text(
             '${completedTasks.length} tugas total diselesaikan',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppSizes.fontSizeSmall,
-              color: AppColors.textSecondary,
+              color: cs.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: AppSizes.spaceL),
@@ -95,9 +88,9 @@ class ProductivityChart extends StatelessWidget {
                   children: [
                     Text(
                       '$count',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
-                        color: AppColors.textSecondary,
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -105,16 +98,16 @@ class ProductivityChart extends StatelessWidget {
                       width: 12,
                       height: barHeight,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryTeal,
+                        color: cs.primary,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _getDayName(day),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
-                        color: AppColors.textSecondary,
+                        color: cs.onSurfaceVariant,
                       ),
                     ),
                   ],
