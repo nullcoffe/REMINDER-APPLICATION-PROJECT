@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/widgets/neu_card.dart';
@@ -10,6 +12,9 @@ class GreetingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    // Mengambil foto profil dari Firebase Authentication.
+    final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
 
     return NeuCard(
       padding: const EdgeInsets.all(AppSizes.spaceL),
@@ -38,26 +43,41 @@ class GreetingCard extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(width: 12),
+
+          // Foto profil atau ikon person.
           Container(
             width: 60,
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: colorScheme.primary, width: 2),
+              border: Border.all(
+                color: colorScheme.primary,
+                width: 2,
+              ),
             ),
             child: ClipOval(
-              child: Image.network(
-                'https://via.placeholder.com/60',
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(
-                  color: colorScheme.surfaceContainerHighest,
-                  child: Icon(
-                    Icons.person,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
+              child: photoUrl != null && photoUrl.isNotEmpty
+                  ? Image.network(
+                      photoUrl,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.person,
+                        size: 35,
+                        color: colorScheme.primary,
+                      ),
+                    )
+                  : Container(
+                      color: colorScheme.surfaceContainerHighest,
+                      child: Icon(
+                        Icons.person,
+                        size: 35,
+                        color: colorScheme.primary,
+                      ),
+                    ),
             ),
           ),
         ],
