@@ -245,7 +245,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               const SizedBox(height: AppSizes.spaceM),
               DropdownButtonFormField<String>(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Kategori',
                   labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
@@ -286,7 +286,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               const SizedBox(height: AppSizes.spaceM),
               DropdownButtonFormField<String>(
-                value: _selectedDifficulty,
+                initialValue: _selectedDifficulty,
                 decoration: InputDecoration(
                   labelText: 'Tingkat Kesulitan',
                   labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),

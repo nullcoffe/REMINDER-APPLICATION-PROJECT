@@ -53,7 +53,7 @@ class PriorityBadge extends StatelessWidget {
 
       // Mengatur warna latar, sudut, dan garis tepi.
       decoration: BoxDecoration(
-        color: badgeColor.withOpacity(0.15),
+        color: badgeColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: badgeColor,

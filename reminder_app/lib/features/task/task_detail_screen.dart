@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/routes/app_routes.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/utils/priority_calculator.dart';
@@ -44,10 +43,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
   Stream<List<ChecklistModel>>? _checklistStream;
   List<ChecklistModel> _checklistItems = [];
-  bool _isLoadingChecklist = true;
 
   final TextEditingController _newSubTaskController = TextEditingController();
   bool _isAddingSubTask = false;
+
+  // Getter untuk mengakses colorScheme dengan lebih ringkas.
+  ColorScheme get _cs => Theme.of(context).colorScheme;
 
   @override
   void initState() {
@@ -97,7 +98,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Judul sub-tugas tidak boleh kosong'),
-          backgroundColor: AppColors.error,
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -127,7 +128,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Sub-tugas berhasil ditambahkan'),
-            backgroundColor: AppColors.success,
+            backgroundColor: Colors.green,
           ),
         );
       }
@@ -137,7 +138,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Gagal menambah sub-tugas: $e'),
-            backgroundColor: AppColors.error,
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -179,7 +180,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Gagal memperbarui sub-tugas: $e'),
-          backgroundColor: AppColors.error,
+          backgroundColor: Colors.red,
         ),
       );
     }
@@ -189,6 +190,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: _cs.surface,
         title: const Text('Hapus Sub-tugas'),
         content: Text('Yakin ingin menghapus "${item.itemTitle}"?'),
         actions: [
@@ -198,10 +200,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
-              'Hapus',
-              style: TextStyle(color: AppColors.error),
-            ),
+            child: Text('Hapus', style: TextStyle(color: _cs.error)),
           ),
         ],
       ),
@@ -213,14 +212,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Sub-tugas berhasil dihapus'),
-            backgroundColor: AppColors.success,
+            backgroundColor: Colors.green,
           ),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Gagal menghapus sub-tugas: $e'),
-            backgroundColor: AppColors.error,
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -245,10 +244,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 
   Color _priorityColor(int score) {
-    if (score >= 90) return AppColors.priorityUrgent;
-    if (score >= 80) return AppColors.priorityHigh;
-    if (score >= 60) return AppColors.priorityMedium;
-    return AppColors.priorityLow;
+    if (score >= 80) return _cs.error;
+    if (score >= 60) return _cs.primary;
+    if (score >= 40) return _cs.secondary;
+    return _cs.tertiary;
   }
 
   Future<void> _updateStatus(
@@ -302,9 +301,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
   BoxDecoration get _cardDecoration {
     return BoxDecoration(
-      color: AppColors.surface,
+      color: _cs.surface,
       borderRadius: BorderRadius.circular(AppSizes.radiusCard),
-      border: Border.all(color: AppColors.border),
+      border: Border.all(color: _cs.outline),
     );
   }
 
@@ -338,19 +337,19 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget _sectionHeader(IconData icon, String title, {Widget? trailing}) {
     return Row(
       children: [
-        Icon(icon, size: AppSizes.fontSizeLarge, color: AppColors.primary),
+        Icon(icon, size: AppSizes.fontSizeLarge, color: _cs.primary),
         const SizedBox(width: AppSizes.spaceS),
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: _cs.onSurface,
             ),
           ),
         ),
-        if (trailing != null) trailing,
+        ?trailing,
       ],
     );
   }
@@ -360,26 +359,26 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: AppSizes.spaceM),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: _cs.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
         ),
         child: Column(
           children: [
             Text(
               value.toString().padLeft(2, '0'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: AppSizes.fontSizeXLarge,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                color: _cs.primary,
               ),
             ),
             const SizedBox(height: AppSizes.spaceXS),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: AppSizes.fontSizeXS,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textSecondary,
+                color: _cs.onSurfaceVariant,
               ),
             ),
           ],
@@ -393,7 +392,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       child: Container(
         height: AppSizes.spaceXS,
         color: visible
-            ? (active ? AppColors.primary : AppColors.border)
+            ? (active ? _cs.primary : _cs.outline)
             : Colors.transparent,
       ),
     );
@@ -420,18 +419,16 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 height: AppSizes.spaceXL,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: reached ? AppColors.primary : AppColors.surfaceLight,
+                  color: reached ? _cs.primary : _cs.surfaceContainerHighest,
                   border: Border.all(
-                    color: isCurrent ? AppColors.tertiary : AppColors.border,
+                    color: isCurrent ? _cs.tertiary : _cs.outline,
                     width: 2,
                   ),
                 ),
                 child: Icon(
                   showCheck ? Icons.check : _stepIcons[index],
                   size: AppSizes.fontSizeLarge,
-                  color: reached
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
+                  color: reached ? _cs.onPrimary : _cs.onSurfaceVariant,
                 ),
               ),
               _stepLine(
@@ -447,7 +444,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             style: TextStyle(
               fontSize: AppSizes.fontSizeXS,
               fontWeight: isCurrent ? FontWeight.bold : FontWeight.w500,
-              color: reached ? AppColors.textPrimary : AppColors.textSecondary,
+              color: reached ? _cs.onSurface : _cs.onSurfaceVariant,
             ),
           ),
         ],
@@ -465,13 +462,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       children: [
         _chip(
           label: _task.categoryId,
-          color: AppColors.primary,
+          color: _cs.primary,
           icon: Icons.category_outlined,
         ),
         if (_task.difficultyLevel.isNotEmpty)
           _chip(
             label: 'Kesulitan: ${_task.difficultyLevel}',
-            color: AppColors.tertiary,
+            color: _cs.tertiary,
             icon: Icons.speed_outlined,
           ),
         _chip(
@@ -493,39 +490,39 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         children: [
           Text(
             _task.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppSizes.fontSizeLarge,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: _cs.onSurface,
             ),
           ),
           const SizedBox(height: AppSizes.spaceM),
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_today_outlined,
                 size: AppSizes.fontSizeLarge,
-                color: AppColors.primary,
+                color: _cs.primary,
               ),
               const SizedBox(width: AppSizes.spaceS),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Deadline',
                       style: TextStyle(
                         fontSize: AppSizes.fontSizeXS,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                        color: _cs.onSurfaceVariant,
                       ),
                     ),
                     Text(
                       _formatDeadline(_deadline),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: AppSizes.fontSizeMedium,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: _cs.onSurface,
                       ),
                     ),
                   ],
@@ -552,13 +549,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     if (_isDone) {
       badgeLabel = 'Selesai';
-      badgeColor = AppColors.primary;
+      badgeColor = _cs.primary;
     } else if (isOverdue) {
       badgeLabel = 'Terlambat';
-      badgeColor = AppColors.error;
+      badgeColor = _cs.error;
     } else {
       badgeLabel = 'Berjalan';
-      badgeColor = AppColors.success;
+      badgeColor = Colors.green;
     }
 
     return Container(
@@ -588,23 +585,23 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             width: double.infinity,
             padding: AppSizes.inputPadding,
             decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
+              color: _cs.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
             ),
-            child: const Row(
+            child: Row(
               children: [
                 Icon(
                   Icons.notifications_active_outlined,
                   size: AppSizes.fontSizeLarge,
-                  color: AppColors.tertiary,
+                  color: _cs.tertiary,
                 ),
-                SizedBox(width: AppSizes.spaceS),
+                const SizedBox(width: AppSizes.spaceS),
                 Expanded(
                   child: Text(
                     'Pengingat akan dikirim 1 hari sebelum deadline',
                     style: TextStyle(
                       fontSize: AppSizes.fontSizeSmall,
-                      color: AppColors.textSecondary,
+                      color: _cs.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -644,7 +641,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           if (mounted) {
             setState(() {
               _checklistItems = checklist;
-              _isLoadingChecklist = false;
             });
           }
         });
@@ -668,7 +664,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 'Tahapan Pengerjaan',
                 trailing: _chip(
                   label: '${(progressPercent * 100).round()}% Selesai',
-                  color: AppColors.primary,
+                  color: _cs.primary,
                 ),
               ),
               const SizedBox(height: AppSizes.spaceM),
@@ -676,10 +672,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 borderRadius: BorderRadius.circular(AppSizes.spaceXS),
                 child: LinearProgressIndicator(
                   value: progressPercent,
-                  backgroundColor: AppColors.surfaceLight,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    AppColors.primary,
-                  ),
+                  backgroundColor: _cs.surfaceContainerHighest,
+                  valueColor: AlwaysStoppedAnimation<Color>(_cs.primary),
                   minHeight: 8,
                 ),
               ),
@@ -701,14 +695,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 }),
               ),
               const SizedBox(height: AppSizes.spaceM),
-              const Divider(color: AppColors.border),
+              Divider(color: _cs.outline),
               const SizedBox(height: AppSizes.spaceS),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.checklist,
                     size: AppSizes.fontSizeMedium,
-                    color: AppColors.primary,
+                    color: _cs.primary,
                   ),
                   const SizedBox(width: AppSizes.spaceS),
                   Text(
@@ -716,7 +710,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     style: TextStyle(
                       fontSize: AppSizes.fontSizeSmall,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: _cs.onSurface,
                     ),
                   ),
                   const Spacer(),
@@ -725,7 +719,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     style: TextStyle(
                       fontSize: AppSizes.fontSizeSmall,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: _cs.primary,
                     ),
                   ),
                 ],
@@ -735,12 +729,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 (item) => CheckboxListTile(
                   value: item.isCompleted,
                   onChanged: (_) => _toggleChecklistItem(item),
-                  activeColor: AppColors.primary,
+                  activeColor: _cs.primary,
                   title: Text(
                     item.itemTitle,
                     style: TextStyle(
                       fontSize: AppSizes.fontSizeSmall,
-                      color: AppColors.textPrimary,
+                      color: _cs.onSurface,
                       decoration: item.isCompleted
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
@@ -748,18 +742,18 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   ),
                   subtitle: Text(
                     item.isCompleted ? 'Selesai' : 'Belum',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: AppSizes.fontSizeXS,
-                      color: AppColors.textSecondary,
+                      color: _cs.onSurfaceVariant,
                     ),
                   ),
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
                   secondary: IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete_outline,
                       size: 18,
-                      color: AppColors.error,
+                      color: _cs.error,
                     ),
                     onPressed: () => _deleteSubTask(item),
                   ),
@@ -769,23 +763,23 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               Container(
                 padding: const EdgeInsets.all(AppSizes.spaceS),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceLight,
+                  color: _cs.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(AppSizes.radiusDefault),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: _cs.outline),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         controller: _newSubTaskController,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
+                        style: TextStyle(
+                          color: _cs.onSurface,
                           fontSize: AppSizes.fontSizeSmall,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Tulis sub-tugas baru...',
                           hintStyle: TextStyle(
-                            color: AppColors.textSecondary,
+                            color: _cs.onSurfaceVariant,
                             fontSize: AppSizes.fontSizeSmall,
                           ),
                           border: InputBorder.none,
@@ -802,10 +796,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Icon(
-                              Icons.add_circle,
-                              color: AppColors.primary,
-                            ),
+                          : Icon(Icons.add_circle, color: _cs.primary),
                       onPressed: _isAddingSubTask ? null : _addSubTask,
                     ),
                   ],
@@ -834,9 +825,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             style: TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               height: 1.5,
-              color: description.isEmpty
-                  ? AppColors.textSecondary
-                  : AppColors.textPrimary,
+              color: description.isEmpty ? _cs.onSurfaceVariant : _cs.onSurface,
             ),
           ),
         ],
@@ -849,19 +838,19 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSizes.spaceM),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.15),
+        color: _cs.primaryContainer,
         borderRadius: BorderRadius.circular(AppSizes.radiusCard),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+        border: Border.all(color: _cs.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             _isDone ? 'Kerja Bagus!' : 'Tetap Semangat!',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppSizes.fontSizeMedium,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: _cs.onPrimaryContainer,
             ),
           ),
           const SizedBox(height: AppSizes.spaceXS),
@@ -869,9 +858,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
             _isDone
                 ? 'Kamu sudah menyelesaikan tugas ini.'
                 : 'Kamu pasti bisa menyelesaikan tugas ini!',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppSizes.fontSizeSmall,
-              color: AppColors.textSecondary,
+              color: _cs.onPrimaryContainer,
             ),
           ),
         ],
@@ -882,9 +871,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget _buildBottomBar() {
     return Container(
       padding: const EdgeInsets.all(AppSizes.spaceM),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+      decoration: BoxDecoration(
+        color: _cs.surface,
+        border: Border(top: BorderSide(color: _cs.outline)),
       ),
       child: SafeArea(
         top: false,
@@ -896,9 +885,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 icon: const Icon(Icons.edit_outlined),
                 label: const Text('Edit Tugas'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.textPrimary,
+                  foregroundColor: _cs.primary,
                   padding: AppSizes.buttonPadding,
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: _cs.outline),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusButton),
                   ),
@@ -921,10 +910,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     : const Icon(Icons.check_circle_outline),
                 label: const Text('Tandai Selesai'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textPrimary,
-                  disabledBackgroundColor: AppColors.surfaceLight,
-                  disabledForegroundColor: AppColors.textSecondary,
+                  backgroundColor: _cs.primary,
+                  foregroundColor: _cs.onPrimary,
+                  disabledBackgroundColor: _cs.surfaceContainerHighest,
+                  disabledForegroundColor: _cs.onSurfaceVariant,
                   padding: AppSizes.buttonPadding,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusButton),
@@ -941,19 +930,16 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: _cs.surface,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Detail Tugas',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: _cs.onSurface, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.surface,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: _cs.surface,
+        foregroundColor: _cs.onSurface,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: _cs.onSurface),
         actions: [
           IconButton(
             tooltip: 'Edit Tugas',

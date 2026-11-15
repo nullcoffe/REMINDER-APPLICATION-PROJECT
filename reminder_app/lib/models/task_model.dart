@@ -10,6 +10,8 @@ class TaskModel {
   final String difficultyLevel;
   final int priorityScore;
   final String status;
+  final bool isDeleted;
+  final Timestamp? deletedAt;
   final Timestamp? createdAt;
   final Timestamp? updatedAt;
 
@@ -23,6 +25,8 @@ class TaskModel {
     required this.difficultyLevel,
     required this.priorityScore,
     required this.status,
+    this.isDeleted = false,
+    this.deletedAt,
     this.createdAt,
     this.updatedAt,
   });
@@ -38,6 +42,8 @@ class TaskModel {
       difficultyLevel: map['difficultyLevel'] ?? '',
       priorityScore: map['priorityScore'] ?? 0,
       status: map['status'] ?? 'pending',
+      isDeleted: map['isDeleted'] ?? false,
+      deletedAt: map['deletedAt'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
     );
@@ -53,6 +59,8 @@ class TaskModel {
       'difficultyLevel': difficultyLevel,
       'priorityScore': priorityScore,
       'status': status,
+      'isDeleted': isDeleted,
+      'deletedAt': deletedAt,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
@@ -68,6 +76,8 @@ class TaskModel {
     String? difficultyLevel,
     int? priorityScore,
     String? status,
+    bool? isDeleted,
+    Timestamp? deletedAt,
     Timestamp? createdAt,
     Timestamp? updatedAt,
   }) {
@@ -81,6 +91,8 @@ class TaskModel {
       difficultyLevel: difficultyLevel ?? this.difficultyLevel,
       priorityScore: priorityScore ?? this.priorityScore,
       status: status ?? this.status,
+      isDeleted: isDeleted ?? this.isDeleted,
+      deletedAt: deletedAt ?? this.deletedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

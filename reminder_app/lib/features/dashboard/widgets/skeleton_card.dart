@@ -15,7 +15,7 @@ class SkeletonCard extends StatelessWidget {
           height: 160,
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
-            color: colorScheme.surfaceVariant.withValues(alpha: value),
+            color: colorScheme.surfaceContainerHighest.withValues(alpha: value),
             borderRadius: BorderRadius.circular(12),
           ),
         );
